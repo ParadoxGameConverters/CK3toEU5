@@ -1,0 +1,559 @@
+# languages determine which eu5 language a particular dynamic culture speaks
+# Usage:
+# link = { eu5 = eu5language ck3 = ck3language [optional] name_list = name_list_ck3 }
+# multiple ck3 entries are allowed, multiple eu5 are not.
+
+##Alaska
+#Out of scope
+
+##Anatolia
+#link = { eu5 = turkish_language ck3 = ??? }
+#link = { eu5 = turkish_dialect ck3 = ??? }
+#link = { eu5 = turkmen_dialect ck3 = ??? }
+#link = { eu5 = azeri_dialect ck3 = ??? }
+
+##Arabia
+link = { eu5 = arabic_language ck3 = language_arabic }
+#link = { eu5 = maghrebi_dialect ck3 = ??? }
+#link = { eu5 = egyptian_dialect ck3 = ??? }
+#link = { eu5 = iraqi_dialect ck3 = ??? }
+#link = { eu5 = levantine_dialec ck3 = ??? }
+#link = { eu5 = peninsular_dialect ck3 = ??? }
+#link = { eu5 = classical_arabic_dialect ck3 = ??? }
+#link = { eu5 = maltese_dialect ck3 = ??? }
+
+#link = { eu5 = south_arabic_language ck3 = ??? }
+
+##Aridoamerica
+#Out of scope
+
+##Australia
+#Out of scope
+
+##Balkans
+link = { eu5 = greek_language ck3 = language_greek }
+
+link = { eu5 = serbo_croatian_language ck3 = language_south_slavic }
+#link = { eu5 = serbian_dialect ck3 = ??? }
+#link = { eu5 = croatian_dialect ck3 = ??? }
+#link = { eu5 = slovene_dialect ck3 = ??? }
+
+link = { eu5 = albanian_language ck3 = language_albanian }
+link = { eu5 = bulgarian_language ck3 = language_slavonic }
+#link = { eu5 = church_slavonic_language ck3 = ??? }
+
+##Baltic
+link = { eu5 = baltic_language ck3 = language_baltic }
+#link = { eu5 = latvian_dialect ck3 = ??? }
+#link = { eu5 = lithuanian_dialect ck3 = ??? }
+#link = { eu5 = western_baltic_dialect ck3 = ??? }
+
+##Bengal
+link = { eu5 = oriya_language ck3 = language_magadhan name_list = name_list_oriya }
+#link = { eu5 = sanskrit_language ck3 = ??? }
+link = { eu5 = north_dravidian_language ck3 = language_north_dravidian }
+#link = { eu5 = brahmaputran_language ck3 = ??? }
+#link = { eu5 = munda_language ck3 = ??? }
+#link = { eu5 = khasi_language ck3 = ??? }
+
+##Brazil
+#Out of scope
+
+##Canada
+#Out of Scope
+
+##Caribbean
+#Out of scope
+
+##Carpathia
+link = { eu5 = hungarian_language ck3 = language_magyar }
+link = { eu5 = romanian_language ck3 = language_wallachian }
+
+##Caucasus
+link = { eu5 = armenian_language ck3 = language_armenian }
+link = { eu5 = georgian_language ck3 = language_georgian }
+#link = { eu5 = circassian_language ck3 = ??? }
+#link = { eu5 = alanic_language ck3 = ??? }
+#link = { eu5 = dagestanian_language ck3 = ??? }
+
+##Central America
+#Out of scope
+
+##Central North America
+#Out of scope
+
+##China
+link = { eu5 = mandarin_language ck3 = language_chinese }
+#link = { eu5 = northern_mandarin_dialect ck3 = ??? }
+#link = { eu5 = southern_mandarin_dialect ck3 = ??? }
+
+#link = { eu5 = shu_language ck3 = ??? }
+#link = { eu5 = xiang_language ck3 = ??? }
+#link = { eu5 = gan_language ck3 = ??? }
+#link = { eu5 = ping_language ck3 = ??? }
+#link = { eu5 = yue_language ck3 = ??? }
+#link = { eu5 = min_language ck3 = ??? }
+#link = { eu5 = wu_language ck3 = ??? }
+#link = { eu5 = huizhou_language ck3 = ??? }
+#link = { eu5 = kejia_language ck3 = ??? }
+#link = { eu5 = jin_language ck3 = ??? }
+#link = { eu5 = classical_chinese_language ck3 = ??? }
+#link = { eu5 = formosan_language ck3 = ??? }
+link = { eu5 = hmong_language ck3 = language_hmongic }
+#link = { eu5 = yi_language ck3 = ??? }
+link = { eu5 = qiangic_language ck3 = language_qiangic }
+#link = { eu5 = tujia_language ck3 = ??? }
+#link = { eu5 = bai_language ck3 = ??? }
+
+##Crescent
+link = { eu5 = aramaic_language ck3 = language_aramaic }
+link = { eu5 = hebrew_language ck3 = language_israelite }
+
+##Deccan
+link = { eu5 = telugu_language ck3 = language_telugu }
+link = { eu5 = tamil_language ck3 = language_tamil }
+#link = { eu5 = malayalam_language ck3 = ??? }
+#link = { eu5 = gondi_language ck3 = ??? }
+link = { eu5 = kannada_language ck3 = language_kannada }
+#link = { eu5 = hindustani_language ck3 = ??? }
+#link = { eu5 = bihari_language ck3 = ??? }
+link = { eu5 = bengali_language ck3 = language_magadhan heritage name_list = name_list_bengali }
+link = { eu5 = kamarupi_language ck3 = language_magadhan name_list = name_list_assamese }
+link = { eu5 = marathi_language ck3 = language_marathi }
+link = { eu5 = sinhala_language ck3 = language_sinhalese }
+#link = { eu5 = sindhi_language ck3 = ??? }
+#link = { eu5 = malvi_language ck3 = ??? }
+#link = { eu5 = dakhni_language ck3 = ??? }
+#link = { eu5 = bhili_language ck3 = ??? }
+link = { eu5 = pahari_language ck3 = language_pahari }
+#link = { eu5 = west_himalayic_language ck3 = ??? } #language_pahari, but not used by any EU5 countries
+#link = { eu5 = nepali_language ck3 = ??? } #language_pahari, but only used by the Khas people
+
+##East Africa
+#link = { eu5 = bantoid_language ck3 = ??? }
+#link = { eu5 = bassa_language ck3 = ??? }
+#link = { eu5 = tsogo_language ck3 = ??? }
+#link = { eu5 = bangi_language ck3 = ??? }
+#link = { eu5 = lega_language ck3 = ??? }
+#link = { eu5 = kongo_language ck3 = ??? }
+#link = { eu5 = rwanda_language ck3 = ??? }
+#link = { eu5 = nyamwezi_language ck3 = ??? }
+link = { eu5 = swahili_language ck3 = language_sabaki }
+#link = { eu5 = chokwe_language ck3 = ??? }
+#link = { eu5 = luba_language ck3 = ??? }
+#link = { eu5 = rukwa_language ck3 = ??? }
+#link = { eu5 = nyasa_language ck3 = ??? }
+#link = { eu5 = rufiji_ruvuma_language ck3 = ??? }
+#link = { eu5 = kavango_language ck3 = ??? }
+#link = { eu5 = sintu_language ck3 = ??? }
+#link = { eu5 = malagasy_language ck3 = ??? }
+#link = { eu5 = luo_language ck3 = ??? }
+
+##East Coast
+#Out of scope
+
+##East Siberia
+#Out of scope
+
+##Egypt
+#link = { eu5 = coptic_language ck3 = ??? }
+
+##France
+link = { eu5 = french_language ck3 = language_french }
+#link = { eu5 = norman_dialect ck3 = ??? }
+#link = { eu5 = burgundian_dialect ck3 = ??? }
+#link = { eu5 = angevin_dialect ck3 = ??? }
+#link = { eu5 = francique_dialect ck3 = ??? }
+#link = { eu5 = poitevin_dialect ck3 = ??? }
+#link = { eu5 = arpitan_dialect ck3 = ??? }
+
+link = { eu5 = occitan_language ck3 = language_occitano_romance }
+#link = { eu5 = occitan_dialect ck3 = ??? }
+#link = { eu5 = gascon_dialect ck3 = ??? }
+#link = { eu5 = catalan_dialect ck3 = ??? }
+
+##Germany
+link = { eu5 = german_language ck3 = language_high_german }
+link = { eu5 = dutch_dialect ck3 = language_dutch }
+#link = { eu5 = low_german_dialect ck3 = ??? }
+link = { eu5 = central_german_dialect ck3 = language_central_germanic }
+#link = { eu5 = upper_german_dialect ck3 = ??? }
+#link = { eu5 = alemannic_dialect ck3 = ??? }
+#link = { eu5 = yiddish_dialect ck3 = ??? }
+
+link = { eu5 = frisian_language ck3 = language_anglic }
+
+##Great Bassin
+#Out of scope
+
+##Great Britain
+link = { eu5 = brythonic_language ck3 = language_brythonic }
+#link = { eu5 = welsh_dialect ck3 = ??? }
+#link = { eu5 = breton_dialect ck3 = ??? }
+
+#link = { eu5 = english_language ck3 = ??? }
+#link = { eu5 = english_dialect ck3 = ??? }
+#link = { eu5 = hiberno_english_dialect ck3 = ??? }
+#link = { eu5 = northumbrian_dialect ck3 = ??? }
+#link = { eu5 = scots_dialect ck3 = ??? }
+
+#Horn of Africa
+#link = { eu5 = kordofan_language ck3 = ??? }
+link = { eu5 = daju_language ck3 = language_sudanic name_list = name_list_daju }
+link = { eu5 = nubian_language ck3 = language_sudanic name_list = name_list_nubian }
+#link = { eu5 = dinka_language ck3 = ??? }
+
+#link = { eu5 = east_cushitic_language ck3 = ??? }
+link = { eu5 = somali_dialect ck3 = language_cushitic name_list = name_list_somali }
+link = { eu5 = afar_dialect ck3 = language_cushitic name_list = name_list_afar }
+#link = { eu5 = dahalo_dialect ck3 = ??? }
+#link = { eu5 = daasanach_dialect ck3 = ??? }
+#link = { eu5 = rendille_dialect ck3 = ??? }
+#link = { eu5 = highland_cushitic_dialect ck3 = ??? }
+#link = { eu5 = oromo_dialect ck3 = ??? }
+
+#link = { eu5 = agaw_language ck3 = ??? }
+link = { eu5 = beja_language ck3 = language_cushitic name_list = name_list_beja }
+#link = { eu5 = south_cushitic_language ck3 = ??? }
+link = { eu5 = ethiopic_language ck3 = language_ethiopic }
+#link = { eu5 = north_ethiopic_language ck3 = ??? }
+#link = { eu5 = geez_language ck3 = ??? }
+#link = { eu5 = kalenjin_language ck3 = ??? }
+#link = { eu5 = lotuko_language ck3 = ??? }
+#link = { eu5 = ubangian_language ck3 = ??? }
+#link = { eu5 = baguirmi_language ck3 = ??? }
+#link = { eu5 = moru_madi_language ck3 = ??? }
+link = { eu5 = omotic_language ck3 = language_omotic }
+
+##Iberia
+#link = { eu5 = spanish_language ck3 = ??? }
+link = { eu5 = aragonese_dialect ck3 = language_iberian name_list = name_list_aragonese }
+link = { eu5 = castilian_dialect ck3 = language_iberian name_list = name_list_castilian }
+link = { eu5 = ladino_dialect ck3 = language_iberian name_list = name_list_sephardi }
+#link = { eu5 = leonese_dialect ck3 = language_iberian name_list = ??? }
+
+#link = { eu5 = portuguese_language ck3 = ??? }
+link = { eu5 = galician_dialect ck3 = language_iberian name_list = name_list_galician }
+link = { eu5 = portuguese_dialect ck3 = language_iberian name_list = name_list_portuguese }
+
+link = { eu5 = basque_language ck3 = language_basque }
+
+##Indochina
+link = { eu5 = tai_language ck3 = language_tai }
+#link = { eu5 = thai_dialect ck3 = ??? }
+#link = { eu5 = shan_dialect ck3 = ??? }
+#link = { eu5 = lao_dialect ck3 = ??? }
+#link = { eu5 = dai_dialect ck3 = ??? }
+
+#link = { eu5 = zhuang_language ck3 = ??? }
+#link = { eu5 = kam_language ck3 = ??? }
+#link = { eu5 = kra_language ck3 = ??? }
+#link = { eu5 = hlai_language ck3 = ??? }
+#link = { eu5 = palaungic_language ck3 = ??? }
+#link = { eu5 = khmu_language ck3 = ??? }
+#link = { eu5 = kachinic_language ck3 = ??? }
+#link = { eu5 = karenic_language ck3 = ??? }
+#link = { eu5 = bahnaric_language ck3 = ??? }
+#link = { eu5 = katuic_language ck3 = ??? }
+link = { eu5 = aslian_language ck3 = language_asli }
+link = { eu5 = khmer_language ck3 = language_mon_khmer name_list = name_list_khmer }
+link = { eu5 = vietnamese_language ck3 = language_vietnamese }
+
+link = { eu5 = cham_language ck3 = language_chamic }
+#link = { eu5 = cham_dialect ck3 = ??? }
+#link = { eu5 = achenese_dialect ck3 = ??? }
+
+link = { eu5 = mon_language ck3 = language_mon_khmer name_list = name_list_mon }
+#link = { eu5 = andamanese_language ck3 = ??? }
+#link = { eu5 = nicobarese_language ck3 = ??? }
+
+#link = { eu5 = malay_language ck3 = ??? }
+#link = { eu5 = malay_dialect ck3 = ??? }
+#link = { eu5 = minangkabau_dialect ck3 = ??? }
+#link = { eu5 = iban_dialect ck3 = ??? }
+#link = { eu5 = banjarese_dialect ck3 = ??? }
+#link = { eu5 = kutai_dialect ck3 = ??? }
+
+#link = { eu5 = lampung_language ck3 = ??? }
+link = { eu5 = burmese_language ck3 = language_burmese }
+#link = { eu5 = meitei_language ck3 = ??? }
+#link = { eu5 = pali_language ck3 = ??? }
+
+##Indonesia
+#Like half of these are covered in CK3 with language_austronesian
+#link = { eu5 = javanese_language ck3 = ??? }
+#link = { eu5 = balinese_language ck3 = ??? }
+#link = { eu5 = madurese_language ck3 = ??? }
+#link = { eu5 = sundanese_language ck3 = ??? }
+#link = { eu5 = batak_language ck3 = ??? }
+#link = { eu5 = bornean_language ck3 = ??? }
+#link = { eu5 = rejang_language ck3 = ??? }
+#link = { eu5 = dayak_language ck3 = ??? }
+#link = { eu5 = kayanic_language ck3 = ??? }
+#link = { eu5 = barito_language ck3 = ??? }
+#link = { eu5 = sama_language ck3 = ??? }
+#link = { eu5 = buginese_language ck3 = ??? }
+#link = { eu5 = gorontalo_language ck3 = ??? }
+#link = { eu5 = celebic_language ck3 = ??? }
+#link = { eu5 = timoric_language ck3 = ??? }
+#link = { eu5 = sumba_language ck3 = ??? }
+#link = { eu5 = tanimbar_language ck3 = ??? }
+#link = { eu5 = aru_language ck3 = ??? }
+#link = { eu5 = maluku_language ck3 = ??? }
+#link = { eu5 = bomberai_language ck3 = ??? }
+#link = { eu5 = halmaheran_language ck3 = ??? }
+#link = { eu5 = ternate_language ck3 = ??? }
+
+#link = { eu5 = visayan_language ck3 = ??? }
+#link = { eu5 = cebuano_dialect ck3 = ??? }
+#link = { eu5 = southern_visayan_dialect ck3 = ??? }
+#link = { eu5 = palawanic_dialect ck3 = ??? }
+#link = { eu5 = hiligaynon_dialect ck3 = ??? }
+#link = { eu5 = waray_dialect ck3 = ??? }
+
+#link = { eu5 = danao_language ck3 = ??? }
+#link = { eu5 = danao_dialect ck3 = ??? }
+#link = { eu5 = manobo_dialect ck3 = ??? }
+#link = { eu5 = subanon_dialect ck3 = ??? }
+
+#link = { eu5 = ilocano_language ck3 = ??? }
+#link = { eu5 = tagalog_language ck3 = ??? }
+#link = { eu5 = bikol_language ck3 = ??? }
+#link = { eu5 = kapampangan_language ck3 = ??? }
+
+##Ireland
+link = { eu5 = gaelic_language ck3 = language_goidelic }
+#link = { eu5 = irish_dialect ck3 = ??? }
+#link = { eu5 = scottish_gaelic_dialect ck3 = ??? }
+
+##Italy
+link = { eu5 = latin_language ck3 = language_latin }
+
+#link = { eu5 = north_italian_language ck3 = ??? }
+link = { eu5 = lombard_dialect ck3 = language_italian name_list = name_list_lombard }
+link = { eu5 = piedmontese_dialect ck3 = language_italian name_list = name_list_cisalpine }
+#link = { eu5 = ligurian_dialect ck3 = ??? }
+#link = { eu5 = emilian_dialect ck3 = ??? }
+#link = { eu5 = venetian_dialect ck3 = ??? }
+#link = { eu5 = rhaetian_dialect ck3 = ??? }
+
+#link = { eu5 = south_italian_language ck3 = ??? }
+#link = { eu5 = tuscan_dialect ck3 = ??? }
+link = { eu5 = sicilian_dialect ck3 = language_italian name_list = name_list_sicilian }
+#link = { eu5 = neapolitan_dialect ck3 = ??? }
+#link = { eu5 = median_dialect ck3 = ??? }
+#link = { eu5 = dalmatian_dialect ck3 = ??? }
+link = { eu5 = sardinian_dialect ck3 = language_sardinian }
+
+##Korea Japan
+link = { eu5 = korean_language ck3 = language_korean }
+link = { eu5 = japanese_language ck3 = language_japonic name_list = name_list_yamato }
+link = { eu5 = japanese_language ck3 = language_japonic name_list = name_list_emishi }
+link = { eu5 = ainu_language ck3 = language_ainu }
+link = { eu5 = ryukyu_language ck3 = language_japonic name_list = name_list_ryukyuan }
+
+##Maghreb
+link = { eu5 = tamazight_language ck3 = language_berber }
+
+##Manchuria
+link = { eu5 = jurchen_language ck3 = language_tungusic }
+link = { eu5 = nivkh_language ck3 = language_nivkh }
+#link = { eu5 = evenk_language ck3 = ??? }
+#link = { eu5 = nanai_language ck3 = ??? }
+#link = { eu5 = udege_language ck3 = ??? }
+
+##Mesoamerica
+#Out of scope
+
+##Mongolia
+link = { eu5 = mongolian_language ck3 = language_mongolic }
+
+##Oceania
+#Out of scope
+
+##Papua
+#All covered by the generic "language_papuan" in CK3
+#link = { eu5 = biak_language ck3 = ??? }
+#link = { eu5 = yapen_language ck3 = ??? }
+#link = { eu5 = manus_language ck3 = ??? }
+#link = { eu5 = lavongai_language ck3 = ??? }
+#link = { eu5 = mussau_language ck3 = ??? }
+#link = { eu5 = kavieng_language ck3 = ??? }
+#link = { eu5 = kuot_language ck3 = ??? }
+#link = { eu5 = siar_language ck3 = ??? }
+#link = { eu5 = baining_language ck3 = ??? }
+#link = { eu5 = mengen_language ck3 = ??? }
+#link = { eu5 = kol_papua_language ck3 = ??? }
+#link = { eu5 = lamogai_language ck3 = ??? }
+#link = { eu5 = willaumez_language ck3 = ??? }
+#link = { eu5 = kaulong_language ck3 = ??? }
+#link = { eu5 = arop_language ck3 = ??? }
+#link = { eu5 = rotokas_language ck3 = ??? }
+#link = { eu5 = naasioi_language ck3 = ??? }
+#link = { eu5 = nehan_language ck3 = ??? }
+#link = { eu5 = yela_language ck3 = ??? }
+#link = { eu5 = nimoa_language ck3 = ??? }
+#link = { eu5 = kilivila_language ck3 = ??? }
+#link = { eu5 = bwaidoga_language ck3 = ??? }
+#link = { eu5 = duau_language ck3 = ??? }
+#link = { eu5 = suau_language ck3 = ??? }
+#link = { eu5 = dagan_language ck3 = ??? }
+#link = { eu5 = manubara_language ck3 = ??? }
+#link = { eu5 = sinaugoro_language ck3 = ??? }
+#link = { eu5 = yareba_language ck3 = ??? }
+#link = { eu5 = guhu_oro_language ck3 = ??? }
+#link = { eu5 = mumeng_language ck3 = ??? }
+#link = { eu5 = koiari_language ck3 = ??? }
+#link = { eu5 = waima_language ck3 = ??? }
+#link = { eu5 = eleman_language ck3 = ??? }
+#link = { eu5 = angan_language ck3 = ??? }
+#link = { eu5 = binanderean_language ck3 = ??? }
+#link = { eu5 = rumu_language ck3 = ??? }
+#link = { eu5 = kutubuan_language ck3 = ??? }
+#link = { eu5 = bosavi_language ck3 = ??? }
+#link = { eu5 = awyu_language ck3 = ??? }
+#link = { eu5 = asmat_language ck3 = ??? }
+#link = { eu5 = kayagar_language ck3 = ??? }
+#link = { eu5 = marind_language ck3 = ??? }
+#link = { eu5 = yelmek_language ck3 = ??? }
+#link = { eu5 = kolopom_language ck3 = ??? }
+#link = { eu5 = oriomo_language ck3 = ??? }
+#link = { eu5 = tirio_language ck3 = ??? }
+#link = { eu5 = pahoturi_language ck3 = ??? }
+#link = { eu5 = yam_language ck3 = ??? }
+#link = { eu5 = gogodala_language ck3 = ??? }
+#link = { eu5 = minanibai_language ck3 = ??? }
+#link = { eu5 = kiwaian_language ck3 = ??? }
+#link = { eu5 = bukawa_language ck3 = ??? }
+#link = { eu5 = bel_language ck3 = ??? }
+#link = { eu5 = markham_language ck3 = ??? }
+#link = { eu5 = rawa_language ck3 = ??? }
+#link = { eu5 = chimbu_language ck3 = ??? }
+#link = { eu5 = ramu_language ck3 = ??? }
+#link = { eu5 = pondo_language ck3 = ??? }
+#link = { eu5 = madang_language ck3 = ??? }
+#link = { eu5 = torricelli_language ck3 = ??? }
+#link = { eu5 = sepik_language ck3 = ??? }
+#link = { eu5 = kwomtari_language ck3 = ??? }
+#link = { eu5 = fas_language ck3 = ??? }
+#link = { eu5 = tami_language ck3 = ??? }
+#link = { eu5 = nimboran_language ck3 = ??? }
+#link = { eu5 = kwerbic_language ck3 = ??? }
+#link = { eu5 = tor_language ck3 = ??? }
+#link = { eu5 = nisa_language ck3 = ??? }
+#link = { eu5 = iresim_language ck3 = ??? }
+#link = { eu5 = yaur_language ck3 = ??? }
+#link = { eu5 = kei_language ck3 = ??? }
+#link = { eu5 = sumuri_language ck3 = ??? }
+#link = { eu5 = arandai_language ck3 = ??? }
+#link = { eu5 = hatam_language ck3 = ??? }
+#link = { eu5 = mantion_language ck3 = ??? }
+#link = { eu5 = maybrat_language ck3 = ??? }
+#link = { eu5 = abun_language ck3 = ??? }
+#link = { eu5 = tehit_language ck3 = ??? }
+
+##Persia
+#link = { eu5 = kurdish_language ck3 = ??? }
+link = { eu5 = persian_language ck3 = language_iranian }
+#link = { eu5 = balochi_language ck3 = ??? }
+link = { eu5 = afghani_language ck3 = language_scythian } #Blame CK3
+#link = { eu5 = tabaristani_language ck3 = ??? }
+
+##Polish
+link = { eu5 = west_slavic_language ck3 = language_lechitic }
+#link = { eu5 = kashubian_dialect ck3 = ??? }
+#link = { eu5 = polabian_dialect ck3 = ??? }
+#link = { eu5 = polish_dialect ck3 = ??? }
+#link = { eu5 = silesian_dialect ck3 = ??? }
+
+link = { eu5 = czechslovak_language ck3 = language_czech_slovak }
+#link = { eu5 = czech_dialect ck3 = ??? }
+#link = { eu5 = slovak_dialect ck3 = ??? }
+#link = { eu5 = sorbian_dialect ck3 = ??? }
+
+##Russian
+link = { eu5 = east_slavic_language ck3 = language_east_slavic }
+#link = { eu5 = russian_dialect ck3 = ??? }
+#link = { eu5 = novgorodian_dialect ck3 = ??? }
+
+#link = { eu5 = ruthenian_language ck3 = ??? }
+#link = { eu5 = belarusian_dialect ck3 = ??? }
+#link = { eu5 = ukrainian_dialect ck3 = ??? }
+
+##Sahel
+link = { eu5 = saharan_language ck3 = language_tubu }
+link = { eu5 = songhai_language ck3 = language_ayneha }
+link = { eu5 = mande_language ck3 = language_manding ck3 = language_soninke }
+link = { eu5 = gur_language ck3 = language_gur }
+link = { eu5 = hausa_language ck3 = language_chadic name_list = name_list_hausa }
+#link = { eu5 = adamawa_language ck3 = ??? }
+#link = { eu5 = bua_language ck3 = ??? }
+link = { eu5 = sao_language ck3 = language_chadic name_list = name_list_sao }
+
+##Scandinavia
+#link = { eu5 = scandinavian_language ck3 = ??? }
+#link = { eu5 = swedish_dialect ck3 = ??? }
+#link = { eu5 = norwegian_dialect ck3 = ??? }
+#link = { eu5 = danish_dialect ck3 = ??? }
+#link = { eu5 = icelandic_dialect ck3 = ??? }
+
+#link = { eu5 = finnish_language ck3 = ??? }
+link = { eu5 = finnish_dialect ck3 = language_finnic }
+#link = { eu5 = estonian_dialect ck3 = ??? }
+
+link = { eu5 = sami_language ck3 = language_sami }
+
+##South Africa
+#Out of scope
+
+##South America
+#Out of scope
+
+##Steppes
+#link = { eu5 = kipchak_language ck3 = ??? }
+
+##Tartar
+link = { eu5 = oghuric_language ck3 = language_oghur }
+
+##Tibet
+link = { eu5 = tibetan_language ck3 = language_tibetan }
+
+##Ural
+#link = { eu5 = nenets_language ck3 = ??? }
+link = { eu5 = mordvinic_language ck3 = language_volga_finnic name_list = name_list_mordvin }
+link = { eu5 = mari_language ck3 = language_volga_finnic name_list = name_list_mari }
+link = { eu5 = permic_language ck3 = language_ugro_permian name_list = name_list_komi }
+link = { eu5 = ugrian_language ck3 = language_ugro_permian name_list = name_list_khanty }
+#link = { eu5 = yeniseian_language ck3 = ??? }
+
+##West Africa
+link = { eu5 = senegambian_language ck3 = language_senegambian }
+#link = { eu5 = mel_language ck3 = ??? }
+#link = { eu5 = senufo_language ck3 = ??? }
+link = { eu5 = kru_language ck3 = language_kru }
+link = { eu5 = kwa_language ck3 = language_kwa }
+link = { eu5 = nigerian_language ck3 = language_yoruba }
+#link = { eu5 = dogon_language ck3 = ??? }
+#link = { eu5 = ijaw_language ck3 = ??? }
+
+##Western India
+link = { eu5 = punjabi_language ck3 = language_vrachada }
+link = { eu5 = rajasthani_language ck3 = language_rajasthani }
+link = { eu5 = gujarati_language ck3 = language_sauraseni }
+link = { eu5 = kashmiri_language ck3 = language_kashmiri }
+
+##Xinjiang
+#link = { eu5 = karluk_language ck3 = ??? }
+#link = { eu5 = turkic_language ck3 = ??? }
+
+
+###Unmatched CK3 Languages
+#language_norse
+#language_saxon
+#language_turkic - Too complicated
+#language_tocharian
+#language_khitan
+#language_egyptian - Old Egpytian, dead language
+#language_hunnic - Dead language
+#language_ancient_greek - Dead language
+

@@ -1,0 +1,254 @@
+# heritages determine into which eu5 culture groups a particular dynamic culture goes
+# multiple eu5 per line, single (ck3) heritage per line. THIS IS THE REVERSE OF MOST FILES!!!
+# multiple eu5 per line, single (ck3) language per line. THIS IS THE REVERSE OF MOST FILES!!!
+  # You can have both a culture and a heritage on the same line.
+
+##Heritage -> Group(s)
+#Listed in the order of their appearance in the heritage heritage file
+#link = { eu5 = ??? heritage = heritage_akan } #Akans/Krus are not in west_african_group for some reason
+link = { eu5 = arabic_group heritage = heritage_arabic }
+link = { eu5 = austronesian_group heritage = heritage_austronesian }
+link = { eu5 = baltic_group heritage = heritage_baltic }
+link = { eu5 = finnic_group heritage = heritage_balto_finnic }
+link = { eu5 = amazigh_group eu5 = maghrebi_group heritage = heritage_berber }
+link = { eu5 = british_group eu5 = celtic_group heritage = heritage_brythonic }
+link = { eu5 = tibeto_burman_group heritage = heritage_burman }
+link = { eu5 = greek_group heritage = heritage_byzantine }
+link = { eu5 = west_african_group heritage = heritage_central_african } #heritage Central Africans are in EU5's West Africa Group
+link = { eu5 = german_group heritage = heritage_central_germanic }
+link = { eu5 = chinese_group eu5 = confucian_group heritage = heritage_chinese }
+link = { eu5 = confucian_group heritage = heritage_korean }
+link = { eu5 = jurchen_group eu5 = tungusic_group heritage = heritage_buyeo }
+link = { eu5 = thai_group heritage = heritage_tai }
+# link = { eu5 = ??? heritage = heritage_hmongic } #Hmong/Yao lack a culture group in EU5
+link = { eu5 = dravidian_group eu5 = indian_group heritage = heritage_dravidian }
+link = { eu5 = ethiopian_group heritage = heritage_east_african }
+link = { eu5 = russian_group eu5 = slavic_group heritage = heritage_east_slavic }
+link = { eu5 = french_group heritage = heritage_frankish }
+link = { eu5 = celtic_group heritage = heritage_goidelic }
+link = { eu5 = iberian_group heritage = heritage_iberian }
+link = { eu5 = indian_group eu5 = indo_aryan_group heritage = heritage_indo_aryan }
+link = { eu5 = iranian_group heritage = heritage_iranian }
+link = { eu5 = jewish_group heritage = heritage_israelite }
+link = { eu5 = italian_group heritage = heritage_latin }
+link = { eu5 = carpathian_group eu5 = hungarian_group heritage = heritage_magyar }
+link = { eu5 = mongolian_group heritage = heritage_mongolic }
+link = { eu5 = scandinavian_group heritage = heritage_north_germanic }
+link = { eu5 = tibeto_burman_group heritage = heritage_qiangic }
+link = { eu5 = west_african_group heritage = heritage_sahelian }
+link = { eu5 = west_african_group heritage = heritage_senegambian }
+#link = { eu5 = ??? heritage = heritage_somalian } #Somalis do not have a culture group in EU5
+#link = { eu5 = ??? heritage = heritage_bantu } #No Bantu group in EU5 (shocking honestly)
+link = { eu5 = slavic_group eu5 = south_slavic_group heritage = heritage_south_slavic }
+link = { eu5 = tibetan_group eu5 = tibeto_burman_group heritage = heritage_tibetan }
+link = { eu5 = turkic_group heritage = heritage_turkic }
+#link = { eu5 = ??? heritage = heritage_ugro_permian } #Permic cultures have no culture group in EU5
+#link = { eu5 = ??? heritage = heritage_volga_finnic } #Permic cultures have no culture group in EU5
+link = { eu5 = west_african_group heritage = heritage_west_african }
+link = { eu5 = british_group heritage = heritage_west_germanic }
+link = { eu5 = slavic_group heritage = heritage_west_slavic }
+link = { eu5 = west_african_group heritage = heritage_yoruba }
+#link = { eu5 = ??? heritage = heritage_tocharian } #Tocharians extinct by EU5 timeframe, no culture group
+link = { eu5 = carpathian_group eu5 = romanian_group heritage = heritage_vlach }
+link = { eu5 = caucasian_group heritage = heritage_caucasian }
+#link = { eu5 = ??? heritage = heritage_syriac } #Syrians only have Arabic culture group
+link = { eu5 = greek_group heritage = heritage_gothic }
+#link = { eu5 = ??? heritage = heritage_egyptian } #Egyptians only have Arabic culture group
+link = { eu5 = carpathian_group eu5 = tatar_group heritage = heritage_hunnic }
+link = { eu5 = greek_group heritage = heritage_ancient_greek }
+#link = { eu5 = ??? heritage = heritage_albanian } #Albanians have no culture group in EU5
+link = { eu5 = jurchen_group eu5 = tungusic_group heritage = heritage_tungusic }
+link = { eu5 = tungusic_group heritage = heritage_nivkh }
+link = { eu5 = confucian_group eu5 = japanese_group heritage = heritage_japonic }
+#link = { eu5 = ??? heritage = heritage_ainuic } #Ainu have no culture group in EU5
+link = { eu5 = austroasiatic_group heritage = heritage_mon_khmer }
+link = { eu5 = austroasiatic_group eu5 = confucian_group heritage = heritage_viet }
+
+##Language -> Group(s)
+link = { eu5 = arabic_group language = language_arabic }
+link = { eu5 = netherlandish_group langauge = language_dutch }
+link = { eu5 = nepali_group langauge = language_pahari }
+link = { eu5 = pyrenean_group langauge = language_occitano_romance }
+link = { eu5 = pyrenean_group langauge = language_basque }
+link = { eu5 = tatar_group langauge = language_oghur }
+
+##Complex (Requires BOTH heritage and a language)
+link = { eu5 = bohemian_group heritage = heritage_west_slavic langauge = language_czech_slovak }
+link = { eu5 = swiss_group heritage = central_germanic langauge = language_french }
+link = { eu5 = swiss_group heritage = central_germanic langauge = language_occitano_romance }
+link = { eu5 = swiss_group heritage = central_germanic langauge = language_italian }
+link = { eu5 = swiss_group heritage = frankish langauge = language_central_germanic }
+link = { eu5 = swiss_group heritage = frankish langauge = language_high_german }
+link = { eu5 = swiss_group heritage = heritage_latin langauge = language_central_germanic }
+link = { eu5 = swiss_group heritage = heritage_latin langauge = language_high_german }
+
+##name_list -> Group(s)
+link = { eu5 = maghrebi_group name_list = name_list_maghrebi }
+link = { eu5 = hibernian_group name_list = name_list_irish }
+link = { eu5 = scottish_group name_list = name_list_pictish }
+link = { eu5 = scottish_group name_list = name_list_cumbrian }
+link = { eu5 = scottish_group name_list = name_list_gaelic }
+link = { eu5 = lithuanian_group name_list = name_list_lithuanian }
+link = { eu5 = polish_group name_list = name_list_polish }
+link = { eu5 = arabian_group name_list = name_list_bedouin }
+link = { eu5 = arabian_group name_list = name_list_levantine }
+link = { eu5 = arabian_group name_list = name_list_yemeni }
+
+
+##undefined EU5 culture groups
+#link = { eu5 = andean_group ck3 = ??? }
+#link = { eu5 = haudenosaunee_group ck3 = ??? }
+#link = { eu5 = micronesian_group ck3 = ??? }
+#link = { eu5 = nahua_group ck3 = ??? }
+#link = { eu5 = polynesian_group ck3 = ??? }
+#link = { eu5 = puebloan_group ck3 = ??? }
+#link = { eu5 = malagasy_group ck3 = ??? }
+#link = { eu5 = shan_group ck3 = ??? }
+
+#link = { eu5 = abenakian_group ck3 = ??? }
+#link = { eu5 = aikana_group ck3 = ??? }
+#link = { eu5 = aingae_group ck3 = ??? }
+#link = { eu5 = algic_group ck3 = ??? }
+#link = { eu5 = anishinabe_group ck3 = ??? }
+#link = { eu5 = apsaalooke_hiraaca_group ck3 = ??? }
+#link = { eu5 = atacame_group ck3 = ??? }
+#link = { eu5 = atakapa_group ck3 = ??? }
+#link = { eu5 = atallan_group ck3 = ??? }
+#link = { eu5 = aymara_group ck3 = ??? }
+#link = { eu5 = bagua_group ck3 = ??? }
+#link = { eu5 = barbakoan_group ck3 = ??? }
+#link = { eu5 = besiro_group ck3 = ??? }
+#link = { eu5 = bora_huitoto_group ck3 = ??? }
+#link = { eu5 = cacan_group ck3 = ??? }
+#link = { eu5 = caddoan_group ck3 = ??? }
+#link = { eu5 = calima_group ck3 = ??? }
+#link = { eu5 = caribe_group ck3 = ??? }
+#link = { eu5 = charrua_group ck3 = ??? }
+#link = { eu5 = cherokee_group ck3 = ??? }
+#link = { eu5 = chibchan_group ck3 = ??? }
+#link = { eu5 = chicham_group ck3 = ??? }
+#link = { eu5 = chickasaw_choctaw_group ck3 = ??? }
+#link = { eu5 = chitimacha_group ck3 = ??? }
+#link = { eu5 = chiwere_group ck3 = ??? }
+#link = { eu5 = choco_group ck3 = ??? }
+#link = { eu5 = chono_group ck3 = ??? }
+#link = { eu5 = chumashan_group ck3 = ??? }
+#link = { eu5 = ckunsa_group ck3 = ??? }
+#link = { eu5 = coahuilteco_group ck3 = ??? }
+#link = { eu5 = cree_group ck3 = ??? }
+#link = { eu5 = cuicas_group ck3 = ??? }
+#link = { eu5 = cuitlatec_group ck3 = ??? }
+#link = { eu5 = culli_group ck3 = ??? }
+#link = { eu5 = dakota_group ck3 = ??? }
+#link = { eu5 = dhegiha_group ck3 = ??? }
+#link = { eu5 = eastern_otomanguean_group ck3 = ??? }
+#link = { eu5 = guahibo_group ck3 = ??? }
+#link = { eu5 = haida_group ck3 = ??? }
+#link = { eu5 = henia_kamiare_group ck3 = ??? }
+#link = { eu5 = hinonoeitiit_group ck3 = ??? }
+#link = { eu5 = hokan_group ck3 = ??? }
+#link = { eu5 = inuit_group ck3 = ??? }
+#link = { eu5 = iroquoian_group ck3 = ??? }
+#link = { eu5 = jirajaran_group ck3 = ??? }
+#link = { eu5 = kambiwa_group ck3 = ??? }
+#link = { eu5 = kanisian_group ck3 = ??? }
+#link = { eu5 = kawesqar_group ck3 = ??? }
+#link = { eu5 = kayambi_group ck3 = ??? }
+#link = { eu5 = keres_group ck3 = ??? }
+#link = { eu5 = ktunaxa_group ck3 = ??? }
+#link = { eu5 = kwaza_group ck3 = ??? }
+#link = { eu5 = lenape_group ck3 = ??? }
+#link = { eu5 = lule_group ck3 = ??? }
+#link = { eu5 = macro_je_group ck3 = ??? }
+#link = { eu5 = malibu_group ck3 = ??? }
+#link = { eu5 = manoki_group ck3 = ??? }
+#link = { eu5 = mapudungun_group ck3 = ??? }
+#link = { eu5 = maskoy_group ck3 = ??? }
+#link = { eu5 = massachusett_group ck3 = ??? }
+#link = { eu5 = mataco_guaicuru_group ck3 = ??? }
+#link = { eu5 = maya_group ck3 = ??? }
+#link = { eu5 = misumalpan_group ck3 = ??? }
+#link = { eu5 = moseten_group ck3 = ??? }
+#link = { eu5 = movima_group ck3 = ??? }
+#link = { eu5 = muchik_group ck3 = ??? }
+#link = { eu5 = mura_group ck3 = ??? }
+#link = { eu5 = muskogee_group ck3 = ??? }
+#link = { eu5 = myaamia_group ck3 = ??? }
+#link = { eu5 = nadene_group ck3 = ??? }
+#link = { eu5 = napuruna_group ck3 = ??? }
+#link = { eu5 = natchez_group ck3 = ??? }
+#link = { eu5 = nuuchi_nuwu_group ck3 = ??? }
+#link = { eu5 = otopamean_group ck3 = ??? }
+#link = { eu5 = paiute_group ck3 = ??? }
+#link = { eu5 = panche_group ck3 = ??? }
+#link = { eu5 = pano_group ck3 = ??? }
+#link = { eu5 = panzaleo_group ck3 = ??? }
+#link = { eu5 = penutian_group ck3 = ??? }
+#link = { eu5 = pijao_group ck3 = ??? }
+#link = { eu5 = powhatan_group ck3 = ??? }
+#link = { eu5 = pukina_group ck3 = ??? }
+#link = { eu5 = pume_group ck3 = ??? }
+#link = { eu5 = purepecha_group ck3 = ??? }
+#link = { eu5 = quechuan_group ck3 = ??? }
+#link = { eu5 = quingnam_group ck3 = ??? }
+#link = { eu5 = salishan_group ck3 = ??? }
+#link = { eu5 = seeptsa_group ck3 = ??? }
+#link = { eu5 = shawnee_group ck3 = ??? }
+#link = { eu5 = shoshoni_group ck3 = ??? }
+#link = { eu5 = sihni_group ck3 = ??? }
+#link = { eu5 = siksika_group ck3 = ??? }
+#link = { eu5 = sinu_group ck3 = ??? }
+#link = { eu5 = skarureh_group ck3 = ??? }
+#link = { eu5 = ta_arawakan_group ck3 = ??? }
+#link = { eu5 = takic_group ck3 = ??? }
+#link = { eu5 = tanoan_group ck3 = ??? }
+#link = { eu5 = tarairiu_group ck3 = ??? }
+#link = { eu5 = tayrona_group ck3 = ??? }
+#link = { eu5 = timoto_group ck3 = ??? }
+#link = { eu5 = timucua_group ck3 = ??? }
+#link = { eu5 = totozoquean_group ck3 = ??? }
+#link = { eu5 = truka_group ck3 = ??? }
+#link = { eu5 = tsehesenestsestotse_group ck3 = ??? }
+#link = { eu5 = tshon_group ck3 = ??? }
+#link = { eu5 = tsimshian_group ck3 = ??? }
+#link = { eu5 = tucanoan_group ck3 = ??? }
+#link = { eu5 = tupi_group ck3 = ??? }
+#link = { eu5 = tutelo_group ck3 = ??? }
+#link = { eu5 = truka_group ck3 = ??? }
+#link = { eu5 = txapakura_group ck3 = ??? }
+#link = { eu5 = uru_group ck3 = ??? }
+#link = { eu5 = wakashan_group ck3 = ??? }
+#link = { eu5 = waqha_group ck3 = ??? }
+#link = { eu5 = warao_group ck3 = ??? }
+#link = { eu5 = warpe_group ck3 = ??? }
+#link = { eu5 = wendat_group ck3 = ??? }
+#link = { eu5 = xinka_group ck3 = ??? }
+#link = { eu5 = yaghan_group ck3 = ??? }
+#link = { eu5 = yuki_group ck3 = ??? }
+#link = { eu5 = yupik_group ck3 = ??? }
+#link = { eu5 = yutonahua_group ck3 = ??? }
+#link = { eu5 = zamuco_group ck3 = ??? }
+#link = { eu5 = zuni_group ck3 = ??? }
+
+
+# Mod: RICE
+#link = { eu5 = ??? ck3 = heritage_algonquian }
+link = { eu5 = haudenosaunee_group ck3 = heritage_iroquoian }
+link = { eu5 = inuit_group ck3 = heritage_paleo_inuit }
+link = { eu5 = inuit_group ck3 = heritage_inuit }
+#link = { eu5 = ??? ck3 = heritage_east_bantu }
+#link = { eu5 = ??? ck3 = heritage_siberian }
+link = { eu5 = austroasiatic_group ck3 = heritage_vietic }
+link = { eu5 = confucian_group ck3 = heritage_korean }
+link = { eu5 = austronesian_group ck3 = heritage_malayic }
+#link = { eu5 = ??? ck3 = heritage_south_bantu }
+link = { eu5 = austronesian_group ck3 = heritage_chamic }
+link = { eu5 = japanese_group ck3 = heritage_yamato }
+link = { eu5 = tibetan_group ck3 = heritage_loloish }
+link = { eu5 = austroasiatic_group ck3 = heritage_khmer }
+link = { eu5 = austronesian_group ck3 = heritage_sulawesi }
+link = { eu5 = thai_group ck3 = heritage_tai }
+
+# Mod: Fallen Eagle
+link = { eu5 = greek_group ck3 = heritage_hellenistic }
+link = { eu5 = slavic_group ck3 = heritage_slavic }

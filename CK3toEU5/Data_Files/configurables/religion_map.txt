@@ -3,6 +3,7 @@
 # multiple ck3 entries are allowed, multiple eu5 are not.
 #Special Entries:
 ## religious_head: Will map to EU5 religion if it has specified religious head
+## school: Specifies the Muslim theological school for EU5
 
 ##Buddhist
 link = { eu5 = bon ck3 = bon ck3 = old_bon } #Bons should probably be split in the future
