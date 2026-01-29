@@ -1,7 +1,7 @@
 # heritages determine into which eu5 culture groups a particular dynamic culture goes
 # multiple eu5 per line, single (ck3) heritage per line. THIS IS THE REVERSE OF MOST FILES!!!
 # multiple eu5 per line, single (ck3) language per line. THIS IS THE REVERSE OF MOST FILES!!!
-  # You can have both a culture and a heritage on the same line.
+  # You can have both a heritage and a language on the same line.
 
 ##Heritage -> Group(s)
 #Listed in the order of their appearance in the heritage heritage file

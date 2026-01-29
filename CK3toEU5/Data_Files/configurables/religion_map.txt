@@ -306,7 +306,7 @@ link = { eu5 = ibadi ck3 = mutazila school = mutazila_school }
 link = { eu5 = yazidism ck3 = yazidi }
 
 ##Zoroastrianism
-link = { eu5 = zoroastrian ck3 = mazdayasna
+link = { eu5 = zoroastrian ck3 = mazdayasna }
 
 ### IRToCK3 addition
 ## Others
