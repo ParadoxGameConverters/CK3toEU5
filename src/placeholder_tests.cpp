@@ -2,7 +2,12 @@
 
 
 
+namespace placeholder
+{
+
 TEST(PlaceholderTests, PlaceholderTest)
 {
    SUCCEED();
 }
+
+}  // namespace placeholder
