@@ -1,0 +1,10 @@
+# Version info - if editing, remember to also update the workflow, which generates a fresh copy of this
+
+version = "0.0.0"
+name = ""
+source = "CK3"
+minSource = "0.*"
+maxSource = "2.*"
+target = "EU5"
+minTarget = "0.*"
+maxTarget = "2.*"
