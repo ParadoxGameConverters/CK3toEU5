@@ -1,0 +1,137 @@
+name: "Linux-based analysis"
+
+env:
+  COVERAGE: YES
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 16 * * 6'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze_main:
+    name: Analyze Local
+    if: github.repository_owner == 'ParadoxGameConverters'
+    runs-on: [self-hosted, linux]
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['cpp']
+
+    steps:
+    - name: "Cloning repo"
+      uses: actions/checkout@v6
+      with:
+        submodules: true
+
+    - name: "Cloning submodules"
+      run: git submodule update --init --recursive
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v4
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Configure cmake
+      run: cmake --preset x64-coverage-linux
+
+    - name: Build solution
+      run: cmake --build --preset build-x64-coverage-linux --target CK3toEU5 ConverterFrontend CK3toEU5Tests -- -j40
+
+    - name: Run tests
+      run: |
+       cd build/test/Coverage-Linux/
+       ./CK3toEU5Tests
+       cd ../../..
+
+    - name: Run gcov
+      run: cmake --build --preset build-x64-coverage-linux --target gcov
+
+    - name: Run lcov
+      run: cmake --build --preset build-x64-coverage-linux --target lcov
+
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: build/x64-coverage-linux/lcoverage/coverage.info
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v4
+
+    - name: Cleanup
+      uses: colpal/actions-clean@v1
+      if: always()
+
+  analyze:
+    name: Analyze Foreign
+    if: github.repository_owner != 'ParadoxGameConverters'
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['cpp']
+
+    steps:
+    - name: "Cloning repo"
+      uses: actions/checkout@v6
+      with:
+        submodules: true
+
+    - name: "Cloning selective submodules"
+      run: git submodule update --init --recursive
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v4
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Install Prerequisites
+      run: |
+       sudo apt-key adv --fetch-keys https://repos.codelite.org/CodeLite.asc
+       sudo apt-add-repository 'deb https://repos.codelite.org/wx3.2/ubuntu/ jammy universe'
+       sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+       sudo apt-get update
+       sudo apt-get install libcurl4-openssl-dev libwxbase3.2-0-unofficial \
+                libwxbase3.2unofficial-dev libwxgtk3.2-0-unofficial libwxgtk3.2unofficial-dev \
+                wx3.2-headers wx-common libnotify-dev libnotify4 libcurl4-openssl-dev lcov cmake \
+                ninja-build
+
+    - name: Prepare build
+      run: |
+       # Link gcc-12 and g++-12 to their standard commands
+       sudo ln -s /usr/bin/gcc-12 /usr/local/bin/gcc
+       sudo ln -s /usr/bin/g++-12 /usr/local/bin/g++
+       sudo ln -s /usr/bin/gcov-12 /usr/local/bin/gcov
+       sudo ln -s /usr/bin/lcov /usr/local/bin/lcov
+       sudo ln -s /usr/bin/geninfo /usr/local/bin/geninfo
+       # Export CC and CXX to tell cmake which compiler to use
+       export CC=/usr/bin/gcc-12
+       export CXX=/usr/bin/g++-12
+    
+    - name: Build solution
+      run: |
+        cmake --preset x64-release-linux
+        cmake --build --preset build-x64-release-linux --target CK3toEU5 ConverterFrontend CK3toEU5Tests -- -j40
+
+    - name: Run tests
+      run: |
+       cd build/test/Release-Linux/
+       ./CK3toEU5Tests
+       cd ../../..
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v4
+
+    - name: Cleanup
+      uses: colpal/actions-clean@v1
+      if: always()
