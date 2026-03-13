@@ -7,7 +7,7 @@
 
 
 
-int main() // NOLINT(bugprone-exception-escape)
+int main()  // NOLINT(bugprone-exception-escape)
 {
    try
    {
