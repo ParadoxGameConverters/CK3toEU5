@@ -1,7 +1,9 @@
-#include <iostream>
+#include <print>
 
 int main() {
 	// I miss printf()
-	std::cout << "Hello, world!" << std::endl;
+	// Meet C++23's new hotness!
+	std::println("Hello, world!");
+
 	return 0;
 }
