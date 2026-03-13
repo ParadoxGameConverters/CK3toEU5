@@ -1,0 +1,9 @@
+Coding Style
+------------
+
+The coding style for CK3 to EU5 is derived from the Google C++ Style Guide: https://google.github.io/styleguide/cppguide.html
+Notable changes are longer line lengths and braced blocks starting on folloing lines.
+
+Code formatting is enforced via clang format. There is a check on pull requests that will point out formatting errors, and they can be corrected via automated tools. In Visual Studio, press Ctrl+K,D to automatically format the currently viewed file.
+
+Naming should adhere to Google style. This is enforced by clang-tidy on pull requests. It can be checked locally by building the x64 clang-tidy configuration.
