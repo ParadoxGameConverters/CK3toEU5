@@ -1,0 +1,12 @@
+l_english:
+ STARTDATE: "Select starting bookmark:"
+ STARTDATETIP: "1444 or CK end-date?"
+ STARTDATE1: "Europa Universalis (1444)"
+ STARTDATE1TIP: "Start at vanilla EU4 start date."
+ STARTDATE2: "Crusader Universalis (dynamic)"
+ STARTDATE2TIP: "Start at CK savegame date."
+ STARTDATE3: "Customized - start_date.txt"
+ STARTDATE3TIP: "Manually configured."
+ MODNAME: "Mod Output Name (optional):"
+ MODNAMETIP: "Please, stick to Latin letters"
+ MODNAMETIP2: "Optional name for the converted mod (default name is the one of the savegame)"

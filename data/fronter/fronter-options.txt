@@ -1,0 +1,35 @@
+option = {
+	name = start_date
+	displayName = STARTDATE
+	tooltip = STARTDATETIP
+	radioSelector = {
+		radioOption = {
+			name = 1
+			displayName = STARTDATE1
+			tooltip = STARTDATE1TIP
+			default = true
+		}
+		radioOption = {
+			name = 2
+			displayName = STARTDATE2
+			tooltip = STARTDATE2TIP
+			default = false
+		}
+		radioOption = {
+			name = 3
+			displayName = STARTDATE3
+			tooltip = STARTDATE3TIP
+			default = false
+		}
+	}
+}
+option = {
+	name = output_name
+	displayName = MODNAME
+	tooltip = MODNAMETIP
+	textSelector = {	
+		value = ""
+		editable = true
+		tooltip = MODNAMETIP2
+	}
+}

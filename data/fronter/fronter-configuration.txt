@@ -1,0 +1,56 @@
+﻿name = CK3ToEU5
+converterFolder = CK3ToEU5
+backendExePath = CK3ToEU5
+displayName = CK3DISPLAYNAME
+sourceGame = CK3GAME
+targetGame = EU5GAME
+
+enableUpdateChecker = true
+checkForUpdatesOnStartup = true
+latestGitHubConverterReleaseUrl = "https://github.com/ParadoxGameConverters/CK3ToEU5/releases/"
+converterReleaseForumThread = "https://forum.paradoxplaza.com/forum/threads/ck3-to-eu5-converter-thread.1866691/"
+pagesCommitIdUrl = "https://paradoxgameconverters.com/commit_ids/CK3ToEU5.txt"
+overwritePlayset = true
+
+requiredFolder = {
+	name = CK3directory
+	displayName = CK3FOLDER
+	tooltip = CK3FOLDERIP
+	mandatory = true
+	searchPathType = steamFolder
+	searchPathID = 1158310
+}
+requiredFolder = {
+	name = CK3DocDirectory
+	displayName = CK3DOC
+	tooltip = CK3DOCTIP
+	mandatory = true
+	searchPathType = windowsUsersFolder
+	searchPath = "Paradox Interactive\Crusader Kings III"
+}
+requiredFolder = {
+	name = EU5directory
+	displayName = EU5FOLDER
+	tooltip = EU5FOLDERTIP
+	mandatory = true
+	searchPathType = steamFolder
+	searchPathID = 3450310
+}
+requiredFolder = {
+	name = targetGameModPath
+	displayName = EU5MOD
+	tooltip = EU5MODTIP
+	mandatory = true
+	searchPathType = windowsUsersFolder
+	searchPath = "Paradox Interactive\Europa Universalis V\mod"
+}
+requiredFile = {
+	name = SaveGame
+	displayName = CK3SAVE
+	tooltip = CK3SAVETIP
+	mandatory = true
+	outputtable = true
+	searchPathType = windowsUsersFolder
+	searchPath = "Paradox Interactive\Crusader Kings III\save games"
+	allowedExtension = "*.CK3"
+}
