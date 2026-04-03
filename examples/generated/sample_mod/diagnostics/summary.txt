@@ -1,0 +1,7 @@
+CK3ToEU5 diagnostics summary
+Infos: 2
+Warnings: 0
+Errors: 0
+
+[INFO] CONVERSION_COUNTRIES: Generated 2 EU5 countries.
+[INFO] CONVERSION_LOCATIONS: Generated 4 EU5 locations.

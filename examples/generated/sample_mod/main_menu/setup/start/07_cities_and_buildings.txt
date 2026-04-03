@@ -1,0 +1,56 @@
+locations = {
+	evreux = {
+		rank = town
+		town_setup = ck3_converter_town
+	}
+	london = {
+		rank = city
+		town_setup = ck3_converter_capital_city
+	}
+	oxford = {
+		rank = town
+		town_setup = ck3_converter_town
+	}
+	rouen = {
+		rank = city
+		town_setup = ck3_converter_capital_city
+	}
+}
+
+building_manager = {
+	merchants_guild = {
+		location = london
+		tag = ENG
+		level = 1
+	}
+	sergeantry = {
+		location = london
+		tag = ENG
+		level = 1
+	}
+	stockade = {
+		location = london
+		tag = ENG
+		level = 1
+	}
+	barracks = {
+		location = oxford
+		tag = ENG
+		level = 1
+	}
+	sergeantry = {
+		location = rouen
+		tag = NRM
+		level = 1
+	}
+	stockade = {
+		location = rouen
+		tag = NRM
+		level = 1
+	}
+	barracks = {
+		location = evreux
+		tag = NRM
+		level = 1
+	}
+}

@@ -1,0 +1,100 @@
+countries = {
+	countries = {
+		ENG = {
+			own_control_core = { london oxford }
+			capital = london
+			dynasty = dyn_house_100
+			country_rank = rank_kingdom
+			starting_technology_level = 3
+			currency_data = {
+				gold = 680
+				prestige = 58
+				government_power = 68
+			}
+			government = {
+				ruler = char_1_edward
+				ruler_term = { character = char_1_edward start_date = 1337.1.1 }
+				type = monarchy
+				heir_selection = cognatic_primogeniture
+				laws = {
+					feudal_de_jure_law = by_blood
+					heir_religion_law = heir_same_religion
+					marriage_law = monogamous_marriage
+					medieval_levy_law = all_cultures
+				}
+				reforms = {
+					feudal_nobility
+				}
+				privilege = {
+					clergy_literacy_rights
+					clergy_enforced_unity
+					market_fairs
+					shipwright_contracts
+					peasants_allowed_weapons_privilege
+				}
+				centralization_vs_decentralization = 40
+				traditionalist_vs_innovative = -14
+				spiritualist_vs_humanist = -20
+				aristocracy_vs_plutocracy = 18
+				serfdom_vs_free_subjects = 25
+				mercantilism_vs_free_trade = -33
+				belligerent_vs_conciliatory = 10
+				quality_vs_quantity = -10
+				offensive_vs_defensive = -5
+				land_vs_naval = 0
+				capital_economy_vs_traditional_economy = 60
+				individualism_vs_communalism = 33
+				outward_vs_inward = -30
+			}
+		}
+		NRM = {
+			own_control_core = { evreux rouen }
+			capital = rouen
+			dynasty = dyn_house_200
+			country_rank = rank_duchy
+			starting_technology_level = 2
+			currency_data = {
+				gold = 390
+				prestige = 50
+				government_power = 49
+			}
+			government = {
+				ruler = char_2_robert
+				ruler_term = { character = char_2_robert start_date = 1337.1.1 }
+				consort = char_3_william
+				heir = char_3_william
+				type = monarchy
+				heir_selection = semi_salic_law
+				laws = {
+					feudal_de_jure_law = by_blood
+					heir_religion_law = heir_same_religion
+					marriage_law = monogamous_marriage
+					medieval_levy_law = all_cultures
+				}
+				reforms = {
+					feudal_nobility
+				}
+				privilege = {
+					noble_fortification_licenses
+					clergy_literacy_rights
+					clergy_enforced_unity
+					market_fairs
+					shipwright_contracts
+				}
+				centralization_vs_decentralization = 25
+				traditionalist_vs_innovative = -14
+				spiritualist_vs_humanist = -20
+				aristocracy_vs_plutocracy = 18
+				serfdom_vs_free_subjects = 25
+				mercantilism_vs_free_trade = -33
+				belligerent_vs_conciliatory = 8
+				quality_vs_quantity = -10
+				offensive_vs_defensive = 15
+				land_vs_naval = 0
+				capital_economy_vs_traditional_economy = 53
+				individualism_vs_communalism = 33
+				outward_vs_inward = -30
+			}
+		}
+	}
+}

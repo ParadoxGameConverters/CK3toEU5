@@ -1,0 +1,332 @@
+world = {
+	date = 1337.1.1
+	dynasties = {
+		1 = {
+			key = "dynasty_plantagenet"
+			good_for_realm_name = yes
+		}
+		2 = {
+			key = "dynasty_normandie"
+		}
+	}
+	dynasty_houses = {
+		100 = {
+			key = "house_plantagenet"
+			name = Plantagenet
+			localized_name = Plantagenet
+			dynasty_id = 1
+			house_head_id = 1
+		}
+		200 = {
+			key = "house_normandie"
+			name = Normandie
+			localized_name = Normandie
+			dynasty_id = 2
+			house_head_id = 2
+		}
+	}
+	cultures = {
+		10 = {
+			key = english
+			display_name = "English"
+		}
+		20 = {
+			key = norman
+			display_name = "Norman"
+		}
+	}
+	faiths = {
+		30 = {
+			key = catholic
+			religion = christianity_religion
+			display_name = "Catholic"
+		}
+	}
+	characters = {
+		1 = {
+			first_name = Edward
+			last_name = Plantagenet
+			dynasty_house_id = 100
+			dynasty = Plantagenet
+			culture_id = 10
+			culture = english
+			faith_id = 30
+			faith = catholic
+			government = feudal
+			primary_title = k_england
+			realm_capital_province = 100
+			domain_titles = { k_england c_middlesex c_oxfordshire }
+			gold = 450
+			realm_current_strength = 9200
+			realm_max_strength = 10400
+			realm_levy = 7800
+			adm = 62
+			dip = 58
+			mil = 61
+			birth_date = 1312.11.13
+		}
+		2 = {
+			first_name = Robert
+			last_name = Normandie
+			dynasty_house_id = 200
+			dynasty = Normandie
+			culture_id = 20
+			culture = norman
+			faith_id = 30
+			faith = catholic
+			government = feudal
+			primary_title = d_normandy
+			liege = 1
+			spouse = 3
+			realm_capital_province = 103
+			domain_titles = { d_normandy c_rouen c_evreux }
+			gold = 180
+			realm_current_strength = 4300
+			realm_max_strength = 4700
+			realm_levy = 3500
+			adm = 48
+			dip = 52
+			mil = 46
+			birth_date = 1305.5.4
+		}
+		3 = {
+			first_name = William
+			last_name = Normandie
+			dynasty_house_id = 200
+			dynasty = Normandie
+			culture_id = 20
+			culture = norman
+			faith_id = 30
+			faith = catholic
+			government = feudal
+			liege = 2
+			spouse = 2
+			gold = 40
+			adm = 42
+			dip = 44
+			mil = 39
+			birth_date = 1325.2.14
+		}
+		4 = {
+			first_name = Richard
+			last_name = Normandie
+			dynasty_house_id = 200
+			dynasty = Normandie
+			culture_id = 20
+			culture = norman
+			faith_id = 30
+			faith = catholic
+			government = feudal
+			dead = yes
+			death_date = 1330.4.1
+			gold = 0
+			adm = 45
+			dip = 41
+			mil = 47
+			birth_date = 1298.9.9
+		}
+	}
+	titles = {
+		k_england = {
+			source_id = 1
+			rank = kingdom
+			holder = 1
+			government = feudal
+			capital_county = c_middlesex
+			owned_de_facto_counties = { c_middlesex c_oxfordshire }
+			display_name = "England"
+		}
+		d_normandy = {
+			source_id = 2
+			rank = duchy
+			holder = 2
+			de_jure_liege_title = k_england
+			de_facto_liege_title = k_england
+			government = feudal
+			capital_county = c_rouen
+			de_facto_vassals = { c_rouen c_evreux }
+			owned_de_jure_counties = { c_rouen c_evreux }
+			owned_de_facto_counties = { c_rouen c_evreux }
+			heirs = { 3 }
+			claimants = { 3 }
+			electors = { 2 3 }
+			previous_holders = { 4 1 }
+			display_name = "Normandy"
+		}
+		c_middlesex = {
+			source_id = 3
+			rank = county
+			holder = 1
+			government = feudal
+			de_jure_vassals = { b_london b_westminster }
+			display_name = "Middlesex"
+		}
+		c_oxfordshire = {
+			source_id = 4
+			rank = county
+			holder = 1
+			government = feudal
+			de_jure_vassals = { b_oxford }
+			display_name = "Oxfordshire"
+		}
+		c_rouen = {
+			source_id = 5
+			rank = county
+			holder = 2
+			government = feudal
+			de_jure_vassals = { b_rouen }
+			display_name = "Rouen"
+		}
+		c_evreux = {
+			source_id = 6
+			rank = county
+			holder = 2
+			government = feudal
+			de_jure_vassals = { b_evreux }
+			display_name = "Evreux"
+		}
+		b_london = {
+			source_id = 7
+			rank = barony
+			holder = 1
+			capital_province = 100
+			display_name = "London"
+			capital_barony = yes
+		}
+		b_westminster = {
+			source_id = 8
+			rank = barony
+			holder = 1
+			capital_province = 101
+			display_name = "Westminster"
+		}
+		b_oxford = {
+			source_id = 9
+			rank = barony
+			holder = 1
+			capital_province = 102
+			display_name = "Oxford"
+		}
+		b_rouen = {
+			source_id = 10
+			rank = barony
+			holder = 2
+			capital_province = 103
+			display_name = "Rouen"
+		}
+		b_evreux = {
+			source_id = 11
+			rank = barony
+			holder = 2
+			capital_province = 104
+			display_name = "Evreux"
+		}
+	}
+	wars = {
+		norman_civil_war = {
+			name = "Norman Civil War"
+			cb_type = claimant_war
+			start_date = 1336.8.12
+			attacker = 2
+			defender = 1
+			targeted_titles = { d_normandy c_rouen }
+			attacker = {
+				participants = {
+					{
+						character = 2
+						date = 1336.8.12
+						contribution_score = 74
+					}
+					{
+						character = 3
+						date = 1336.8.12
+						contribution_score = 21
+					}
+				}
+			}
+			defender = {
+				participants = {
+					{
+						character = 1
+						date = 1336.8.12
+						contribution_score = 88
+					}
+				}
+			}
+		}
+	}
+	counties = {
+		c_middlesex = {
+			source_title_id = 3
+			owner = 1
+			top_liege = 1
+			culture_id = 10
+			culture = english
+			faith_id = 30
+			faith = catholic
+			government = feudal
+			province = london_province
+			display_name = "Middlesex"
+			development = 16
+			holdings = { castle city temple }
+			baronies = { b_london b_westminster }
+			barony_display_names = { "London" "Westminster" }
+			barony_provinces = { 100 101 }
+			neighbors = { c_oxfordshire }
+		}
+		c_oxfordshire = {
+			source_title_id = 4
+			owner = 1
+			top_liege = 1
+			culture_id = 10
+			culture = english
+			faith_id = 30
+			faith = catholic
+			government = feudal
+			province = oxford_province
+			display_name = "Oxfordshire"
+			development = 10
+			holdings = { castle city }
+			baronies = { b_oxford }
+			barony_display_names = { "Oxford" }
+			barony_provinces = { 102 }
+			neighbors = { c_middlesex }
+		}
+		c_rouen = {
+			source_title_id = 5
+			owner = 2
+			top_liege = 1
+			culture_id = 20
+			culture = norman
+			faith_id = 30
+			faith = catholic
+			government = feudal
+			province = rouen_province
+			display_name = "Rouen"
+			development = 13
+			holdings = { castle city temple }
+			baronies = { b_rouen }
+			barony_display_names = { "Rouen" }
+			barony_provinces = { 103 }
+			neighbors = { c_evreux }
+		}
+		c_evreux = {
+			source_title_id = 6
+			owner = 2
+			top_liege = 1
+			culture_id = 20
+			culture = norman
+			faith_id = 30
+			faith = catholic
+			government = feudal
+			province = evreux_province
+			display_name = "Evreux"
+			development = 8
+			holdings = { castle }
+			baronies = { b_evreux }
+			barony_display_names = { "Evreux" }
+			barony_provinces = { 104 }
+			neighbors = { c_rouen }
+		}
+	}
+}

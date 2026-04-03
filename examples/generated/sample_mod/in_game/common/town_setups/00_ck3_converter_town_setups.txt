@@ -1,0 +1,22 @@
+﻿ck3_converter_town = {
+	brewery = 1
+	temple = 1
+}
+
+ck3_converter_city = {
+	brewery = 1
+	temple = 1
+	tools_guild = 1
+}
+
+ck3_converter_capital_town = {
+	brewery = 1
+	temple = 1
+	tools_guild = 1
+}
+
+ck3_converter_capital_city = {
+	brewery = 2
+	temple = 1
+	tools_guild = 2
+}

@@ -1,0 +1,57 @@
+character_db = {
+	char_1_edward = {
+		first_name = { name = char_first_1_edward }
+		last_name = { name = char_last_1_plantagenet }
+		culture = english
+		religion = catholic
+		adm = 62
+		dip = 58
+		mil = 61
+		birth_date = 1312.11.13
+		birth = london
+		female = no
+		tag = ENG
+		dynasty = dyn_house_100
+	}
+	char_2_robert = {
+		first_name = { name = char_first_2_robert }
+		last_name = { name = char_last_2_normandie }
+		culture = norman
+		religion = catholic
+		adm = 48
+		dip = 52
+		mil = 46
+		birth_date = 1305.5.4
+		birth = rouen
+		female = no
+		tag = NRM
+		dynasty = dyn_house_200
+	}
+	char_3_william = {
+		first_name = { name = char_first_3_william }
+		last_name = { name = char_last_3_normandie }
+		culture = norman
+		religion = catholic
+		adm = 42
+		dip = 44
+		mil = 39
+		birth_date = 1325.2.14
+		female = no
+		tag = NRM
+		dynasty = dyn_house_200
+	}
+	char_4_richard = {
+		first_name = { name = char_first_4_richard }
+		last_name = { name = char_last_4_normandie }
+		culture = norman
+		religion = catholic
+		adm = 45
+		dip = 41
+		mil = 47
+		birth_date = 1298.9.9
+		death_date = 1330.4.1
+		female = no
+		tag = NRM
+		dynasty = dyn_house_200
+	}
+}

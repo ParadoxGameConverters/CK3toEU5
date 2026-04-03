@@ -1,0 +1,3 @@
+diplomacy_manager = {
+	opinion = { first = NRM second = ENG type = opinion_supportive_monarch }
+}

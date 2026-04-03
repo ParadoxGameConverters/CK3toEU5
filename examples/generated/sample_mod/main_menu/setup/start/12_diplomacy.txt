@@ -1,0 +1,8 @@
+diplomacy_manager = {
+	dependency = {
+		first = ENG
+		second = NRM
+		subject_type = fiefdom
+		start_date = 1337.1.1
+	}
+}

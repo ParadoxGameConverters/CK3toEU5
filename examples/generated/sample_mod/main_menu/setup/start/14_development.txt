@@ -1,0 +1,6 @@
+development = {
+	evreux = 8.0
+	london = 16.0
+	oxford = 10.0
+	rouen = 13.0
+}

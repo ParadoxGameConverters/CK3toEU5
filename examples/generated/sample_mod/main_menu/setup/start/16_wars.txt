@@ -1,0 +1,28 @@
+war_manager = {
+	civil_war = {
+		war_name = {
+			name = "CIVIL_WAR_NAME"
+			ordinal = 1
+			first = {
+				name = "NRM"
+			}
+			second = {
+				name = "ENG"
+			}
+		}
+		start_date = 1336.8.12
+		action = 1337.1.1
+		attacker = {
+			country = NRM
+			request = {
+				reason = Instigator
+			}
+		}
+		defender = {
+			country = ENG
+			request = {
+				reason = Target
+			}
+		}
+	}
+}

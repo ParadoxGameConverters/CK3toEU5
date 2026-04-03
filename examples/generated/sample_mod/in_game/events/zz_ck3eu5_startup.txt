@@ -1,0 +1,285 @@
+﻿namespace = ck3eu5_startup
+
+ck3eu5_startup.1 = {
+	type = country_event
+	title = ck3eu5_startup.1.t
+	desc = ck3eu5_startup.1.desc
+	hide_portraits = yes
+	immediate = {
+		if = {
+			limit = { tag = ENG }
+			if = {
+				limit = { debug_only = yes }
+				debug_log = "CK3EU5_VALIDATE_COUNTRY_ENG_START"
+				debug_log_scopes = yes
+				test_log = { name = ck3eu5_validation_country text = "CK3EU5_VALIDATE_COUNTRY_ENG_START" }
+			}
+			# army army_ENG
+			location:london = {
+				while = {
+					count = 6
+					create_sub_unit_with_owner = {
+						type = a_men_at_arms
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 3
+					create_sub_unit_with_owner = {
+						type = a_crossbowmen
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 2
+					create_sub_unit_with_owner = {
+						type = a_armored_horsemen
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = a_camp_followers
+						owner = root
+						origin = scope:location
+					}
+				}
+			}
+			# navy navy_ENG
+			location:london = {
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = n_caravel
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = n_flute
+						owner = root
+						origin = scope:location
+					}
+				}
+			}
+			# army war_norman_civil_war_army_eng
+			location:london = {
+				while = {
+					count = 4
+					create_sub_unit_with_owner = {
+						type = a_men_at_arms
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 2
+					create_sub_unit_with_owner = {
+						type = a_crossbowmen
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = a_armored_horsemen
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = a_camp_followers
+						owner = root
+						origin = scope:location
+					}
+				}
+			}
+			force_recalc_country_active_status = root
+			if = {
+				limit = { debug_only = yes }
+				if = {
+					limit = { any_army = { } }
+					debug_log = "CK3EU5_VALIDATE_ARMY_PRESENT_ENG"
+					test_log = { name = ck3eu5_validation_army text = "CK3EU5_VALIDATE_ARMY_PRESENT_ENG" }
+				}
+				else = {
+					error_log = "CK3EU5_VALIDATE_ARMY_MISSING_ENG"
+				}
+				if = {
+					limit = { any_navy = { } }
+					debug_log = "CK3EU5_VALIDATE_NAVY_PRESENT_ENG"
+					test_log = { name = ck3eu5_validation_navy text = "CK3EU5_VALIDATE_NAVY_PRESENT_ENG" }
+				}
+				else = {
+					error_log = "CK3EU5_VALIDATE_NAVY_MISSING_ENG"
+				}
+				if = {
+					limit = { is_at_war_with = c:NRM }
+					debug_log = "CK3EU5_VALIDATE_WAR_LINK_ENG_NRM"
+					test_log = { name = ck3eu5_validation_war_link text = "CK3EU5_VALIDATE_WAR_LINK_ENG_NRM" }
+				}
+			}
+		}
+		if = {
+			limit = { tag = NRM }
+			if = {
+				limit = { debug_only = yes }
+				debug_log = "CK3EU5_VALIDATE_COUNTRY_NRM_START"
+				debug_log_scopes = yes
+				test_log = { name = ck3eu5_validation_country text = "CK3EU5_VALIDATE_COUNTRY_NRM_START" }
+			}
+			# army army_NRM
+			location:rouen = {
+				while = {
+					count = 5
+					create_sub_unit_with_owner = {
+						type = a_men_at_arms
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 2
+					create_sub_unit_with_owner = {
+						type = a_crossbowmen
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = a_horsemen
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = a_camp_followers
+						owner = root
+						origin = scope:location
+					}
+				}
+			}
+			# navy navy_NRM
+			location:rouen = {
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = n_barque
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = n_hulk
+						owner = root
+						origin = scope:location
+					}
+				}
+			}
+			# army war_norman_civil_war_army_nrm
+			location:rouen = {
+				while = {
+					count = 3
+					create_sub_unit_with_owner = {
+						type = a_men_at_arms
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = a_crossbowmen
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = a_horsemen
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = a_camp_followers
+						owner = root
+						origin = scope:location
+					}
+				}
+			}
+			# navy war_norman_civil_war_navy_nrm
+			location:rouen = {
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = n_barque
+						owner = root
+						origin = scope:location
+					}
+				}
+				while = {
+					count = 1
+					create_sub_unit_with_owner = {
+						type = n_hulk
+						owner = root
+						origin = scope:location
+					}
+				}
+			}
+			force_recalc_country_active_status = root
+			if = {
+				limit = { debug_only = yes }
+				if = {
+					limit = { any_army = { } }
+					debug_log = "CK3EU5_VALIDATE_ARMY_PRESENT_NRM"
+					test_log = { name = ck3eu5_validation_army text = "CK3EU5_VALIDATE_ARMY_PRESENT_NRM" }
+				}
+				else = {
+					error_log = "CK3EU5_VALIDATE_ARMY_MISSING_NRM"
+				}
+				if = {
+					limit = { any_navy = { } }
+					debug_log = "CK3EU5_VALIDATE_NAVY_PRESENT_NRM"
+					test_log = { name = ck3eu5_validation_navy text = "CK3EU5_VALIDATE_NAVY_PRESENT_NRM" }
+				}
+				else = {
+					error_log = "CK3EU5_VALIDATE_NAVY_MISSING_NRM"
+				}
+				if = {
+					limit = { NOT = { is_at_war_with = c:ENG } }
+					declare_war = c:ENG
+					debug_log = "CK3EU5_VALIDATE_WAR_DECLARE_NRM_ENG"
+					test_log = { name = ck3eu5_validation_war_declare text = "CK3EU5_VALIDATE_WAR_DECLARE_NRM_ENG" }
+				}
+				if = {
+					limit = { is_at_war_with = c:ENG }
+					debug_log = "CK3EU5_VALIDATE_WAR_LINK_NRM_ENG"
+					test_log = { name = ck3eu5_validation_war_link text = "CK3EU5_VALIDATE_WAR_LINK_NRM_ENG" }
+				}
+				else = {
+					error_log = "CK3EU5_VALIDATE_WAR_LINK_MISSING_NRM_ENG"
+				}
+			}
+		}
+	}
+	option = { name = ck3eu5_startup.1.a }
+}

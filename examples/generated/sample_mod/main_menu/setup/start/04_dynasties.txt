@@ -1,0 +1,13 @@
+# Dynasties must be created before characters.
+dynasty_manager = {
+	dyn_house_100 = {
+		name = { name = dynasty_plantagenet }
+		dynasty_name_type = location
+		home = london
+	}
+	dyn_house_200 = {
+		name = { name = dynasty_normandie }
+		dynasty_name_type = location
+		home = rouen
+	}
+}

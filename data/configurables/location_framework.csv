@@ -1,0 +1,5 @@
+location_key,province_definition,display_name,raw_good,region,area,climate,topography,default_rank,town_setup,coastal
+london,london_province,London,cloth,channel_region,thames_area,temperate,flatland,city,,yes
+oxford,oxford_province,Oxford,grain,channel_region,thames_area,temperate,flatland,town,,no
+rouen,rouen_province,Rouen,wine,normandy_region,seine_area,temperate,flatland,city,,yes
+evreux,evreux_province,Evreux,grain,normandy_region,seine_area,temperate,flatland,town,,no

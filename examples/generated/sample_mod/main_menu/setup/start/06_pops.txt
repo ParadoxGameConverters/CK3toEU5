@@ -1,0 +1,154 @@
+locations = {
+	evreux = {
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = nobles
+			size = 1.3
+		}
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = clergy
+			size = 0.39
+		}
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = burghers
+			size = 0.64
+		}
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = laborers
+			size = 6.1
+		}
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = soldiers
+			size = 0.77
+		}
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = peasants
+			size = 14.2
+		}
+	}
+	london = {
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = nobles
+			size = 1.7
+		}
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = clergy
+			size = 1.13
+		}
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = burghers
+			size = 2.18
+		}
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = laborers
+			size = 12.1
+		}
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = soldiers
+			size = 1.09
+		}
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = peasants
+			size = 27.2
+		}
+	}
+	oxford = {
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = nobles
+			size = 1.4
+		}
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = clergy
+			size = 0.45
+		}
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = burghers
+			size = 1.7
+		}
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = laborers
+			size = 7.9
+		}
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = soldiers
+			size = 0.85
+		}
+		define_pop = {
+			culture = english
+			religion = catholic
+			type = peasants
+			size = 17.4
+		}
+	}
+	rouen = {
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = nobles
+			size = 1.55
+		}
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = clergy
+			size = 1.04
+		}
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = burghers
+			size = 1.94
+		}
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = laborers
+			size = 10.0
+		}
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = soldiers
+			size = 0.97
+		}
+		define_pop = {
+			culture = norman
+			religion = catholic
+			type = peasants
+			size = 22.4
+		}
+	}
+}

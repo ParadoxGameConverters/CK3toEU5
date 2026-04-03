@@ -34,6 +34,7 @@
 *.wsp
 
 build/
+build_nf/
 .vs/
 Release/
 ReleaseIntermediate/
@@ -41,3 +42,13 @@ Debug/
 DebugIntermediate/
 lib/
 /CK3toEU5.sln.DotSettings.user
+
+# Local live-validation and extracted data
+data/generated/eu5_live/
+data/generated/ck3_bootstrap/
+data/generated/ck3_bootstrap_modded/
+data/generated/map_correspondence/vanilla_probe_normalized.txt
+data/generated/map_correspondence/*
+!data/generated/map_correspondence/augmented_mappings.csv
+!data/generated/map_correspondence/manual_seed_mappings.csv
+tests/tmp_vanilla_probe.zip

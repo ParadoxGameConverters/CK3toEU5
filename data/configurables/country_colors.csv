@@ -1,0 +1,3 @@
+tag,color,color2,color3,unit_color0,unit_color1,unit_color2,description_category,difficulty
+ENG,rgb { 172 30 45 },rgb { 225 225 225 },rgb { 45 45 75 },rgb { 172 30 45 },rgb { 225 225 225 },rgb { 45 45 75 },military,2
+NRM,rgb { 40 90 180 },rgb { 230 230 230 },rgb { 30 40 90 },rgb { 40 90 180 },rgb { 230 230 230 },rgb { 30 40 90 },diplomatic,3

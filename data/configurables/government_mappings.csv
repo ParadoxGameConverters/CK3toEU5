@@ -1,0 +1,11 @@
+ck3_government,eu5_type,centralization_vs_decentralization,traditionalist_vs_innovative,spiritualist_vs_humanist,aristocracy_vs_plutocracy,serfdom_vs_free_subjects,mercantilism_vs_free_trade,belligerent_vs_conciliatory,quality_vs_quantity,offensive_vs_defensive,land_vs_naval,capital_economy_vs_traditional_economy,individualism_vs_communalism,outward_vs_inward
+feudal,monarchy,35,-10,-20,-35,30,-10,5,-5,5,15,35,-15,-10
+feudal_government,monarchy,35,-10,-20,-35,30,-10,5,-5,5,15,35,-15,-10
+tribal,tribe,-25,-20,-10,-20,10,-25,25,15,-10,25,-35,-20,-5
+tribal_government,tribe,-25,-20,-10,-20,10,-25,25,15,-10,25,-35,-20,-5
+clan,monarchy,10,-5,-15,-20,15,-5,10,0,0,5,20,-10,-25
+clan_government,monarchy,10,-5,-15,-20,15,-5,10,0,0,5,20,-10,-25
+theocracy,theocracy,20,5,-55,-20,10,0,-10,-10,15,5,15,-20,10
+theocracy_government,theocracy,20,5,-55,-20,10,0,-10,-10,15,5,15,-20,10
+republic,republic,15,25,10,35,-25,-30,-15,5,10,-10,45,25,-35
+republic_government,republic,15,25,10,35,-25,-30,-15,5,10,-10,45,25,-35

@@ -1,0 +1,26 @@
+﻿ck3eu5_on_game_start = {
+	effect = {
+		if = {
+			limit = { debug_only = yes }
+			debug_log = "CK3EU5_VALIDATE_ON_GAME_START"
+			debug_log_date = yes
+			test_log = { name = ck3eu5_validation text = "CK3EU5_VALIDATE_ON_GAME_START" }
+			every_war = {
+				debug_log = "CK3EU5_VALIDATE_WAR_PRESENT"
+				debug_log_scopes = yes
+				test_log = { name = ck3eu5_validation_war text = "CK3EU5_VALIDATE_WAR_PRESENT" }
+				every_war_participant = {
+					debug_log = "CK3EU5_VALIDATE_WAR_PARTICIPANT"
+					debug_log_scopes = yes
+					test_log = { name = ck3eu5_validation_war_participant text = "CK3EU5_VALIDATE_WAR_PARTICIPANT" }
+				}
+			}
+		}
+		c:ENG = { trigger_event_silently = ck3eu5_startup.1 }
+		c:NRM = { trigger_event_silently = ck3eu5_startup.1 }
+	}
+}
+
+on_game_start = {
+	on_actions = { ck3eu5_on_game_start }
+}
