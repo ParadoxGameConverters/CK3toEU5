@@ -15,8 +15,7 @@
 namespace configuration
 {
 
-[[nodiscard]] Configuration LoadConfiguration(const std::filesystem::path& configuration_file,
-    const commonItems::ConverterVersion& converter_version);
+[[nodiscard]] Configuration LoadConfiguration(const std::filesystem::path& configuration_file);
 
 }  // namespace configuration
 

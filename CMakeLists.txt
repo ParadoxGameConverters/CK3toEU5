@@ -267,6 +267,7 @@ include_directories("./external/commonItems/external/googletest/googlemock/inclu
 # test sources will be added one by one like so:
 set(TEST_SOURCES ${TEST_SOURCES} "src/placeholder_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/configuration/configuration_loader_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/configuration/configuration_tests.cpp")
 
 add_executable(
 	CK3toEU5Tests

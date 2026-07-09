@@ -15,53 +15,52 @@ using std::filesystem::path;
 namespace
 {
 
-std::string DetermineOutputName(const path& save_name)
+std::string determineOutputName(const path& save_path)
 {
-   if (save_name.extension() != ".ck3")
-   {
-      throw std::invalid_argument(
-          "The save is not a Crusader Kings 3 save. Choose a save ending in '.ck3' and convert again.");
-   }
+   return save_path.stem().string();
+}
 
-   return save_name.stem().string();
+std::string ensureOutputNameNotEmpty(const std::string& output_name, const path& save_path)
+{
+   if (output_name.empty())
+   {
+      Log(LogLevel::Info) << "\tOutput name in config empty, using save name instead.";
+      return determineOutputName(save_path);
+   }
+   return output_name;
 }
 
 }  // namespace
 
 
-configuration::Configuration configuration::LoadConfiguration(const path& configuration_file,
-    const commonItems::ConverterVersion& converter_version)
+configuration::Configuration configuration::LoadConfiguration(const path& configuration_file)
 {
    commonItems::parser configuration_parser;
    Configuration configuration;
 
    configuration_parser.registerKeyword("CK3DocDirectory", [&configuration](std::istream& stream) {
-      configuration.ck3_doc_directory = commonItems::getString(stream);
-      Log(LogLevel::Info) << "\tCrusader Kings 3 documents directory is " << configuration.ck3_doc_directory;
+      configuration.set_ck3_doc_directory(commonItems::getString(stream));
+      Log(LogLevel::Info) << "\tCrusader Kings 3 documents directory is " << configuration.get_ck3_doc_directory();
    });
-   configuration_parser.registerKeyword("CK3directory", [&configuration, &converter_version](std::istream& stream) {
-      configuration.ck3_directory = commonItems::getString(stream);
-      Log(LogLevel::Info) << "\tCrusader Kings 3 install path is " << configuration.ck3_directory;
-      configuration.VerifyCK3Path();
-      configuration.VerifyCK3Version(converter_version);
+   configuration_parser.registerKeyword("CK3directory", [&configuration](std::istream& stream) {
+      configuration.set_ck3_directory(commonItems::getString(stream));
+      Log(LogLevel::Info) << "\tCrusader Kings 3 install path is " << configuration.get_ck3_directory();
    });
-   configuration_parser.registerKeyword("EU5directory", [&configuration, &converter_version](std::istream& stream) {
-      configuration.eu5_directory = commonItems::getString(stream);
-      Log(LogLevel::Info) << "\tEuropa Universalis 5 install path is " << configuration.eu5_directory;
-      configuration.VerifyEU5Path();
-      configuration.VerifyEU5Version(converter_version);
+   configuration_parser.registerKeyword("EU5directory", [&configuration](std::istream& stream) {
+      configuration.set_eu5_directory(commonItems::getString(stream));
+      Log(LogLevel::Info) << "\tEuropa Universalis 5 install path is " << configuration.get_eu5_directory();
    });
    configuration_parser.registerKeyword("targetGameModPath", [&configuration](std::istream& stream) {
-      configuration.eu5_mod_path = commonItems::getString(stream);
-      Log(LogLevel::Info) << "\tEuropa Universalis 5 mod path is " << configuration.eu5_mod_path;
+      configuration.set_eu5_mod_path(commonItems::getString(stream));
+      Log(LogLevel::Info) << "\tEuropa Universalis 5 mod path is " << configuration.get_eu5_mod_path();
    });
    configuration_parser.registerKeyword("SaveGame", [&configuration](std::istream& stream) {
-      configuration.save_game = commonItems::getString(stream);
-      Log(LogLevel::Info) << "\tSave game is " << configuration.save_game;
+      configuration.set_save_game_path(commonItems::getString(stream));
+      Log(LogLevel::Info) << "\tSave game is " << configuration.get_save_game_path();
    });
    configuration_parser.registerKeyword("debug", [&configuration](std::istream& stream) {
-      configuration.debug = commonItems::getString(stream) == "yes";
-      if (configuration.debug)
+      configuration.set_debug(commonItems::getString(stream) == "yes");
+      if (configuration.get_debug())
       {
          Log(LogLevel::Info) << "\tDebug is active";
       }
@@ -71,19 +70,16 @@ configuration::Configuration configuration::LoadConfiguration(const path& config
       }
    });
    configuration_parser.registerKeyword("output_name", [&configuration](std::istream& stream) {
-      configuration.output_name = commonItems::getString(stream);
-      Log(LogLevel::Info) << "\tOutput name is " << configuration.output_name;
+      configuration.set_output_name(commonItems::getString(stream));
+      Log(LogLevel::Info) << "\tOutput name given in config is " << configuration.get_output_name();
    });
 
    configuration_parser.parseFile(configuration_file);
 
-   if (configuration.output_name.empty())
-   {
-      configuration.output_name = DetermineOutputName(configuration.save_game);
-   }
-   configuration.output_name = normalizeStringPath(configuration.output_name);
+   configuration.set_output_name(normalizeStringPath(
+       ensureOutputNameNotEmpty(configuration.get_output_name(), configuration.get_save_game_path())));
+   Log(LogLevel::Info) << "\tUsing output name " << configuration.get_output_name();
 
-   Log(LogLevel::Info) << "Using output name " << configuration.output_name;
 
    return configuration;
 }
