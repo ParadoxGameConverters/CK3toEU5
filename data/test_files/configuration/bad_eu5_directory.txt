@@ -1,0 +1,1 @@
+EU5directory = "test_files/test_folders/bad_eu5_folder"

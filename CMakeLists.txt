@@ -19,6 +19,8 @@ set (UNICODE_DEFAULT OFF)
 
 if (PLATFORM STREQUAL "Windows")
 	ADD_DEFINITIONS(-DUNICODE -D_UNICODE -DWINDOWS)
+	add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+	add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 elseif (PLATFORM STREQUAL "Linux")
 	if (COVERAGE STREQUAL true)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
@@ -37,7 +39,7 @@ set(GTEST_SOURCES ${GTEST_SOURCES} "external/commonItems/external/googletest/goo
 add_library(
 	GtestLib
 	${GTEST_SOURCES}
-  )
+)
 
 
 #### Fronter ####
@@ -104,7 +106,7 @@ if (PLATFORM STREQUAL "Windows")
 		${F_UPDATECHECKER_SOURCES}
 		${F_SQLITE_SOURCES}
 		${F_SQLITE3_SOURCES}
-	   )
+	    )
 	 set_target_properties(ConverterFrontend
 		PROPERTIES
 		RUNTIME_OUTPUT_DIRECTORY ${FRONTER_OUTPUT_DIRECTORY}
@@ -201,6 +203,7 @@ set(MAIN_SOURCE "src/main.cpp")
 
 # converter sources will be added one by one like so:
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_to_eu5_converter.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/configuration/configuration_loader.cpp")
 
 add_subdirectory("./external/fmt")
 link_directories("./external/rakaly")
@@ -212,7 +215,7 @@ if (RUN_CLANG_TIDY)
 endif(RUN_CLANG_TIDY)
 add_library(CK3toEU5lib
 	${CONVERTER_SOURCES}
- )
+)
 target_precompile_headers(CK3toEU5lib PUBLIC ${PCH_SOURCES})
 if (PLATFORM STREQUAL "Windows")
 	target_compile_options(CK3toEU5lib PRIVATE /permissive /W4 /w14242 /w14254 /w14263 /w14265 /w14287 /we4289 /w14296 
@@ -226,7 +229,7 @@ endif (PLATFORM  STREQUAL "Windows")
 add_executable(
 	CK3toEU5
 	${MAIN_SOURCE}
- )
+)
 set_target_properties( CK3toEU5
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CONVERTER_OUTPUT_DIRECTORY}
@@ -263,12 +266,12 @@ include_directories("./external/commonItems/external/googletest/googlemock/inclu
 
 # test sources will be added one by one like so:
 set(TEST_SOURCES ${TEST_SOURCES} "src/placeholder_tests.cpp")
-
+set(TEST_SOURCES ${TEST_SOURCES} "src/configuration/configuration_loader_tests.cpp")
 
 add_executable(
 	CK3toEU5Tests
 	${TEST_SOURCES}
- )
+)
 set_target_properties(CK3toEU5Tests
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIRECTORY}
@@ -370,7 +373,7 @@ endif (COVERAGE STREQUAL true)
 add_library(run_clang_tidy
 	${CONVERTER_SOURCES}
 	${TEST_SOURCES}
- )
+)
 target_link_libraries(run_clang_tidy pthread)
 set_target_properties(run_clang_tidy PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
 add_dependencies(run_clang_tidy CK3toEU5 CK3toEU5Tests)

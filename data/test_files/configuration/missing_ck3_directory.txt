@@ -1,0 +1,1 @@
+CK3directory = "test_files/test_folders/missing_ck3_folder"
