@@ -1,7 +1,7 @@
 # CK3toEU5
 
 
-##Building
+## Building
 This project uses CMake and can be build using any modern C++ toolchain that supports C++23, though Visual Studio is the most used and tested.
 
 To start, first clone the repository. Then open a terminal window to the location where it was cloned and run the command `git submodule update --init --recursive`. When this has finished, open the folder in your IDE of choice.
