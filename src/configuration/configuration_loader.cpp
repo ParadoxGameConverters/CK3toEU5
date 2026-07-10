@@ -19,15 +19,12 @@ using std::filesystem::path;
 namespace
 {
 
-std::string DetermineOutputName(const path& save_path)  // NOLINT : it says they should be static instead, when made
-                                                        // static it says they should be in anonymous namespace instead
+std::string DetermineOutputName(const path& save_path)
 {
    return save_path.stem().string();
 }
 
-std::string EnsureOutputNameNotEmpty(const std::string& output_name,
-    const path& save_path)  // NOLINT : it says they should be static instead, when made static it says they should be
-                            // in anonymous namespace instead
+std::string EnsureOutputNameNotEmpty(const std::string& output_name, const path& save_path)
 {
    if (output_name.empty())
    {

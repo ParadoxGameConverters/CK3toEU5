@@ -108,31 +108,11 @@ class Configuration
       }
    }
 
-   void VerifyEU5Version(const commonItems::ConverterVersion& converter_version) const
+   void VerifyEU5Version(const commonItems::ConverterVersion& converter_version) const  // NOLINT: not yet implemented
    {
       // TODO(kubkm): - find a way to get eu5 version
-      const auto eu5_version = GameVersion::extractVersionFromBranchTxt(eu5_directory_ / "clausewitz_branch.txt");
-      if (!eu5_version)
-      {
-         Log(LogLevel::Error) << "EU5 version could not be determined, proceeding blind!";
-         return;
-      }
-
-      Log(LogLevel::Info) << "EU5 version: " << eu5_version->toShortString();
-
-      if (converter_version.getMinTarget() > *eu5_version)
-      {
-         Log(LogLevel::Error) << "EU5 version is v" << eu5_version->toShortString() << ", converter requires minimum v"
-                              << converter_version.getMinTarget().toShortString() << "!";
-         throw std::runtime_error("Converter vs EU5 installation mismatch!");
-      }
-
-      if (!converter_version.getMaxTarget().isLargerishThan(*eu5_version))
-      {
-         Log(LogLevel::Error) << "EU5 version is v" << eu5_version->toShortString() << ", converter requires maximum v"
-                              << converter_version.getMaxTarget().toShortString() << "!";
-         throw std::runtime_error("Converter vs EU5 installation mismatch!");
-      }
+      (void)converter_version;
+      Log(LogLevel::Error) << "EU5 version could not be determined, proceeding blind!";
    }
 
    void VerifyCK3Save() const

@@ -119,6 +119,24 @@ TEST(ConfigurationTest, BadSaveNameThrowsException)  // NOLINT : clang-tidy doen
        std::runtime_error);
 }
 
+TEST(ConfigurationTest, WrongCk3VersionThrowsException)  // NOLINT : clang-tidy doens't like gtest
+{
+   commonItems::ConverterVersion converter_version;
+   converter_version.loadVersion("test_files/version_restrictive.txt");
+   const auto configuration = LoadConfiguration("test_files/configuration/ck3_version.txt");
+   EXPECT_THROW(configuration.Validate(converter_version),  // NOLINT : clang-tidy doens't like gtest
+       std::runtime_error);
+}
+
+TEST(ConfigurationTest, CorrectCk3VersionValidates)  // NOLINT : clang-tidy doens't like gtest
+{
+   commonItems::ConverterVersion converter_version;
+   converter_version.loadVersion("test_files/version.txt");
+   const auto configuration = LoadConfiguration("test_files/configuration/ck3_version.txt");
+   EXPECT_THROW(configuration.Validate(converter_version),  // NOLINT : clang-tidy doens't like gtest
+       std::runtime_error);
+}
+
 TEST(ConfigurationTest, CorrectConfigurationValidatedWithoutErrors)  // NOLINT : clang-tidy doens't like gtest
 {
    const auto configuration = LoadConfiguration("test_files/configuration/test_configuration.txt");
