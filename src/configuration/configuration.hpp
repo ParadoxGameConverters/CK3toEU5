@@ -27,10 +27,10 @@ class Configuration
    [[nodiscard]] std::string GetOutputName() const { return output_name_; }
 
    void SetCK3Directory(std::filesystem::path ck3_dir) { ck3_directory_ = std::move(ck3_dir); }
-   void SetCK3DocDirectory(std::filesystem::path ck3_doc_dir) {ck3_doc_directory_ = std::move(ck3_doc_dir); }
-   void SetEU5Directory(std::filesystem::path eu5_dir) {eu5_directory_ = std::move(eu5_dir); }
-   void SetEU5ModPath(std::filesystem::path eu5_mod_p) {eu5_mod_path_ = std::move(eu5_mod_p); }
-   void SetSaveGamePath(std::filesystem::path save_game_p) {save_game_ = std::move(save_game_p); }
+   void SetCK3DocDirectory(std::filesystem::path ck3_doc_dir) { ck3_doc_directory_ = std::move(ck3_doc_dir); }
+   void SetEU5Directory(std::filesystem::path eu5_dir) { eu5_directory_ = std::move(eu5_dir); }
+   void SetEU5ModPath(std::filesystem::path eu5_mod_p) { eu5_mod_path_ = std::move(eu5_mod_p); }
+   void SetSaveGamePath(std::filesystem::path save_game_p) { save_game_ = std::move(save_game_p); }
    void SetDebug(bool debug) { debug_ = debug; }
    void SetOutputName(const std::string& name) { output_name_ = name; }
 
@@ -110,7 +110,7 @@ class Configuration
 
    void VerifyEU5Version(const commonItems::ConverterVersion& converter_version) const
    {
-      // TODO: kubkm - find a way to get eu5 version
+      // TODO(kubkm): - find a way to get eu5 version
       const auto eu5_version = GameVersion::extractVersionFromBranchTxt(eu5_directory_ / "clausewitz_branch.txt");
       if (!eu5_version)
       {

@@ -1,5 +1,8 @@
 #include <external/commonItems/external/googletest/googlemock/include/gmock/gmock-matchers.h>
 #include <external/commonItems/external/googletest/googletest/include/gtest/gtest.h>
+
+#include <iostream>
+#include <sstream>
 #include <stdexcept>
 
 #include "src/configuration/configuration.hpp"
@@ -80,35 +83,40 @@ TEST(ConfigurationTest, CustomOutputOverridesSaveOutputName)  // NOLINT : clang-
 TEST(ConfigurationTest, ExceptionForMissingVic3Directory)  // NOLINT : clang-tidy doens't like gtest
 {
    const auto configuration = LoadConfiguration("test_files/configuration/missing_ck3_directory.txt");
-   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()), std::runtime_error);
+   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()),
+       std::runtime_error);  // NOLINT : clang-tidy doens't like gtest
 }
 
 
 TEST(ConfigurationTest, ExceptionForBadVic3Directory)  // NOLINT : clang-tidy doens't like gtest
 {
    const auto configuration = LoadConfiguration("test_files/configuration/bad_ck3_directory.txt");
-   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()), std::runtime_error);
+   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()),
+       std::runtime_error);  // NOLINT : clang-tidy doens't like gtest
 }
 
 
 TEST(ConfigurationTest, ExceptionForMissingHoI4Directory)  // NOLINT : clang-tidy doens't like gtest
 {
    const auto configuration = LoadConfiguration("test_files/configuration/missing_eu5_directory.txt");
-   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()), std::runtime_error);
+   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()),
+       std::runtime_error);  // NOLINT : clang-tidy doens't like gtest
 }
 
 
 TEST(ConfigurationTest, ExceptionForBadHoI4Directory)  // NOLINT : clang-tidy doens't like gtest
 {
    const auto configuration = LoadConfiguration("test_files/configuration/bad_eu5_directory.txt");
-   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()), std::runtime_error);
+   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()),
+       std::runtime_error);  // NOLINT : clang-tidy doens't like gtest
 }
 
 
 TEST(ConfigurationTest, BadSaveNameThrowsException)  // NOLINT : clang-tidy doens't like gtest
 {
    const auto configuration = LoadConfiguration("test_files/configuration/bad_save_name.txt");
-   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()), std::runtime_error);
+   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()),
+       std::runtime_error);  // NOLINT : clang-tidy doens't like gtest
 }
 
 TEST(ConfigurationTest, CorrectConfigurationValidatedWithoutErrors)  // NOLINT : clang-tidy doens't like gtest

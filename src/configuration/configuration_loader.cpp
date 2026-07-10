@@ -2,10 +2,14 @@
 
 #include <external/commonItems/CommonFunctions.h>
 #include <external/commonItems/Log.h>
-#include <external/commonItems/OSCompatibilityLayer.h>
+#include <external/commonItems/Parser.h>
 #include <external/commonItems/ParserHelpers.h>
-#include <external/fmt/include/fmt/format.h>
 
+#include <filesystem>
+#include <iostream>
+#include <string>
+
+#include "configuration.hpp"
 
 
 using std::filesystem::path;
@@ -15,12 +19,15 @@ using std::filesystem::path;
 namespace
 {
 
-std::string DetermineOutputName(const path& save_path)
+std::string DetermineOutputName(const path& save_path)  // NOLINT : it says they should be static instead, when made
+                                                        // static it says they should be in anonymous namespace instead
 {
    return save_path.stem().string();
 }
 
-std::string EnsureOutputNameNotEmpty(const std::string& output_name, const path& save_path)
+std::string EnsureOutputNameNotEmpty(const std::string& output_name,
+    const path& save_path)  // NOLINT : it says they should be static instead, when made static it says they should be
+                            // in anonymous namespace instead
 {
    if (output_name.empty())
    {
@@ -76,8 +83,8 @@ configuration::Configuration configuration::LoadConfiguration(const path& config
 
    configuration_parser.parseFile(configuration_file);
 
-   configuration.SetOutputName(normalizeStringPath(
-       EnsureOutputNameNotEmpty(configuration.GetOutputName(), configuration.GetSaveGamePath())));
+   configuration.SetOutputName(
+       normalizeStringPath(EnsureOutputNameNotEmpty(configuration.GetOutputName(), configuration.GetSaveGamePath())));
    Log(LogLevel::Info) << "\tUsing output name " << configuration.GetOutputName();
 
 

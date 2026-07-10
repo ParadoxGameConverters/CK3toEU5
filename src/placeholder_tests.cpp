@@ -7,7 +7,7 @@
 namespace placeholder
 {
 
-TEST(PlaceholderTests, PlaceholderTest)
+TEST(PlaceholderTests, PlaceholderTest)  // NOLINT : clang-tidy doens't like gtest
 {
    ck3_to_eu5::ConvertCk3ToEu5();
    SUCCEED();
