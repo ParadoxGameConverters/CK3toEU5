@@ -20,7 +20,7 @@ int main()  // NOLINT(bugprone-exception-escape)
       Log(LogLevel::Info) << converter_version;
 
       const auto configuration = configuration::LoadConfiguration("configuration.txt");
-      configuration.validate(converter_version);
+      configuration.Validate(converter_version);
 
       // Meet C++23's new hotness!
       std::println("Hello, world!");

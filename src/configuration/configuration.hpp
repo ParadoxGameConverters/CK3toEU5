@@ -18,73 +18,73 @@ namespace configuration
 class Configuration
 {
   public:
-   std::filesystem::path get_ck3_directory() const { return ck3_directory; }
-   std::filesystem::path get_ck3_doc_directory() const { return ck3_doc_directory; }
-   std::filesystem::path get_eu5_directory() const { return eu5_directory; }
-   std::filesystem::path get_eu5_mod_path() const { return eu5_mod_path; }
-   std::filesystem::path get_save_game_path() const { return save_game; }
-   bool get_debug() const { return debug; }
-   std::string get_output_name() const { return output_name; }
+   [[nodiscard]] std::filesystem::path GetCK3Directory() const { return ck3_directory_; }
+   [[nodiscard]] std::filesystem::path GetCK3DocDirectory() const { return ck3_doc_directory_; }
+   [[nodiscard]] std::filesystem::path GetEU5Directory() const { return eu5_directory_; }
+   [[nodiscard]] std::filesystem::path GetEU5ModPath() const { return eu5_mod_path_; }
+   [[nodiscard]] std::filesystem::path GetSaveGamePath() const { return save_game_; }
+   [[nodiscard]] bool GetDebug() const { return debug_; }
+   [[nodiscard]] std::string GetOutputName() const { return output_name_; }
 
-   void set_ck3_directory(std::filesystem::path ck3_dir) { ck3_directory = ck3_dir; }
-   void set_ck3_doc_directory(std::filesystem::path ck3_doc_dir) { ck3_doc_directory = ck3_doc_dir; }
-   void set_eu5_directory(std::filesystem::path eu5_dir) { eu5_directory = eu5_dir; }
-   void set_eu5_mod_path(std::filesystem::path eu5_mod_p) { eu5_mod_path = eu5_mod_p; }
-   void set_save_game_path(std::filesystem::path save_game_p) { save_game = save_game_p; }
-   void set_debug(bool d) { debug = d; }
-   void set_output_name(const std::string& name) { output_name = name; }
+   void SetCK3Directory(std::filesystem::path ck3_dir) { ck3_directory_ = std::move(ck3_dir); }
+   void SetCK3DocDirectory(std::filesystem::path ck3_doc_dir) {ck3_doc_directory_ = std::move(ck3_doc_dir); }
+   void SetEU5Directory(std::filesystem::path eu5_dir) {eu5_directory_ = std::move(eu5_dir); }
+   void SetEU5ModPath(std::filesystem::path eu5_mod_p) {eu5_mod_path_ = std::move(eu5_mod_p); }
+   void SetSaveGamePath(std::filesystem::path save_game_p) {save_game_ = std::move(save_game_p); }
+   void SetDebug(bool debug) { debug_ = debug; }
+   void SetOutputName(const std::string& name) { output_name_ = name; }
 
-   void validate(const commonItems::ConverterVersion& converter_version) const
+   void Validate(const commonItems::ConverterVersion& converter_version) const
    {
-      verifyCK3Path();
-      verifyCK3Version(converter_version);
-      verifyEU5Path();
-      verifyEU5Version(converter_version);
-      verifyCK3Save();
+      VerifyCK3Path();
+      VerifyCK3Version(converter_version);
+      VerifyEU5Path();
+      VerifyEU5Version(converter_version);
+      VerifyCK3Save();
    }
 
   private:
-   std::filesystem::path ck3_directory;
-   std::filesystem::path ck3_doc_directory;
-   std::filesystem::path eu5_directory;
-   std::filesystem::path eu5_mod_path;
-   std::filesystem::path save_game;
-   bool debug = false;
-   std::string output_name;
+   std::filesystem::path ck3_directory_;
+   std::filesystem::path ck3_doc_directory_;
+   std::filesystem::path eu5_directory_;
+   std::filesystem::path eu5_mod_path_;
+   std::filesystem::path save_game_;
+   bool debug_ = false;
+   std::string output_name_;
 
 
 
-   void verifyCK3Path() const
+   void VerifyCK3Path() const
    {
-      if (!commonItems::DoesFolderExist(ck3_directory))
+      if (!commonItems::DoesFolderExist(ck3_directory_))
       {
-         throw std::runtime_error(fmt::format("Crusader Kings 3 path {} doesn't exist.", ck3_directory.string()));
+         throw std::runtime_error(fmt::format("Crusader Kings 3 path {} doesn't exist.", ck3_directory_.string()));
       }
-      if (!commonItems::DoesFileExist(ck3_directory / "binaries/ck3.exe") &&
-          !commonItems::DoesFileExist(ck3_directory / "CK3game") &&
-          !commonItems::DoesFileExist(ck3_directory / "binaries/ck3"))
+      if (!commonItems::DoesFileExist(ck3_directory_ / "binaries/ck3.exe") &&
+          !commonItems::DoesFileExist(ck3_directory_ / "CK3game") &&
+          !commonItems::DoesFileExist(ck3_directory_ / "binaries/ck3"))
       {
-         throw std::runtime_error(fmt::format("{} does not contain Crusader Kings 3.", ck3_directory.string()));
+         throw std::runtime_error(fmt::format("{} does not contain Crusader Kings 3.", ck3_directory_.string()));
       }
    }
 
-   void verifyEU5Path() const
+   void VerifyEU5Path() const
    {
-      if (!commonItems::DoesFolderExist(eu5_directory))
+      if (!commonItems::DoesFolderExist(eu5_directory_))
       {
-         throw std::runtime_error(fmt::format("Europa Universalis 5 path {} doesn't exist.", eu5_directory.string()));
+         throw std::runtime_error(fmt::format("Europa Universalis 5 path {} doesn't exist.", eu5_directory_.string()));
       }
-      if (!commonItems::DoesFileExist(eu5_directory / "binaries/eu5.exe") &&
-          !commonItems::DoesFileExist(eu5_directory / "binaries/eu5"))
+      if (!commonItems::DoesFileExist(eu5_directory_ / "binaries/eu5.exe") &&
+          !commonItems::DoesFileExist(eu5_directory_ / "binaries/eu5"))
       {
-         throw std::runtime_error(fmt::format("{} does not contain Europa Universalis 5.", eu5_directory.string()));
+         throw std::runtime_error(fmt::format("{} does not contain Europa Universalis 5.", eu5_directory_.string()));
       }
    }
 
-   void verifyCK3Version(const commonItems::ConverterVersion& converter_version) const
+   void VerifyCK3Version(const commonItems::ConverterVersion& converter_version) const
    {
       const auto ck3_version =
-          GameVersion::extractVersionFromLauncher(ck3_directory / "launcher/launcher-settings.json");
+          GameVersion::extractVersionFromLauncher(ck3_directory_ / "launcher/launcher-settings.json");
       if (!ck3_version)
       {
          Log(LogLevel::Error) << "CK3 version could not be determined, proceeding blind!";
@@ -108,10 +108,10 @@ class Configuration
       }
    }
 
-   void verifyEU5Version(const commonItems::ConverterVersion& converter_version) const
+   void VerifyEU5Version(const commonItems::ConverterVersion& converter_version) const
    {
-      // TODO find a way to get eu5 version
-      const auto eu5_version = GameVersion::extractVersionFromBranchTxt(eu5_directory / "clausewitz_branch.txt");
+      // TODO: kubkm - find a way to get eu5 version
+      const auto eu5_version = GameVersion::extractVersionFromBranchTxt(eu5_directory_ / "clausewitz_branch.txt");
       if (!eu5_version)
       {
          Log(LogLevel::Error) << "EU5 version could not be determined, proceeding blind!";
@@ -135,9 +135,9 @@ class Configuration
       }
    }
 
-   void verifyCK3Save() const
+   void VerifyCK3Save() const
    {
-      if (save_game.extension() != ".ck3")
+      if (save_game_.extension() != ".ck3")
       {
          throw std::invalid_argument(
              "The save is not a Crusader Kings 3 save. Choose a save ending in '.ck3' and convert again.");
