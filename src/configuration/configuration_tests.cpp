@@ -80,7 +80,7 @@ TEST(ConfigurationTest, CustomOutputOverridesSaveOutputName)  // NOLINT : clang-
 }
 
 
-TEST(ConfigurationTest, ExceptionForMissingVic3Directory)  // NOLINT : clang-tidy doens't like gtest
+TEST(ConfigurationTest, ExceptionForMissingCk3Directory)  // NOLINT : clang-tidy doens't like gtest
 {
    const auto configuration = LoadConfiguration("test_files/configuration/missing_ck3_directory.txt");
    EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()),  // NOLINT : clang-tidy doens't like gtest
@@ -96,7 +96,7 @@ TEST(ConfigurationTest, ExceptionForBadVic3Directory)  // NOLINT : clang-tidy do
 }
 
 
-TEST(ConfigurationTest, ExceptionForMissingHoI4Directory)  // NOLINT : clang-tidy doens't like gtest
+TEST(ConfigurationTest, ExceptionForMissingEU5Directory)  // NOLINT : clang-tidy doens't like gtest
 {
    const auto configuration = LoadConfiguration("test_files/configuration/missing_eu5_directory.txt");
    EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()),  // NOLINT : clang-tidy doens't like gtest
@@ -104,7 +104,7 @@ TEST(ConfigurationTest, ExceptionForMissingHoI4Directory)  // NOLINT : clang-tid
 }
 
 
-TEST(ConfigurationTest, ExceptionForBadHoI4Directory)  // NOLINT : clang-tidy doens't like gtest
+TEST(ConfigurationTest, ExceptionForBadEU5Directory)  // NOLINT : clang-tidy doens't like gtest
 {
    const auto configuration = LoadConfiguration("test_files/configuration/bad_eu5_directory.txt");
    EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()),  // NOLINT : clang-tidy doens't like gtest
@@ -116,25 +116,77 @@ TEST(ConfigurationTest, BadSaveNameThrowsException)  // NOLINT : clang-tidy doen
 {
    const auto configuration = LoadConfiguration("test_files/configuration/bad_save_name.txt");
    EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()),  // NOLINT : clang-tidy doens't like gtest
-       std::runtime_error);
+       std::invalid_argument);
 }
 
-TEST(ConfigurationTest, WrongCk3VersionThrowsException)  // NOLINT : clang-tidy doens't like gtest
+TEST(ConfigurationTest, TooNewCk3VersionThrowsException)  // NOLINT : clang-tidy doens't like gtest
 {
    commonItems::ConverterVersion converter_version;
-   converter_version.loadVersion("test_files/version_restrictive.txt");
+   converter_version.loadVersion("test_files/version_old.txt");
    const auto configuration = LoadConfiguration("test_files/configuration/ck3_version.txt");
    EXPECT_THROW(configuration.Validate(converter_version),  // NOLINT : clang-tidy doens't like gtest
        std::runtime_error);
 }
 
-TEST(ConfigurationTest, CorrectCk3VersionValidates)  // NOLINT : clang-tidy doens't like gtest
+TEST(ConfigurationTest, TooNewCk3VersionLogsError)  // NOLINT : clang-tidy doens't like gtest
 {
    commonItems::ConverterVersion converter_version;
+   const std::stringstream log;
+   std::streambuf* cout_buffer = std::cout.rdbuf();
+   std::cout.rdbuf(log.rdbuf());
+
+   converter_version.loadVersion("test_files/version_old.txt");
+   const auto configuration = LoadConfiguration("test_files/configuration/ck3_version.txt");
+   EXPECT_THROW(configuration.Validate(converter_version),  // NOLINT : clang-tidy doens't like gtest
+       std::runtime_error);
+   EXPECT_THAT(log.str(), testing::HasSubstr(R"(CK3 version: 1.19.11.3)"));
+   EXPECT_THAT(log.str(), testing::HasSubstr(R"(CK3 version is v1.19.11.3, converter requires maximum v1.5!)"));
+   std::cout.rdbuf(cout_buffer);
+}
+
+TEST(ConfigurationTest, OldCk3VersionThrowsException)  // NOLINT : clang-tidy doens't like gtest
+{
+   commonItems::ConverterVersion converter_version;
+   converter_version.loadVersion("test_files/version_new.txt");
+   const auto configuration = LoadConfiguration("test_files/configuration/ck3_version.txt");
+   EXPECT_THROW(configuration.Validate(converter_version),  // NOLINT : clang-tidy doens't like gtest
+       std::runtime_error);
+}
+
+TEST(ConfigurationTest, OldCk3VersionLogsError)  // NOLINT : clang-tidy doens't like gtest
+{
+   commonItems::ConverterVersion converter_version;
+   const std::stringstream log;
+   std::streambuf* cout_buffer = std::cout.rdbuf();
+   std::cout.rdbuf(log.rdbuf());
+
+   converter_version.loadVersion("test_files/version_new.txt");
+   const auto configuration = LoadConfiguration("test_files/configuration/ck3_version.txt");
+
+   EXPECT_THROW(configuration.Validate(converter_version),  // NOLINT : clang-tidy doens't like gtest
+       std::runtime_error);
+   EXPECT_THAT(log.str(), testing::HasSubstr(R"(CK3 version: 1.19.11.3)"));
+   EXPECT_THAT(log.str(), testing::HasSubstr(R"(CK3 version is v1.19.11.3, converter requires minimum v2.5!)"));
+
+   std::cout.rdbuf(cout_buffer);
+}
+
+TEST(ConfigurationTest, CorrectCk3VersionValidatesAndLogs)  // NOLINT : clang-tidy doens't like gtest
+{
+   commonItems::ConverterVersion converter_version;
+   const std::stringstream log;
+   std::streambuf* cout_buffer = std::cout.rdbuf();
+   std::cout.rdbuf(log.rdbuf());
+
    converter_version.loadVersion("test_files/version.txt");
    const auto configuration = LoadConfiguration("test_files/configuration/ck3_version.txt");
-   EXPECT_THROW(configuration.Validate(converter_version),  // NOLINT : clang-tidy doens't like gtest
-       std::runtime_error);
+   configuration.Validate(converter_version);
+
+   EXPECT_THAT(log.str(),
+       testing::HasSubstr(R"(Crusader Kings 3 install path is "test_files/test_folders/ck3_folder_with_version")"));
+   EXPECT_THAT(log.str(), testing::HasSubstr(R"(CK3 version: 1.19.11.3)"));
+
+   std::cout.rdbuf(cout_buffer);
 }
 
 TEST(ConfigurationTest, CorrectConfigurationValidatedWithoutErrors)  // NOLINT : clang-tidy doens't like gtest

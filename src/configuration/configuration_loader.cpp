@@ -68,10 +68,6 @@ configuration::Configuration configuration::LoadConfiguration(const path& config
       {
          Log(LogLevel::Info) << "\tDebug is active";
       }
-      else
-      {
-         Log(LogLevel::Info) << "\tDebug is not active";
-      }
    });
    configuration_parser.registerKeyword("output_name", [&configuration](std::istream& stream) {
       configuration.SetOutputName(commonItems::getString(stream));
