@@ -13,7 +13,7 @@
 namespace configuration
 {
 
-TEST(ConfigurationTest, DefaultsAreDefaulted)  // NOLINT : clang-tidy doens't like gtest
+TEST(ConfigurationTest, DefaultsAreDefaulted)
 {
    const auto configuration = LoadConfiguration("test_files/configuration/blank_configuration.txt");
 
@@ -80,11 +80,10 @@ TEST(ConfigurationTest, CustomOutputOverridesSaveOutputName)  // NOLINT : clang-
 }
 
 
-TEST(ConfigurationTest, ExceptionForMissingCk3Directory)  // NOLINT : clang-tidy doens't like gtest
+TEST(ConfigurationTest, ExceptionForMissingCk3Directory)
 {
    const auto configuration = LoadConfiguration("test_files/configuration/missing_ck3_directory.txt");
-   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()),  // NOLINT : clang-tidy doens't like gtest
-       std::runtime_error);
+   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()), std::runtime_error);
 }
 
 

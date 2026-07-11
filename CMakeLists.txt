@@ -203,6 +203,7 @@ set(MAIN_SOURCE "src/main.cpp")
 
 # converter sources will be added one by one like so:
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_to_eu5_converter.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/configuration/configuration.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/configuration/configuration_loader.cpp")
 
 add_subdirectory("./external/fmt")
@@ -265,7 +266,6 @@ include_directories("./external/commonItems/external/googletest/googlemock")
 include_directories("./external/commonItems/external/googletest/googlemock/include")
 
 # test sources will be added one by one like so:
-set(TEST_SOURCES ${TEST_SOURCES} "src/placeholder_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/configuration/configuration_tests.cpp")
 
 add_executable(
