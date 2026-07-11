@@ -2,6 +2,7 @@
 
 #include <external/commonItems/ConverterVersion.h>
 #include <external/commonItems/GameVersion.h>
+#include <external/commonItems/Log.h>
 #include <external/commonItems/OSCompatibilityLayer.h>
 #include <external/fmt/include/fmt/format.h>
 
