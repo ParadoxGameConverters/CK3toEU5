@@ -171,7 +171,6 @@ endif (PLATFORM STREQUAL "Windows" AND NOT RUN_CLANG_TIDY)
 #### Converter ####
 
 include_directories(.)
-include_directories("./external/fmt/include")
 include_directories("./external/commonItems")
 
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
@@ -205,8 +204,8 @@ set(MAIN_SOURCE "src/main.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_to_eu5_converter.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/configuration/configuration.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/configuration/configuration_loader.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/output_writer.cpp")
 
-add_subdirectory("./external/fmt")
 link_directories("./external/rakaly")
 
 add_subdirectory(external/commonItems EXCLUDE_FROM_ALL)
@@ -222,9 +221,9 @@ if (PLATFORM STREQUAL "Windows")
 	target_compile_options(CK3toEU5lib PRIVATE /permissive /W4 /w14242 /w14254 /w14263 /w14265 /w14287 /we4289 /w14296 
         /w14311 /w14545 /w14546 /w14547 /w14549 /w14555 /w14619 /w14640 /w14826 /w14905 /w14906 /w14928 
         /external:anglebrackets /external:W0 /WX)
-	target_link_libraries(CK3toEU5lib LINK_PUBLIC commonLib fmt::fmt rakaly.dll.lib)
+	target_link_libraries(CK3toEU5lib LINK_PUBLIC commonLib rakaly.dll.lib)
 elseif (PLATFORM STREQUAL "Linux")
-	target_link_libraries(CK3toEU5lib LINK_PUBLIC commonLib fmt::fmt rakaly)
+	target_link_libraries(CK3toEU5lib LINK_PUBLIC commonLib rakaly)
 endif (PLATFORM  STREQUAL "Windows")
 
 add_executable(
@@ -337,7 +336,6 @@ if (COVERAGE STREQUAL true)
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/lib/gcc/x86_64-linux-gnu/14/include/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info '*/external/bitmap/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info '*/external/commonItems/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info '*/external/fmt/include/fmt/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info '*/external/rakaly/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info '*/external/stb/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info '*/gmock/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
