@@ -41,3 +41,9 @@ Debug/
 DebugIntermediate/
 lib/
 /CK3toEU5.sln.DotSettings.user
+
+# Exception for exe files used in tests
+
+!data/test_files/test_folders/ck3_folder/binaries/ck3.exe
+!data/test_files/test_folders/eu5_folder/binaries/eu5.exe
+!data/test_files/test_folders/ck3_folder_with_version/binaries/ck3.exe

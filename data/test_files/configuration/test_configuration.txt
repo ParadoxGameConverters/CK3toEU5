@@ -1,0 +1,7 @@
+CK3DocDirectory = "ck3_doc_directory"
+CK3directory = "test_files/test_folders/ck3_folder"
+EU5directory = "test_files/test_folders/eu5_folder"
+targetGameModPath = "eu5_mod_directory"
+SaveGame = "test_save.ck3"
+debug = "yes"
+output_name = "test_output_name"
