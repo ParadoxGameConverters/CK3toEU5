@@ -202,9 +202,18 @@ set(MAIN_SOURCE "src/main.cpp")
 
 # converter sources will be added one by one like so:
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_to_eu5_converter.cpp")
+
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/configuration/configuration.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/configuration/configuration_loader.cpp")
-set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/output_writer.cpp")
+
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/output_mod.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/utils/folder_manager_impl.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/utils/file_writer_impl.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/output_folder.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/resource_copy.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/root/dot_mod_files.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/history/generic_advisors.cpp")
+
 
 link_directories("./external/rakaly")
 
@@ -248,7 +257,7 @@ endif (PLATFORM  STREQUAL "Windows")
 if (NOT RUN_CLANG_TIDY)
 	configure_file("data/version.txt" "${FRONTER_OUTPUT_DIRECTORY}/version.txt" COPYONLY)
 	configure_file("data/readme.txt" "${FRONTER_OUTPUT_DIRECTORY}/readme.txt" COPYONLY)
-	file(COPY "data/blank_mod" DESTINATION "${CONVERTER_OUTPUT_DIRECTORY}")
+	file(COPY "data/resources" DESTINATION "${CONVERTER_OUTPUT_DIRECTORY}")
 	file(COPY "data/configurables" DESTINATION "${CONVERTER_OUTPUT_DIRECTORY}")
 	if (PLATFORM STREQUAL "Windows")
 		configure_file("external/rakaly/rakaly.dll" "${FRONTER_OUTPUT_DIRECTORY}/CK3toEU5/rakaly.dll" COPYONLY)
@@ -266,6 +275,11 @@ include_directories("./external/commonItems/external/googletest/googlemock/inclu
 
 # test sources will be added one by one like so:
 set(TEST_SOURCES ${TEST_SOURCES} "src/configuration/configuration_tests.cpp")
+
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/file_writer_impl_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/folder_manager_impl_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/root/dot_mod_files_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/history/generic_advisors_tests.cpp")
 
 add_executable(
 	CK3toEU5Tests
