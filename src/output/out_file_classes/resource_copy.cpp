@@ -22,8 +22,9 @@ CopyResource::CopyResource(std::string name, std::filesystem::path resource_path
 void CopyResource::Create(const std::filesystem::path& folder_path)
 {
    Log(LogLevel::Info) << "\tCopying resources files";
-   copy("resources" / resource_path_,
+   std::filesystem::copy(  // NOLINT : clang-analyzer-optin.core.EnumCastOutOfRang - clang-tidy hates filesystem
+       resource_path_,
        folder_path / GetName(),
-       std::filesystem::copy_options::recursive);  // NOLINT - clang-tidy hates filesystem
+       std::filesystem::copy_options::recursive);
 }
 }  // namespace out

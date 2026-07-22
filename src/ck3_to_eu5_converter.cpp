@@ -22,13 +22,9 @@ void Converter::Convert()
 {
    Log(LogLevel::Progress) << "80%";
 
-   // auto output_writer = out::OutputWriter(configuration_.GetOutputName(), converter_version_.getMaxTarget());
-   // Log(LogLevel::Info) << "Preparing output folder";
-   // output_writer.ClearOutputFolder();
-   // output_writer.CreateOutputFolder();
+
    Log(LogLevel::Info) << "Outputting mod";
    out::OutputWriter output = out::OutputWriter(configuration_.GetOutputName(), converter_version_.getMaxTarget());
-   output.BuildFolderStructure();
    output.GenereteOutputMod();
 
    Log(LogLevel::Progress) << "85%";

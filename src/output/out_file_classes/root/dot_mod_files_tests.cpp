@@ -16,14 +16,13 @@ namespace out
 namespace
 {
 
-
 class MockFileWriter: public FileWriter
 {
   public:
-   MOCK_METHOD(void,
+   MOCK_METHOD(void,  // NOLINT : clang-tidy doens't like gtest
        CreateEmptyAndWrite,
        (const std::filesystem::path&, const std::string&),
-       (override));  // NOLINT : clang-tidy doens't like gtest
+       (override));
 };
 
 TEST(DotModFiles, CorrectFileConentWritten)  // NOLINT : clang-tidy doens't like gtest
@@ -60,8 +59,8 @@ TEST(DotModFiles, CorrectFileConentWritten)  // NOLINT : clang-tidy doens't like
        "replace_path=\"map/supplyareas\"\n"
        "replace_path=\"map/strategicregions\"\n"
        "supported_version=\"*\"";
-   const std::filesystem::path expected_path = "folder\\zaba.mod";
-   const std::filesystem::path expected_descriptor_path = "folder\\descriptor.mod";
+   const std::filesystem::path expected_path = std::filesystem::path("folder") / "zaba.mod";
+   const std::filesystem::path expected_descriptor_path = std::filesystem::path("folder") / "descriptor.mod";
 
    DotModFiles file_resource(name, &mock, GameVersion(""));
 

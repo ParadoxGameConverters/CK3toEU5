@@ -65,8 +65,8 @@ TEST_F(FileManagerTest, FailsWhenCreatingSameFileTwice)  // NOLINT : clang-tidy 
 
    ASSERT_TRUE(std::filesystem::exists(file_path));
 
-   EXPECT_THROW(file_writer.CreateEmptyAndWrite(file_path, test_content),
-       std::runtime_error);  // NOLINT : clang-tidy doens't like gtest
+   EXPECT_THROW(file_writer.CreateEmptyAndWrite(file_path, test_content),  // NOLINT : clang-tidy doens't like gtest
+       std::runtime_error);
 }
 
 }  // namespace

@@ -32,9 +32,8 @@ OutputFolder::~OutputFolder()
    subfolders_.clear();
 }
 
-void OutputFolder::CreateRecursive(
-    const std::filesystem::path& parent_path)  // NOLINT - misc-no-recursion - this is purposefully recursive, recursion
-                                               // is a standard practice when working on a folder structure
+void OutputFolder::CreateRecursive(            // NOLINT - misc-no-recursion - this is purposefully recursive, recursion
+    const std::filesystem::path& parent_path)  // is a standard practice when working on a folder structure
 {
    const std::filesystem::path my_path = parent_path / name_;
    folder_manager_->CreateFolder(my_path);

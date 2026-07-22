@@ -278,6 +278,8 @@ set(TEST_SOURCES ${TEST_SOURCES} "src/configuration/configuration_tests.cpp")
 
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/file_writer_impl_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/folder_manager_impl_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/output_folder_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/resource_copy_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/root/dot_mod_files_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/history/generic_advisors_tests.cpp")
 

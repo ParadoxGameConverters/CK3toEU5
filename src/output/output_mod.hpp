@@ -18,15 +18,8 @@ class OutputWriter  // class with the structure of the output mod
 {
   public:
    OutputWriter(std::string name, GameVersion eu5_version);
-   // removes output folder if any exists
-   // creates output folder
-   // creates mod descriptor files
-   // calls .write() of all classes representing subfolders
 
    ~OutputWriter();
-
-
-   void BuildFolderStructure(/*EU5World eu5_world*/);
 
    void GenereteOutputMod();
 
