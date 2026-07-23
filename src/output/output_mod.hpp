@@ -24,6 +24,9 @@ class OutputWriter  // class with the structure of the output mod
    OutputWriter(const OutputWriter&) = delete;
    OutputWriter& operator=(const OutputWriter&) = delete;
 
+   OutputWriter(OutputWriter&&) noexcept = default;
+   OutputWriter& operator=(OutputWriter&&) noexcept = default;
+
    void GenereteOutputMod();
 
   private:

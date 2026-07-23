@@ -22,6 +22,11 @@ class OutputFileOrResource
    virtual ~OutputFileOrResource() = default;
    virtual void Create(const std::filesystem::path& /*path*/) = 0;
 
+   OutputFileOrResource(const OutputFileOrResource&) = delete;
+   OutputFileOrResource& operator=(const OutputFileOrResource&) = delete;
+
+   OutputFileOrResource(OutputFileOrResource&&) noexcept = default;
+   OutputFileOrResource& operator=(OutputFileOrResource&&) noexcept = default;
 
   protected:
    std::string GetName() { return name_; }

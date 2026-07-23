@@ -12,8 +12,14 @@ namespace out
 class FolderManager
 {
   public:
-   // FolderManager() {};
+   FolderManager() = default;
    virtual ~FolderManager() = default;
+
+   FolderManager(const FolderManager&) = delete;
+   FolderManager& operator=(const FolderManager&) = delete;
+
+   FolderManager(FolderManager&&) noexcept = default;
+   FolderManager& operator=(FolderManager&&) noexcept = default;
 
    // LCOV_EXCL_START - by default coverage expexcts us to test these "methods"
    virtual void RemoveFolder(const std::filesystem::path& /*unused*/) {};

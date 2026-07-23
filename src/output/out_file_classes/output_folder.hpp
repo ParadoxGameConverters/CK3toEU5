@@ -17,6 +17,13 @@ class OutputFolder
   public:
    OutputFolder(std::string name, FolderManager* folder_manager);
    ~OutputFolder();
+
+   OutputFolder(const OutputFolder&) = delete;
+   OutputFolder& operator=(const OutputFolder&) = delete;
+
+   OutputFolder(OutputFolder&&) noexcept = default;
+   OutputFolder& operator=(OutputFolder&&) noexcept = default;
+
    void CreateRecursive(const std::filesystem::path& parent_path);
 
    void RegisterSubfolder(OutputFolder* folder);
