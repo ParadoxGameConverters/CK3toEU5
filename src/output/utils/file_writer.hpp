@@ -15,7 +15,7 @@ class FileWriter
    // FileWriter() {};
    virtual ~FileWriter() = default;
 
-   virtual void CreateEmptyAndWrite(const std::filesystem::path& /*unused*/, const std::string& /*unused*/) {};
+   virtual void CreateEmptyAndWrite(const std::filesystem::path& /*unused*/, const std::string& /*unused*/) = 0;
 };
 
 }  // namespace out

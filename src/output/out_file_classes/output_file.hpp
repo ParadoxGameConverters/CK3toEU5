@@ -20,7 +20,7 @@ class OutputFileOrResource
        name_(std::move(name)),
        file_writer_(file_writer) {}  // here it will take EU5 world as well
    virtual ~OutputFileOrResource() = default;
-   virtual void Create(const std::filesystem::path& /*path*/) {}
+   virtual void Create(const std::filesystem::path& /*path*/) = 0;
 
 
   protected:
