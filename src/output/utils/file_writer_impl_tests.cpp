@@ -69,6 +69,16 @@ TEST_F(FileManagerTest, FailsWhenCreatingSameFileTwice)  // NOLINT : clang-tidy 
        std::runtime_error);
 }
 
+TEST_F(FileManagerTest, FailsWhenWritingToMissingFolder)  // NOLINT : clang-tidy doens't like gtest
+{
+   FileWriterImpl file_writer;
+   const std::string test_content = "test content";
+   const std::string file_path = "nonexistant_folder/test_file.txt";
+
+   EXPECT_THROW(file_writer.CreateEmptyAndWrite(file_path, test_content),  // NOLINT : clang-tidy doens't like gtest
+       std::runtime_error);
+}
+
 }  // namespace
 
 }  // namespace out

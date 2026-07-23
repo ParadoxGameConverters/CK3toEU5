@@ -20,11 +20,6 @@ class MockFolderManager: public FolderManager
 {
   public:
    MOCK_METHOD(void,  // NOLINT : clang-tidy doens't like gtest
-       RemoveFolder,
-       (const std::filesystem::path& /*unused*/),
-       (override));
-
-   MOCK_METHOD(void,  // NOLINT : clang-tidy doens't like gtest
        CreateFolder,
        (const std::filesystem::path& /*unused*/),
        (override));

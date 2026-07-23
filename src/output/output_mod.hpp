@@ -21,6 +21,9 @@ class OutputWriter  // class with the structure of the output mod
 
    ~OutputWriter();
 
+   OutputWriter(const OutputWriter&) = delete;
+   OutputWriter& operator=(const OutputWriter&) = delete;
+
    void GenereteOutputMod();
 
   private:

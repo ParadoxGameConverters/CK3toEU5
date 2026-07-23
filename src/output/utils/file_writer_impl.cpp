@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <format>
 #include <fstream>
-#include <print>
+#include <print>  // NOLINT: couldn't get github runners to use newest c++ standard, should be fixed in the future
 #include <stdexcept>
 #include <string>
 
@@ -25,7 +25,10 @@ void FileWriterImpl::CreateEmptyAndWrite(const std::filesystem::path& file_path,
    {
       throw std::runtime_error(std::format("Could not create file {}", file_path.string()));
    }
-   std::print(write_file, "{}", content);
+   std::print(  // NOLINT: couldn't get github runners to use newest c++ standard, should be fixed in the future
+       write_file,
+       "{}",
+       content);
    write_file.close();
 }
 
