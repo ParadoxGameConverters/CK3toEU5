@@ -211,7 +211,7 @@ set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/utils/folder_manager_impl
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/utils/file_writer_impl.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/output_folder.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/resource_copy.cpp")
-set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/root/dot_mod_files.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/output/dot_mod_files.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/history/generic_advisors.cpp")
 
 
@@ -280,7 +280,7 @@ set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/file_writer_impl_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/folder_manager_impl_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/output_folder_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/resource_copy_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/root/dot_mod_files_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/output/dot_mod_files_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/history/generic_advisors_tests.cpp")
 
 add_executable(
@@ -299,7 +299,6 @@ if (PLATFORM STREQUAL "Windows")
 elseif (PLATFORM STREQUAL "Linux")
 endif (PLATFORM STREQUAL "Windows")
 
-file(COPY "data/blank_mod" DESTINATION "${TEST_OUTPUT_DIRECTORY}")
 file(COPY "data/test_files" DESTINATION "${TEST_OUTPUT_DIRECTORY}")
 if (PLATFORM STREQUAL "Windows")
 	configure_file("external/rakaly/rakaly.dll" "${TEST_OUTPUT_DIRECTORY}/rakaly.dll" COPYONLY)

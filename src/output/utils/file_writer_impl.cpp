@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <format>
 #include <fstream>
+#include <print>
 #include <stdexcept>
 #include <string>
 
@@ -24,7 +25,7 @@ void FileWriterImpl::CreateEmptyAndWrite(const std::filesystem::path& file_path,
    {
       throw std::runtime_error(std::format("Could not create file {}", file_path.string()));
    }
-   write_file << content;
+   std::print(write_file, "{}", content);
    write_file.close();
 }
 

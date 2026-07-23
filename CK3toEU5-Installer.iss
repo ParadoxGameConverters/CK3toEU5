@@ -35,7 +35,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [InstallDelete]
-Type: filesandordirs; Name: "{app}\CK3toEU5\blank_mod"
 Type: filesandordirs; Name: "{app}\CK3toEU5\configurables"
 
 [Files]

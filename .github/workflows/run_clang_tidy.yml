@@ -37,7 +37,7 @@ jobs:
     - name: Build with cmake
       shell: cmd
       run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+        call "C:\Program Files\Microsoft Visual Studio\2026\Community\VC\Auxiliary\Build\vcvars64.bat"
         cmake --preset x64-clang-tidy-windows
         cmake --build --preset build-x64-clang-tidy-windows --target CK3toEU5 CK3toEU5Tests -- -j40
 
@@ -49,7 +49,7 @@ jobs:
   build_test:
     name: Build and test foreign
     if: github.repository_owner != 'ParadoxGameConverters'
-    runs-on: windows-2022
+    runs-on: windows-2025-vs2026
 
     steps:
     - name: "Cloning repo"
@@ -70,7 +70,7 @@ jobs:
     - name: Build with cmake
       shell: cmd
       run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+        call "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
         cmake --preset x64-clang-tidy-windows
         cmake --build --preset build-x64-clang-tidy-windows --target CK3toEU5 CK3toEU5Tests -- -j40
 
