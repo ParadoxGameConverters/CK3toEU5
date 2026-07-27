@@ -13,7 +13,7 @@
 namespace out
 {
 
-AdvisorFile::AdvisorFile(const std::string& name, FileWriter* file_writer): OutputFileOrResource(name, file_writer)
+AdvisorFile::AdvisorFile(const std::string& name, FileWriter& file_writer): OutputFile(name, file_writer)
 {
 }
 
@@ -23,7 +23,7 @@ void AdvisorFile::Create(const std::filesystem::path& folder_path)
 
    auto var = std::string("zaba 123 321");
 
-   UseFileWriter()->CreateEmptyAndWrite(folder_path / "advisors.txt", var);
+   UseFileWriter().CreateEmptyAndWrite(folder_path / "advisors.txt", var);
 }
 
 }  // namespace out

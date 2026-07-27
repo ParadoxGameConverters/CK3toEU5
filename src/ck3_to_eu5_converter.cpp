@@ -6,7 +6,7 @@
 #include <utility>
 
 #include "configuration/configuration.hpp"
-#include "output/output_mod.hpp"
+#include "output/output.hpp"
 
 
 namespace ck3_to_eu5
@@ -24,7 +24,7 @@ void Converter::Convert()
 
 
    Log(LogLevel::Info) << "Outputting mod";
-   out::OutputWriter output = out::OutputWriter(configuration_.GetOutputName(), converter_version_.getMaxTarget());
+   out::Output output = out::Output(configuration_.GetOutputName(), converter_version_);
    output.GenereteOutputMod();
 
    Log(LogLevel::Progress) << "85%";

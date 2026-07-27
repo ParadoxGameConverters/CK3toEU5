@@ -15,17 +15,15 @@ class FolderManager
    FolderManager() = default;
    virtual ~FolderManager() = default;
 
-   FolderManager(const FolderManager&) = delete;
-   FolderManager& operator=(const FolderManager&) = delete;
+   FolderManager(const FolderManager&) = default;
+   FolderManager& operator=(const FolderManager&) = default;
 
    FolderManager(FolderManager&&) noexcept = default;
    FolderManager& operator=(FolderManager&&) noexcept = default;
 
    // LCOV_EXCL_START - by default coverage expexcts us to test these "methods"
    virtual void RemoveFolder(const std::filesystem::path& /*unused*/) {};
-   virtual void RemoveFolder(const std::string& /*unused*/) {};
    virtual void CreateFolder(const std::filesystem::path& /*unused*/) {};
-   virtual void CreateFolder(const std::string& /*unused*/) {};
    // LCOV_EXCL_STOP
 };
 

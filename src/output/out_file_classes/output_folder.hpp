@@ -15,25 +15,25 @@ namespace out
 class OutputFolder
 {
   public:
-   OutputFolder(std::string name, FolderManager* folder_manager);
-   ~OutputFolder();
+   OutputFolder(std::string name, FolderManager& folder_manager);
+   ~OutputFolder() = default;
 
    OutputFolder(const OutputFolder&) = delete;
    OutputFolder& operator=(const OutputFolder&) = delete;
 
-   OutputFolder(OutputFolder&&) noexcept = default;
-   OutputFolder& operator=(OutputFolder&&) noexcept = default;
+   OutputFolder(OutputFolder&&) noexcept = delete;
+   OutputFolder& operator=(OutputFolder&&) noexcept = delete;
 
    void CreateRecursive(const std::filesystem::path& parent_path);
 
-   void RegisterSubfolder(OutputFolder* folder);
-   void RegisterFileOrResource(OutputFileOrResource* file);
+   void RegisterSubfolder(std::unique_ptr<OutputFolder> folder);
+   void RegisterFileOrResource(std::unique_ptr<OutputFileOrResource> file);
 
   private:
-   std::vector<OutputFolder*> subfolders_;
-   std::vector<OutputFileOrResource*> files_;
+   std::vector<std::unique_ptr<OutputFolder>> subfolders_;
+   std::vector<std::unique_ptr<OutputFileOrResource>> files_;
    std::string name_;
-   FolderManager* folder_manager_;
+   FolderManager& folder_manager_;
 };
 
 }  // namespace out

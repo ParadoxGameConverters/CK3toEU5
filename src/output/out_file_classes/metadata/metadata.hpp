@@ -1,6 +1,7 @@
 #ifndef OUT_MOD_FILE_H
 #define OUT_MOD_FILE_H
 
+#include <external/commonItems/ConverterVersion.h>
 #include <external/commonItems/GameVersion.h>
 
 #include <ostream>
@@ -11,15 +12,15 @@
 namespace out
 {
 
-class DotModFiles: public OutputFileOrResource
+class MetadataFile: public OutputFile
 {
   public:
-   DotModFiles(const std::string& name, FileWriter* file_writer, GameVersion output_eu5_version);
+   MetadataFile(const std::string& name, FileWriter& file_writer, commonItems::ConverterVersion converter_version);
 
    void Create(const std::filesystem::path& folder_path) override;
 
   private:
-   GameVersion output_eu5_version_;
+   commonItems::ConverterVersion converter_version_;
 };
 
 }  // namespace out

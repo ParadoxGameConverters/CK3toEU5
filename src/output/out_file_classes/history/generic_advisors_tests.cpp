@@ -34,7 +34,7 @@ TEST(GenericAdvisorsTests, CorrectFileConentWritten)  // NOLINT : clang-tidy doe
    const std::string expected_mod_file_content = "zaba 123 321";
    const std::filesystem::path expected_path = std::filesystem::path("folder") / "advisors.txt";
 
-   AdvisorFile file_resource(name, &mock);
+   AdvisorFile file_resource(name, mock);
 
    EXPECT_CALL(mock, CreateEmptyAndWrite(expected_path, expected_mod_file_content));
 

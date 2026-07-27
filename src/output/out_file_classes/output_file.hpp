@@ -15,26 +15,37 @@ namespace out
 class OutputFileOrResource
 {
   public:
-   explicit OutputFileOrResource(std::string name): name_(std::move(name)), file_writer_(nullptr) {}
-   OutputFileOrResource(std::string name, FileWriter* file_writer):
-       name_(std::move(name)),
-       file_writer_(file_writer) {}  // here it will take EU5 world as well
+   explicit OutputFileOrResource(std::string name): name_(std::move(name)) {}
    virtual ~OutputFileOrResource() = default;
    virtual void Create(const std::filesystem::path& /*path*/) = 0;
 
    OutputFileOrResource(const OutputFileOrResource&) = delete;
    OutputFileOrResource& operator=(const OutputFileOrResource&) = delete;
 
-   OutputFileOrResource(OutputFileOrResource&&) noexcept = default;
-   OutputFileOrResource& operator=(OutputFileOrResource&&) noexcept = default;
+   OutputFileOrResource(OutputFileOrResource&&) noexcept = delete;
+   OutputFileOrResource& operator=(OutputFileOrResource&&) noexcept = delete;
 
   protected:
    std::string GetName() { return name_; }
-   FileWriter* UseFileWriter() { return file_writer_; }
 
   private:
    std::string name_;
-   FileWriter* file_writer_;
+};
+
+class OutputFile: public OutputFileOrResource
+{
+  public:
+   OutputFile(std::string name, FileWriter& file_writer):
+       OutputFileOrResource(std::move(name)),
+       file_writer_(file_writer)
+   {
+   }  // here it will take EU5 world as well
+
+  protected:
+   FileWriter& UseFileWriter() { return file_writer_; }
+
+  private:
+   FileWriter& file_writer_;
 };
 
 }  // namespace out

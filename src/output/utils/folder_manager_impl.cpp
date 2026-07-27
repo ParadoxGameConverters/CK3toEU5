@@ -4,8 +4,8 @@
 #include <external/commonItems/OSCompatibilityLayer.h>
 
 #include <filesystem>
+#include <format>
 #include <stdexcept>
-#include <string>
 
 
 
@@ -16,14 +16,9 @@ void FolderManagerImpl::RemoveFolder(const std::filesystem::path& folder_path)
 {
    if (commonItems::DoesFolderExist(folder_path))
    {
-      Log(LogLevel::Info) << "Removing pre-existing copy of " << folder_path.string();
+      Log(LogLevel::Info) << std::format("Removing pre-existing copy of {}", folder_path.string());
       remove_all(folder_path);
    }
-}
-
-void FolderManagerImpl::RemoveFolder(const std::string& folder_path)
-{
-   RemoveFolder(std::filesystem::path(folder_path));
 }
 
 void FolderManagerImpl::CreateFolder(const std::filesystem::path& folder_path)
@@ -36,8 +31,4 @@ void FolderManagerImpl::CreateFolder(const std::filesystem::path& folder_path)
    std::filesystem::create_directories(folder_path);
 }
 
-void FolderManagerImpl::CreateFolder(const std::string& folder_path)
-{
-   CreateFolder(std::filesystem::path(folder_path));
-}
 }  // namespace out

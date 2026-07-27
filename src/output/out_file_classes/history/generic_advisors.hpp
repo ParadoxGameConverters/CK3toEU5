@@ -8,10 +8,10 @@
 namespace out
 {
 
-class AdvisorFile: public OutputFileOrResource
+class AdvisorFile: public OutputFile
 {
   public:
-   AdvisorFile(const std::string& name, FileWriter* file_writer);
+   AdvisorFile(const std::string& name, FileWriter& file_writer);
 
    void Create(const std::filesystem::path& /*folder_path*/) override;
 };

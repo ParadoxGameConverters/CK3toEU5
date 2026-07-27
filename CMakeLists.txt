@@ -206,12 +206,12 @@ set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_to_eu5_converter.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/configuration/configuration.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/configuration/configuration_loader.cpp")
 
-set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/output_mod.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/output.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/utils/folder_manager_impl.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/utils/file_writer_impl.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/output_folder.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/resource_copy.cpp")
-set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/output/dot_mod_files.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/metadata/metadata.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/history/generic_advisors.cpp")
 
 
@@ -280,7 +280,7 @@ set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/file_writer_impl_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/folder_manager_impl_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/output_folder_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/resource_copy_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/output/dot_mod_files_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/metadata/metadata_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/history/generic_advisors_tests.cpp")
 
 add_executable(

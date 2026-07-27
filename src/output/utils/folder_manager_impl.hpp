@@ -13,9 +13,7 @@ class FolderManagerImpl: public FolderManager
 {
   public:
    void RemoveFolder(const std::filesystem::path& folder_path) override;
-   void RemoveFolder(const std::string& folder_path) override;
    void CreateFolder(const std::filesystem::path& folder_path) override;
-   void CreateFolder(const std::string& folder_path) override;
 };
 
 }  // namespace out
