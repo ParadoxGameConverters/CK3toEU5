@@ -1,0 +1,166 @@
+# CK3 realm laws and cultural pillars -> EU5 government effects.
+#
+# The country's societal values start from its setup template's own numbers. Realm laws then set
+# values outright (a realm with crown authority III is centralized, whatever its template thought),
+# and the culture's ethos and traditions nudge them from there. Everything is clamped to -100..100.
+#
+#   value     = { ck3 = <ck3 law>       key = <eu5 societal value> offset = <absolute position> }
+#   ethos     = { ck3 = <ck3 ethos>     key = <eu5 societal value> shift = <relative shift> }
+#   tradition = { ck3 = <ck3 tradition> key = <eu5 societal value> shift = <relative shift> }
+#   heir      = { ck3 = <ck3 law fragment> eu5 = <eu5 heir_selection> }
+#
+# An ethos or tradition link may carry several key/shift pairs. Heir fragments match by substring;
+# the first match in file order wins.
+
+################################ REALM LAWS ################################
+
+# Crown authority is the single clearest statement a CK3 realm makes about how centralized it is.
+value = { ck3 = crown_authority_0 key = centralization_vs_decentralization offset = -60 }
+value = { ck3 = crown_authority_1 key = centralization_vs_decentralization offset = -20 }
+value = { ck3 = crown_authority_2 key = centralization_vs_decentralization offset = 20 }
+value = { ck3 = crown_authority_3 key = centralization_vs_decentralization offset = 60 }
+value = { ck3 = tribal_authority_0 key = centralization_vs_decentralization offset = -80 }
+value = { ck3 = tribal_authority_1 key = centralization_vs_decentralization offset = -40 }
+value = { ck3 = tribal_authority_2 key = centralization_vs_decentralization offset = 0 }
+value = { ck3 = tribal_authority_3 key = centralization_vs_decentralization offset = 40 }
+
+# Gender succession laws color aristocracy and tradition.
+value = { ck3 = equal_law key = traditionalist_vs_innovative offset = 20 }
+value = { ck3 = male_only_law key = traditionalist_vs_innovative offset = -20 }
+
+################################ ETHOS ################################
+# A culture's ethos is the closest CK3 has to a national character, so it moves several values at once.
+
+ethos = { ck3 = ethos_bellicose
+	key = belligerent_vs_conciliatory shift = 30
+	key = offensive_vs_defensive shift = 20
+	key = quality_vs_quantity shift = -10 }
+ethos = { ck3 = ethos_bureaucratic
+	key = centralization_vs_decentralization shift = 20
+	key = aristocracy_vs_plutocracy shift = 15
+	key = mysticism_vs_jurisprudence shift = 25 }
+ethos = { ck3 = ethos_communal
+	key = individualism_vs_communalism shift = 30
+	key = serfdom_vs_free_subjects shift = 25
+	key = centralization_vs_decentralization shift = -15 }
+ethos = { ck3 = ethos_courtly
+	key = aristocracy_vs_plutocracy shift = -30
+	key = traditionalist_vs_innovative shift = 10
+	key = belligerent_vs_conciliatory shift = -15 }
+ethos = { ck3 = ethos_egalitarian
+	key = serfdom_vs_free_subjects shift = 35
+	key = aristocracy_vs_plutocracy shift = 20
+	key = individualism_vs_communalism shift = 15 }
+ethos = { ck3 = ethos_spiritual
+	key = spiritualist_vs_humanist shift = -35
+	key = mysticism_vs_jurisprudence shift = -25
+	key = traditionalist_vs_innovative shift = -15 }
+ethos = { ck3 = ethos_stoic
+	key = traditionalist_vs_innovative shift = -25
+	key = outward_vs_inward shift = -20
+	key = offensive_vs_defensive shift = -20 }
+
+################################ TRADITIONS ################################
+# Not every tradition says something about statecraft; these are the ones that clearly do.
+
+## War and the army
+tradition = { ck3 = tradition_warrior_culture key = belligerent_vs_conciliatory shift = 20 key = quality_vs_quantity shift = 10 }
+tradition = { ck3 = tradition_spartan key = quality_vs_quantity shift = 20 key = traditionalist_vs_innovative shift = -15 }
+tradition = { ck3 = tradition_stand_and_fight key = offensive_vs_defensive shift = -20 }
+tradition = { ck3 = tradition_stalwart_defenders key = offensive_vs_defensive shift = -25 }
+tradition = { ck3 = tradition_fortress_mastery key = offensive_vs_defensive shift = -20 }
+tradition = { ck3 = tradition_tgp_fortified_strongholds key = offensive_vs_defensive shift = -20 }
+tradition = { ck3 = tradition_castle_keepers key = offensive_vs_defensive shift = -15 key = aristocracy_vs_plutocracy shift = -15 }
+tradition = { ck3 = tradition_hit_and_run key = offensive_vs_defensive shift = 20 key = quality_vs_quantity shift = -15 }
+tradition = { ck3 = tradition_battlefield_looters key = belligerent_vs_conciliatory shift = 20 }
+tradition = { ck3 = tradition_only_the_strong key = belligerent_vs_conciliatory shift = 25 key = serfdom_vs_free_subjects shift = -20 }
+tradition = { ck3 = tradition_strength_in_numbers key = quality_vs_quantity shift = -30 }
+tradition = { ck3 = tradition_reverence_for_veterans key = quality_vs_quantity shift = 20 }
+tradition = { ck3 = tradition_loyal_soldiers key = quality_vs_quantity shift = 15 key = centralization_vs_decentralization shift = 10 }
+tradition = { ck3 = tradition_warriors_by_merit key = aristocracy_vs_plutocracy shift = 25 key = quality_vs_quantity shift = 10 }
+tradition = { ck3 = tradition_chivalry key = aristocracy_vs_plutocracy shift = -25 key = quality_vs_quantity shift = 15 }
+tradition = { ck3 = tradition_swords_for_hire key = quality_vs_quantity shift = -15 key = mercantilism_vs_free_trade shift = 15 }
+tradition = { ck3 = tradition_pacifism key = belligerent_vs_conciliatory shift = -40 key = offensive_vs_defensive shift = -25 }
+tradition = { ck3 = tradition_horse_lords key = offensive_vs_defensive shift = 25 key = land_vs_naval shift = -25 }
+tradition = { ck3 = tradition_devoted_horsemanship key = land_vs_naval shift = -20 }
+tradition = { ck3 = tradition_tgp_bushido key = quality_vs_quantity shift = 25 key = traditionalist_vs_innovative shift = -20 }
+tradition = { ck3 = tradition_tgp_art_of_war key = quality_vs_quantity shift = 20 key = traditionalist_vs_innovative shift = 15 }
+tradition = { ck3 = tradition_ep3_imperial_tagmata key = centralization_vs_decentralization shift = 20 key = quality_vs_quantity shift = 15 }
+tradition = { ck3 = tradition_roman_legacy key = centralization_vs_decentralization shift = 25 key = latinization_vs_hellenization shift = -20 }
+
+## The sea
+tradition = { ck3 = tradition_seafaring key = land_vs_naval shift = 30 key = outward_vs_inward shift = 15 }
+tradition = { ck3 = tradition_maritime_way_of_life key = land_vs_naval shift = 35 }
+tradition = { ck3 = tradition_fp1_coastal_warriors key = land_vs_naval shift = 25 key = belligerent_vs_conciliatory shift = 15 }
+tradition = { ck3 = tradition_practiced_pirates key = land_vs_naval shift = 30 key = belligerent_vs_conciliatory shift = 20 }
+tradition = { ck3 = tradition_fishermen key = land_vs_naval shift = 15 }
+tradition = { ck3 = tradition_maritime_mercantilism key = land_vs_naval shift = 25 key = mercantilism_vs_free_trade shift = 25 }
+
+## Trade, craft and money
+tradition = { ck3 = tradition_caravaneers key = mercantilism_vs_free_trade shift = 30 key = outward_vs_inward shift = 20 }
+tradition = { ck3 = tradition_city_keepers key = aristocracy_vs_plutocracy shift = 30 key = capital_economy_vs_traditional_economy shift = -25 }
+tradition = { ck3 = tradition_artisans key = capital_economy_vs_traditional_economy shift = -20 key = traditionalist_vs_innovative shift = 15 }
+tradition = { ck3 = tradition_metal_craftsmanship key = capital_economy_vs_traditional_economy shift = -15 }
+tradition = { ck3 = tradition_family_entrepreneurship key = aristocracy_vs_plutocracy shift = 25 key = individualism_vs_communalism shift = -20 }
+tradition = { ck3 = tradition_republican_legacy key = aristocracy_vs_plutocracy shift = 35 key = centralization_vs_decentralization shift = -15 }
+tradition = { ck3 = tradition_ancient_miners key = capital_economy_vs_traditional_economy shift = -15 }
+tradition = { ck3 = tradition_brewery key = capital_economy_vs_traditional_economy shift = -10 }
+tradition = { ck3 = tradition_hard_working key = capital_economy_vs_traditional_economy shift = -15 }
+tradition = { ck3 = tradition_agrarian key = capital_economy_vs_traditional_economy shift = 25 }
+tradition = { ck3 = tradition_intensive_farming key = capital_economy_vs_traditional_economy shift = 15 }
+tradition = { ck3 = tradition_pastoralists key = capital_economy_vs_traditional_economy shift = 30 }
+tradition = { ck3 = tradition_collective_lands key = individualism_vs_communalism shift = 30 key = serfdom_vs_free_subjects shift = 20 }
+
+## Faith and learning
+tradition = { ck3 = tradition_zealous_people key = spiritualist_vs_humanist shift = -30 }
+tradition = { ck3 = tradition_faith_bound key = spiritualist_vs_humanist shift = -25 key = traditionalist_vs_innovative shift = -15 }
+tradition = { ck3 = tradition_religious_patronage key = spiritualist_vs_humanist shift = -20 }
+tradition = { ck3 = tradition_fervent_temple_builders key = spiritualist_vs_humanist shift = -25 }
+tradition = { ck3 = tradition_monastic_communities key = spiritualist_vs_humanist shift = -20 key = mysticism_vs_jurisprudence shift = -20 }
+tradition = { ck3 = tradition_mendicant_mystics key = mysticism_vs_jurisprudence shift = -35 }
+tradition = { ck3 = tradition_philosopher_culture key = spiritualist_vs_humanist shift = 30 key = traditionalist_vs_innovative shift = 25 }
+tradition = { ck3 = tradition_fp3_beacon_of_learning key = traditionalist_vs_innovative shift = 30 key = spiritualist_vs_humanist shift = 20 }
+tradition = { ck3 = tradition_language_scholars key = traditionalist_vs_innovative shift = 20 }
+tradition = { ck3 = tradition_scholar_officials key = aristocracy_vs_plutocracy shift = 20 key = mysticism_vs_jurisprudence shift = 25 }
+tradition = { ck3 = tradition_legalistic key = mysticism_vs_jurisprudence shift = 35 }
+tradition = { ck3 = tradition_visigothic_codes key = mysticism_vs_jurisprudence shift = 30 key = centralization_vs_decentralization shift = 15 }
+tradition = { ck3 = tradition_music_theory key = traditionalist_vs_innovative shift = 15 }
+tradition = { ck3 = tradition_poetry key = traditionalist_vs_innovative shift = 15 }
+
+## Society and the outside world
+tradition = { ck3 = tradition_xenophilic key = outward_vs_inward shift = 35 }
+tradition = { ck3 = tradition_welcoming key = outward_vs_inward shift = 25 }
+tradition = { ck3 = tradition_diasporic key = outward_vs_inward shift = 25 }
+tradition = { ck3 = tradition_culture_blending key = outward_vs_inward shift = 20 key = traditionalist_vs_innovative shift = 15 }
+tradition = { ck3 = tradition_religion_blending key = spiritualist_vs_humanist shift = 25 key = outward_vs_inward shift = 15 }
+tradition = { ck3 = tradition_isolationist key = outward_vs_inward shift = -40 }
+tradition = { ck3 = tradition_parochialism key = outward_vs_inward shift = -30 }
+tradition = { ck3 = tradition_tgp_inward_perfection key = outward_vs_inward shift = -40 key = belligerent_vs_conciliatory shift = -20 }
+tradition = { ck3 = tradition_staunch_traditionalists key = traditionalist_vs_innovative shift = -35 }
+tradition = { ck3 = tradition_cultural_primacy key = outward_vs_inward shift = -20 key = centralization_vs_decentralization shift = 15 }
+tradition = { ck3 = tradition_stratified_society key = serfdom_vs_free_subjects shift = -30 key = aristocracy_vs_plutocracy shift = -20 }
+tradition = { ck3 = tradition_ruling_caste key = serfdom_vs_free_subjects shift = -35 key = centralization_vs_decentralization shift = 20 }
+tradition = { ck3 = tradition_hereditary_hierarchy key = aristocracy_vs_plutocracy shift = -25 key = traditionalist_vs_innovative shift = -15 }
+tradition = { ck3 = tradition_equitable key = serfdom_vs_free_subjects shift = 30 }
+tradition = { ck3 = tradition_charitable key = serfdom_vs_free_subjects shift = 20 key = belligerent_vs_conciliatory shift = -15 }
+tradition = { ck3 = tradition_strong_kinship key = individualism_vs_communalism shift = 25 }
+tradition = { ck3 = tradition_tribe_unity key = individualism_vs_communalism shift = 30 key = centralization_vs_decentralization shift = -20 }
+tradition = { ck3 = tradition_fp3_fierce_independence key = centralization_vs_decentralization shift = -35 }
+tradition = { ck3 = tradition_things key = centralization_vs_decentralization shift = -25 key = serfdom_vs_free_subjects shift = 20 }
+tradition = { ck3 = tradition_the_witenagemot key = centralization_vs_decentralization shift = -20 key = aristocracy_vs_plutocracy shift = -15 }
+tradition = { ck3 = tradition_fp3_jirga key = centralization_vs_decentralization shift = -30 key = individualism_vs_communalism shift = 20 }
+tradition = { ck3 = tradition_fp3_enlightened_magnates key = aristocracy_vs_plutocracy shift = -25 key = traditionalist_vs_innovative shift = 20 }
+tradition = { ck3 = tradition_sinophilic key = sinicized_vs_unsinicized shift = -35 }
+tradition = { ck3 = tradition_esteemed_hospitality key = belligerent_vs_conciliatory shift = -20 }
+tradition = { ck3 = tradition_astute_diplomats key = belligerent_vs_conciliatory shift = -25 key = outward_vs_inward shift = 15 }
+tradition = { ck3 = tradition_quarrelsome key = belligerent_vs_conciliatory shift = 25 }
+tradition = { ck3 = tradition_eye_for_an_eye key = belligerent_vs_conciliatory shift = 20 }
+
+################################ SUCCESSION ################################
+heir = { ck3 = primogeniture eu5 = cognatic_primogeniture }
+heir = { ck3 = ultimogeniture eu5 = unigeniture }
+heir = { ck3 = partition eu5 = partition_inheritance }
+heir = { ck3 = seniority eu5 = tribal_oldest_male }
+heir = { ck3 = elective eu5 = oligarchic_elective }
+heir = { ck3 = appointment eu5 = oligarchic_elective }
+heir = { ck3 = theocratic eu5 = bishopric_elective }

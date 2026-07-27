@@ -1,0 +1,47 @@
+# Maps CK3 men-at-arms types to EU5 unit types (in_game/common/unit_types). Standing armies in
+# EU5 are built from the actual regiments rulers maintained in CK3; levies are not converted
+# because EU5 raises those from population natively.
+#
+# eu5 = drop means the type converts to nothing (EU5's starting age has no artillery, so siege
+# equipment is disbanded). Unknown/modded CK3 types default to a_archers.
+
+# Heavy infantry: professional armored foot, elite guards and pike formations.
+link = { eu5 = a_footmen
+	ck3 = armored_footmen ck3 = huscarl ck3 = varangian_guards ck3 = varangian_veterans ck3 = skoutatoi
+	ck3 = palace_guards ck3 = house_guard ck3 = praetorian ck3 = teutonic_knights ck3 = mubarizun
+	ck3 = samurai ck3 = warrior_monks ck3 = teulu ck3 = druzhina ck3 = garudas ck3 = khandayat
+	ck3 = zhanmadao_infantry ck3 = handpicked_faithful ck3 = zupin_warrior ck3 = shomer ck3 = sarawit
+	ck3 = zbrojnosh ck3 = pikemen_unit ck3 = pikemen_militia ck3 = picchieri ck3 = schiltron
+	ck3 = goedendag ck3 = landsknecht ck3 = accolade_maa_pikes ck3 = accolade_maa_vanguards }
+
+# Light infantry: skirmishers, archers, crossbows, hunters and irregulars.
+link = { eu5 = a_archers
+	ck3 = light_footmen ck3 = bondi ck3 = vigmen ck3 = akritai ck3 = ayyar ck3 = bush_hunter
+	ck3 = mountaineer ck3 = metsanvartija ck3 = maturkan_warriors ck3 = pesilat_warriors
+	ck3 = torch_bearers ck3 = maa_bandits ck3 = maa_marauders ck3 = maa_poachers ck3 = maa_thieves
+	ck3 = paiks ck3 = jomsviking_pirates ck3 = abudrar ck3 = guanch_vaulter ck3 = guinea_warrior
+	ck3 = horn_warrior ck3 = bowmen ck3 = longbowmen ck3 = crossbowmen ck3 = gakgung_archers
+	ck3 = archers_of_the_nile ck3 = ballistrai ck3 = shenbigong ck3 = fire_lancers ck3 = handgunners
+	ck3 = accolade_maa_archers ck3 = accolade_maa_crossbowers ck3 = accolade_maa_skirmishers
+	ck3 = accolade_maa_handgunners }
+
+# Light cavalry: raiders, horse archers, camelry and outriders.
+link = { eu5 = a_horsemen
+	ck3 = light_horsemen ck3 = hobelar ck3 = sahel_horsemen ck3 = chasseur ck3 = hussar
+	ck3 = tawashi ck3 = camel_rider ck3 = mulaththamun ck3 = ayrudzi ck3 = tarkhan
+	ck3 = horse_archers ck3 = heavy_horse_archers ck3 = japanese_horse_archers
+	ck3 = emishi_horse_archers ck3 = cataphract_archers ck3 = mangudai ck3 = steppe_raiders
+	ck3 = nomadic_riders ck3 = burenjia ck3 = accolade_maa_horse_archers ck3 = accolade_maa_outriders
+	ck3 = accolade_maa_cameliers }
+
+# Heavy cavalry: knights, cataphracts, lancers and war elephants.
+link = { eu5 = a_armored_horsemen
+	ck3 = armored_horsemen ck3 = cataphract ck3 = black_armor_cavalry ck3 = gendarme ck3 = conrois
+	ck3 = asawira ck3 = kheshig ck3 = tiefutu ck3 = monaspa ck3 = caballero ck3 = nomad_lancers
+	ck3 = war_elephant ck3 = ballista_elephant ck3 = accolade_maa_lancers
+	ck3 = accolade_maa_elephantiers }
+
+# Siege equipment: no EU5 age-1 artillery exists; these disband.
+link = { eu5 = drop
+	ck3 = onager ck3 = mangonel ck3 = trebuchet ck3 = ballista ck3 = bombard ck3 = cannon
+	ck3 = siege_tower ck3 = cloud_ladder ck3 = rocket_carts }

@@ -5,8 +5,11 @@ displayName = CK3DISPLAYNAME
 sourceGame = CK3GAME
 targetGame = EU5GAME
 
-enableUpdateChecker = true
-checkForUpdatesOnStartup = true
+# Update checking is disabled: this fork has no releases on the official
+# ParadoxGameConverters servers, so the checker always reported a bogus
+# "version 0.0" update.
+enableUpdateChecker = false
+checkForUpdatesOnStartup = false
 latestGitHubConverterReleaseUrl = "https://github.com/ParadoxGameConverters/CK3ToEU5/releases/"
 converterReleaseForumThread = "https://forum.paradoxplaza.com/forum/threads/ck3-to-eu5-converter-thread.1866691/"
 pagesCommitIdUrl = "https://paradoxgameconverters.com/commit_ids/CK3ToEU5.txt"

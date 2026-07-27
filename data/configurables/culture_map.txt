@@ -1,0 +1,147 @@
+# Explicit CK3 culture -> EU5 culture links, for CK3 cultures whose name has no EU5 counterpart.
+# Cultures sharing a name with an EU5 culture (english, castilian, tamil...) convert directly and
+# don't need an entry here. Anything not covered falls back on heritage: local vanilla culture if
+# it belongs to the mapped group, otherwise a same-group culture speaking the mapped language.
+#
+# Multiple ck3 per line, single eu5 per line.
+
+##British Isles
+link = { eu5 = highland ck3 = gaelic ck3 = pictish } #Scottish Gaelic; Pictland became the Gaelic highlands
+link = { eu5 = welsh ck3 = cumbrian } #Cumbric was Brythonic, closest living relative
+link = { eu5 = english ck3 = anglo_saxon }
+
+##France & Iberia
+link = { eu5 = french ck3 = frankish }
+link = { eu5 = languedocien ck3 = occitan }
+link = { eu5 = andalusi ck3 = andalusian }
+link = { eu5 = castilian ck3 = visigothic } #Castile claimed the Visigothic mantle
+link = { eu5 = leonese ck3 = asturleonese }
+link = { eu5 = galician ck3 = suebi } #the Suebi kingdom sat in Galicia
+
+##Germany & Low Countries
+link = { eu5 = east_franconian ck3 = franconian ck3 = german }
+link = { eu5 = danube_bavarian ck3 = bavarian }
+link = { eu5 = low_franconian ck3 = dutch }
+link = { eu5 = lower_saxon ck3 = old_saxon }
+
+##Scandinavia & Baltic
+link = { eu5 = norwegian ck3 = norse }
+link = { eu5 = sapmi ck3 = sami }
+link = { eu5 = latvian ck3 = latgalian }
+link = { eu5 = aukstaitian ck3 = lithuanian } #EU5 splits Lithuanians; Aukstaitija is the core
+
+##Italy & Greece
+link = { eu5 = tuscan ck3 = italian } #the literary standard
+link = { eu5 = lombard ck3 = cisalpine ck3 = langobard }
+link = { eu5 = greek_culture ck3 = macedonian ck3 = trojan }
+
+##Slavs & Carpathia
+link = { eu5 = muscovite ck3 = russian }
+link = { eu5 = novgorodian ck3 = ilmenian }
+link = { eu5 = lesser_polish ck3 = polish } #Krakow, the 1337 capital region
+link = { eu5 = kashubian ck3 = pommeranian } #CK3 Pomeranians are the Slavic ones
+link = { eu5 = slovak ck3 = slovien }
+link = { eu5 = slovene ck3 = carantanian }
+link = { eu5 = wallachian ck3 = vlach }
+link = { eu5 = hungarian ck3 = mogyer }
+
+##Uralic peoples
+link = { eu5 = moksha_culture ck3 = mordvin }
+link = { eu5 = meschera_culture ck3 = meshchera } #same people, different romanization
+link = { eu5 = merya_culture ck3 = muroma }
+link = { eu5 = nenets_culture ck3 = samoyed }
+
+##Steppe & Central Asia
+link = { eu5 = cuman_culture ck3 = pecheneg ck3 = kimek ck3 = kipchak ck3 = laktan }
+link = { eu5 = kumyk_culture ck3 = khazar } #Kumyks as the Khazar remnant in the Caucasus
+link = { eu5 = bolghar_culture ck3 = hunnic }
+link = { eu5 = nogai ck3 = kazak } #Kazakhs don't exist yet in 1337; Nogai hold that steppe
+link = { eu5 = uzbek_culture ck3 = karluk }
+link = { eu5 = kyrgyz_culture ck3 = kirghiz }
+link = { eu5 = yugur_culture ck3 = yughur }
+link = { eu5 = tuvan_culture ck3 = uriankhai }
+link = { eu5 = sarta_culture ck3 = shatuo } #Turks inside China
+link = { eu5 = tumed_culture ck3 = ongud }
+
+##Mongols & Manchuria
+link = { eu5 = mongolian_culture ck3 = mongol }
+link = { eu5 = oirat_culture ck3 = naiman } #western Mongols
+link = { eu5 = khamag_culture ck3 = kerait ck3 = shiwei }
+link = { eu5 = daur_culture ck3 = khitan } #Daurs descend from the Khitans
+link = { eu5 = monguor_culture ck3 = tuyuhun } #Monguors descend from the Tuyuhun
+link = { eu5 = jurchen_culture ck3 = mohe ck3 = balhae }
+
+##Persia & the Iranian world
+link = { eu5 = farsi_culture ck3 = persian }
+link = { eu5 = gilak_culture ck3 = daylamite }
+link = { eu5 = tajik_culture ck3 = sogdian }
+link = { eu5 = khorezmian_culture ck3 = khwarezmian }
+link = { eu5 = pamiri_culture ck3 = saka } #last Iranian speakers of the Tarim rim
+link = { eu5 = uyghur_culture ck3 = tocharian } #the Tarim basin turked over
+
+##Middle East & Jewish diaspora
+link = { eu5 = syriac_culture ck3 = assyrian }
+link = { eu5 = mustaarabi ck3 = hebrew } #Arabic-speaking Jews of the Levant
+link = { eu5 = ashkenazi ck3 = radhanite } #Rhineland merchant communities
+link = { eu5 = mizrahi ck3 = bavlim } #Babylonian Jewry
+link = { eu5 = kochini ck3 = kochinim }
+
+##Egypt & Maghreb
+link = { eu5 = lower_egyptian_culture ck3 = egyptian } #the delta and Cairo, where most Egyptians live
+link = { eu5 = coptic_culture ck3 = ancient_egyptian }
+link = { eu5 = moroccan ck3 = maghrebi }
+link = { eu5 = tunisian ck3 = carthaginian }
+link = { eu5 = zenati ck3 = butr } #Butr Berbers ~ the Zenata branch
+link = { eu5 = sanhaja ck3 = baranis } #Baranis Berbers ~ the Sanhaja branch
+link = { eu5 = guanche ck3 = guanches }
+
+##Africa below the Sahara
+link = { eu5 = amhara ck3 = ethiopian }
+link = { eu5 = ometo_culture ck3 = welayta }
+link = { eu5 = swahili_culture ck3 = east_bantu }
+link = { eu5 = western_kru ck3 = kru }
+link = { eu5 = gonja ck3 = guan } #the Gonja are the major Guan people
+link = { eu5 = kanembu_culture ck3 = kanuri }
+link = { eu5 = mandinka ck3 = malinke }
+link = { eu5 = soninke ck3 = marka }
+link = { eu5 = fulbe ck3 = pulaar }
+link = { eu5 = mossi ck3 = gur }
+link = { eu5 = temne ck3 = mel }
+link = { eu5 = bambara ck3 = bozo }
+link = { eu5 = songhai ck3 = sorko ck3 = gaw }
+
+##India & the Himalayas
+link = { eu5 = kannadiga ck3 = kannada }
+link = { eu5 = orissan ck3 = oriya }
+link = { eu5 = kamarupi ck3 = assamese }
+link = { eu5 = dehlavi ck3 = hindustani }
+link = { eu5 = marwari ck3 = rajput }
+link = { eu5 = sinhalese ck3 = sinhala }
+link = { eu5 = khas_culture ck3 = nepali } #the Khas are the Nepali speakers
+link = { eu5 = nicobarese_culture ck3 = nakkavaram } #Nakkavaram = the Nicobars
+link = { eu5 = utsang_culture ck3 = bodpa ck3 = tsangpa ck3 = zhangzhung }
+link = { eu5 = amdowa_culture ck3 = sumpa }
+link = { eu5 = ngalop_culture ck3 = lhomon } #Lhomon = Bhutan
+link = { eu5 = rma_culture ck3 = qiang ck3 = tangut } #both Qiangic peoples
+link = { eu5 = jingpo_culture ck3 = kachin } #Kachin = Jingpo
+
+##East Asia
+link = { eu5 = zhongyuan_culture ck3 = han } #the Central Plains, cradle of Han China
+link = { eu5 = saigoku_culture ck3 = japanese } #western Japan, the Kyoto heartland
+link = { eu5 = touhoku_culture ck3 = emishi }
+link = { eu5 = ryukyu_culture ck3 = ryukyuan }
+link = { eu5 = korean_culture ck3 = goryeo ck3 = silla ck3 = baekje ck3 = goguryeo }
+link = { eu5 = zhuang_culture ck3 = bouxcuengh } #Bouxcuengh is the Zhuang endonym
+link = { eu5 = formosan_culture ck3 = amis }
+
+##Southeast Asia & the Pacific
+link = { eu5 = vietnamese_culture ck3 = viet }
+link = { eu5 = thai_culture ck3 = tai }
+link = { eu5 = orang_asli_culture ck3 = senoi } #the Senoi are Orang Asli
+link = { eu5 = ngaju_culture ck3 = dayak }
+link = { eu5 = cebuano_culture ck3 = bisayan }
+link = { eu5 = ilocano_culture ck3 = iloko }
+link = { eu5 = buginese_culture ck3 = bugis }
+link = { eu5 = torajan_culture ck3 = toraja }
+link = { eu5 = ternate_culture ck3 = maluku }
+link = { eu5 = biak_culture ck3 = papuan }

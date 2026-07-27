@@ -1,0 +1,8 @@
+# Army composition per converted government category. Units are EU5 unit types
+# (in_game/common/unit_types); ratio is the relative weight of each unit within the army.
+# The category is derived from the CK3 government: nomads -> horde, tribes -> tribal, the rest -> feudal.
+
+link = { category = feudal unit = a_footmen ratio = 3 unit = a_archers ratio = 1 unit = a_horsemen ratio = 1 }
+link = { category = tribal unit = a_tribesmen ratio = 4 unit = a_warriors ratio = 1 }
+# Steppe horde governments cannot field the generic infantry types (country_potential blocks them).
+link = { category = horde unit = a_horsemen ratio = 3 unit = a_armored_horsemen ratio = 1 }

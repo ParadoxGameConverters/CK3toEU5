@@ -1,0 +1,2 @@
+swedish_culture = {
+}

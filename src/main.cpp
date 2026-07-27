@@ -23,9 +23,7 @@ int main()  // NOLINT(bugprone-exception-escape)
       const auto configuration = configuration::LoadConfiguration("configuration.txt");
       configuration.Validate(converter_version);
 
-      // Meet C++23's new hotness!
-      std::println("Hello, world!");
-      ck3_to_eu5::ConvertCk3ToEu5();
+      ck3_to_eu5::ConvertCk3ToEu5(configuration, converter_version);
    }
    catch (const std::exception& e)
    {

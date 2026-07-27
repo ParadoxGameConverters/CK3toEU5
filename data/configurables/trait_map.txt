@@ -1,0 +1,56 @@
+# CK3 personality/education traits -> EU5 traits.
+#
+# link    = ruler traits (in_game/common/traits/00_ruler.txt), carried by monarchs.
+# general = general traits (in_game/common/traits/01_general.txt), carried by army commanders -
+#           the knights and champions a CK3 ruler kept in their court.
+#
+# Multiple ck3 entries may map to the same eu5 trait; the first matching trait on a character wins.
+
+link = { eu5 = bold_fighter ck3 = brave }
+link = { eu5 = craven ck3 = craven }
+link = { eu5 = calm ck3 = calm }
+link = { eu5 = cruel ck3 = wrathful ck3 = sadistic }
+link = { eu5 = malevolent ck3 = callous ck3 = vengeful ck3 = arbitrary }
+link = { eu5 = kind_hearted ck3 = compassionate }
+link = { eu5 = tolerant ck3 = forgiving }
+link = { eu5 = benevolent ck3 = generous }
+link = { eu5 = greedy ck3 = greedy }
+link = { eu5 = zealot ck3 = zealous }
+link = { eu5 = free_thinker ck3 = cynical }
+link = { eu5 = industrious ck3 = diligent }
+link = { eu5 = expansionist ck3 = ambitious }
+link = { eu5 = charismatic_negotiator ck3 = gregarious ck3 = diplomat }
+link = { eu5 = secretive ck3 = shy ck3 = paranoid }
+link = { eu5 = incorruptible ck3 = honest }
+link = { eu5 = intricate_web_weaver ck3 = deceitful ck3 = schemer ck3 = education_intrigue_4 ck3 = education_intrigue_5 }
+link = { eu5 = pious ck3 = humble ck3 = chaste }
+link = { eu5 = strict ck3 = arrogant }
+link = { eu5 = careful ck3 = patient ck3 = temperate }
+link = { eu5 = naive ck3 = impatient ck3 = trusting }
+link = { eu5 = sinner ck3 = gluttonous ck3 = lustful }
+link = { eu5 = loose_lips ck3 = fickle }
+link = { eu5 = obsessive_perfectionist ck3 = stubborn }
+link = { eu5 = just ck3 = just }
+link = { eu5 = drunkard ck3 = drunkard }
+link = { eu5 = architectural_visionary ck3 = architect }
+link = { eu5 = scholar ck3 = scholar ck3 = education_learning_4 ck3 = education_learning_5 }
+link = { eu5 = inspiring_leader ck3 = education_martial_4 }
+link = { eu5 = tactical_genius ck3 = education_martial_5 }
+link = { eu5 = midas_touched ck3 = education_stewardship_4 ck3 = education_stewardship_5 }
+link = { eu5 = silver_tongue ck3 = education_diplomacy_4 ck3 = education_diplomacy_5 }
+
+## Commanders. A knight's CK3 reputation decides what kind of general they make; the order here is
+## the priority order, since a character keeps only their strongest command trait.
+general = { eu5 = master_of_arms ck3 = education_martial_5 ck3 = strategist }
+general = { eu5 = strategist ck3 = education_martial_4 }
+general = { eu5 = glory_seeker ck3 = ambitious ck3 = brave }
+general = { eu5 = hardy_warrior ck3 = physique_good_3 ck3 = physique_good_2 ck3 = strong }
+general = { eu5 = ruthless ck3 = sadistic ck3 = callous ck3 = wrathful }
+general = { eu5 = born_to_the_saddle ck3 = horse_lover ck3 = reveler_3 }
+general = { eu5 = inspirational_leader_general ck3 = gregarious ck3 = education_diplomacy_5 }
+general = { eu5 = defensive_planner ck3 = patient ck3 = craven }
+general = { eu5 = offensive_planner ck3 = impatient ck3 = eager_reveler }
+general = { eu5 = siege_specialist ck3 = architect ck3 = education_stewardship_5 }
+general = { eu5 = military_theorist ck3 = scholar ck3 = education_learning_5 }
+general = { eu5 = goal_oriented ck3 = diligent ck3 = stubborn }
+general = { eu5 = battlefield_medic ck3 = physician ck3 = education_learning_4 }

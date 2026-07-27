@@ -1,0 +1,30 @@
+# Maps CK3 tributary contract groups to EU5 subject types (in_game/common/subject_types).
+#
+# Only tributaries reach this mapper. CK3's internal vassals merge into their liege's realm on
+# conversion, so the only subject relationships left are the ones between realms that both survive
+# as their own EU5 country.
+#
+# default = the subject type used for contract groups no link below covers.
+# dynastic = the subject type used when the subject's ruler shares the overlord's dynasty,
+#            whatever the contract says - a cadet branch owes family loyalty, not tribute.
+#            Note: EU5's appanage is France-only (french_feudal_nobility reform + French land),
+#            so the generic cadet-branch type is fiefdom. The converter downgrades it to a plain
+#            vassal when the overlord is not a monarchy, which fiefdom requires.
+
+default = tributary
+dynastic = fiefdom
+
+# Tribute extracted at swordpoint. The subject lost a war and pays for the privilege of existing,
+# which in EU5 terms is a vassal rather than a trade partner.
+link = { eu5 = vassal
+	ck3 = tributary_subjugated }
+
+# Steppe tribute: the classic horde arrangement, where the subject keeps its own affairs and buys
+# peace with regular payments.
+link = { eu5 = tributary
+	ck3 = tributary_nomadic ck3 = tributary_settled }
+
+# Mandala and wanua overlordship: Southeast Asian rings of loosely-held clients orbiting a court.
+# EU5's dominion is the closest fit - autonomous, but unmistakably inside someone's sphere.
+link = { eu5 = dominion
+	ck3 = tributary_mandala ck3 = tributary_mandala_tribal ck3 = tributary_wanua }

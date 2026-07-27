@@ -7,9 +7,11 @@
 #include <external/fmt/include/fmt/format.h>
 
 #include <filesystem>
+#include <fstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include <vector>
 
 
 
@@ -72,6 +74,86 @@ void Configuration::SetDebug(bool debug)
 void Configuration::SetOutputName(const std::string& name)
 {
    output_name_ = name;
+}
+bool Configuration::GetShatterEmpires() const
+{
+   return shatter_empires_;
+}
+bool Configuration::GetVassalSplitoff() const
+{
+   return vassal_splitoff_;
+}
+std::string Configuration::GetHREMode() const
+{
+   return hre_mode_;
+}
+bool Configuration::GetDevImport() const
+{
+   return dev_import_;
+}
+void Configuration::SetShatterEmpires(bool shatter)
+{
+   shatter_empires_ = shatter;
+}
+void Configuration::SetVassalSplitoff(bool splitoff)
+{
+   vassal_splitoff_ = splitoff;
+}
+void Configuration::SetHREMode(const std::string& mode)
+{
+   hre_mode_ = mode;
+}
+void Configuration::SetDevImport(bool dev_import)
+{
+   dev_import_ = dev_import;
+}
+bool Configuration::GetDynamicCultures() const
+{
+   return dynamic_cultures_;
+}
+bool Configuration::GetDynamicReligions() const
+{
+   return dynamic_religions_;
+}
+std::string Configuration::GetTechSource() const
+{
+   return tech_source_;
+}
+std::string Configuration::GetArmyScale() const
+{
+   return army_scale_;
+}
+bool Configuration::GetTreasuryImport() const
+{
+   return treasury_import_;
+}
+void Configuration::SetDynamicCultures(bool dynamic_cultures)
+{
+   dynamic_cultures_ = dynamic_cultures;
+}
+void Configuration::SetDynamicReligions(bool dynamic_religions)
+{
+   dynamic_religions_ = dynamic_religions;
+}
+void Configuration::SetTechSource(const std::string& source)
+{
+   tech_source_ = source;
+}
+void Configuration::SetArmyScale(const std::string& scale)
+{
+   army_scale_ = scale;
+}
+void Configuration::SetTreasuryImport(bool treasury_import)
+{
+   treasury_import_ = treasury_import;
+}
+bool Configuration::GetWarImport() const
+{
+   return war_import_;
+}
+void Configuration::SetWarImport(bool war_import)
+{
+   war_import_ = war_import;
 }
 
 void Configuration::Validate(const commonItems::ConverterVersion& converter_version) const
@@ -136,12 +218,55 @@ void Configuration::VerifyCK3Version(const commonItems::ConverterVersion& conver
    }
 }
 
-void Configuration::VerifyEU5Version(  // NOLINT: not yet implemented
-    const commonItems::ConverterVersion& converter_version) const
+void Configuration::VerifyEU5Version(const commonItems::ConverterVersion& converter_version) const
 {
-   // TODO(kubkm): - find a way to get eu5 version
    (void)converter_version;
-   Log(LogLevel::Error) << "EU5 version could not be determined, proceeding blind!";
+
+   // EU5 ships no launcher-settings.json, so there is no version number to compare against. The
+   // checksum identifies the build well enough for bug reports, and the layout check below is what
+   // actually matters: the converter reads vanilla setup files directly, so a patch that moves or
+   // renames them breaks conversion in ways that are much easier to diagnose here than later.
+   if (const auto checksum_file = eu5_directory_ / "binaries/checksum.txt"; commonItems::DoesFileExist(checksum_file))
+   {
+      std::ifstream checksum_stream(checksum_file);
+      std::string checksum;
+      std::getline(checksum_stream, checksum);
+      if (!checksum.empty())
+      {
+         Log(LogLevel::Info) << "EU5 build checksum: " << checksum;
+      }
+   }
+   else
+   {
+      Log(LogLevel::Warning) << "EU5 build checksum could not be read; proceeding blind.";
+   }
+
+   static const std::vector<std::filesystem::path> required_data = {
+       "game/main_menu/setup/start/10_countries.txt",
+       "game/main_menu/setup/templates",
+       "game/in_game/common/cultures",
+       "game/in_game/common/religions",
+       "game/in_game/map_data/definitions.txt",
+   };
+   std::vector<std::string> missing;
+   for (const auto& entry: required_data)
+   {
+      const auto full_path = eu5_directory_ / entry;
+      if (!commonItems::DoesFileExist(full_path) && !commonItems::DoesFolderExist(full_path))
+      {
+         missing.push_back(entry.string());
+      }
+   }
+   if (!missing.empty())
+   {
+      for (const auto& entry: missing)
+      {
+         Log(LogLevel::Error) << "Missing EU5 game data: " << entry;
+      }
+      throw std::runtime_error(
+          "This Europa Universalis 5 installation is missing game data the converter reads. It is "
+          "probably a newer version than this converter supports.");
+   }
 }
 
 void Configuration::VerifyCK3Save() const

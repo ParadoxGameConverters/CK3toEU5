@@ -187,6 +187,7 @@ link = { eu5 = hellenism_religion ck3 = hellenic_pagan }
 link = { eu5 = norse ck3 = norse_pagan }
 #link = { eu5 = alan_paganism ck3 = ??? }
 link = { eu5 = romuva ck3 = baltic_pagan }
+link = { eu5 = romuva ck3 = slavic_pagan } # EU5 has no Slavic paganism; Romuva is the closest surviving European folk faith
 #link = { eu5 = sapmi_shamanism ck3 = ??? }
 link = { eu5 = muinaisusko ck3 = finnish_pagan }
 #link = { eu5 = vainakh_paganism ck3 = ??? }
@@ -268,7 +269,7 @@ link = { eu5 = anitism_religion ck3 = dayawism }
 #link = { eu5 = enggano_religion ck3 = ??? }
 #link = { eu5 = degar_religion ck3 = ??? }
 #link = { eu5 = sanamahism ck3 = ??? }
-link = { eu5 = satsana_phi ck3 = satsana_phi }
+link = { eu5 = pi_religion ck3 = satsana_phi } # Satsana Phi, the Tai spirit religion, is EU5's pi_religion
 
 ##Folk (South America)
 #Out of Scope
@@ -288,13 +289,13 @@ link = { eu5 = sunni ck3 = ashari school = ashari_school }
 link = { eu5 = sunni ck3 = muwalladi school = maliki_school }
 link = { eu5 = sunni ck3 = maturidi school = maturidi_school }
 
-link = { eu5 = shiite ck3 = alevi school = alevism_school }
-link = { eu5 = shiite ck3 = ismaili ck3 = hafizi school = ismaili_school } #Seveners
-link = { eu5 = shiite ck3 = zayidi school = zaidi_school }
-link = { eu5 = shiite ck3 = nizari school = nizari_school }
-link = { eu5 = shiite ck3 = imami school = imamiya_school }
-link = { eu5 = shiite ck3 = ghulat school = alawi_school } #Alawites are a Ghulat sect
-link = { eu5 = shiite ck3 = alawite school = alawi_school }
+link = { eu5 = shia ck3 = alevi school = alevism_school }
+link = { eu5 = shia ck3 = ismaili ck3 = hafizi school = ismaili_school } #Seveners
+link = { eu5 = shia ck3 = zayidi school = zaidi_school }
+link = { eu5 = shia ck3 = nizari school = nizari_school }
+link = { eu5 = shia ck3 = imami school = imamiya_school }
+link = { eu5 = shia ck3 = ghulat school = alawi_school } #Alawites are a Ghulat sect
+link = { eu5 = shia ck3 = alawite school = alawi_school }
 
 link = { eu5 = ibadi ck3 = ibadi school = ibadi_school }
 link = { eu5 = ibadi ck3 = mutazila school = mutazila_school }
@@ -316,7 +317,7 @@ link = { eu5 = muonyjang_religion ck3 = dinka_pagan }
 link = { eu5 = nahuatl ck3 = cult_of_tlaloc ck3 = cult_of_tezcatlipoca ck3 = cult_of_quetzalcoatl }
 
 # Mod: East Asia Reboot
-link = { eu5 = protestant ck3 = protestant }
+link = { eu5 = lollardy ck3 = protestant } # EU5 has no 1337 protestantism; Lollardy is its proto-protestant faith
 link = { eu5 = calvinist ck3 = reformed }
 link = { eu5 = sanjiao ck3 = tianrenganying ck3 = sanjiaoheliu ck3 = lixue ck3 = zhengyi ck3 = shangqing ck3 = quanzhen }
 link = { eu5 = ainu_religion ck3 = ainuism ck3 = ainu_paganism }
@@ -330,22 +331,25 @@ link = { eu5 = odinala_religion ck3 = odinala_pagan }
 link = { eu5 = midewiwin_religion ck3 = algonquian_pagan }
 link = { eu5 = inuit_religion ck3 = inuit_pagan }
 link = { eu5 = iroquoian_totemism ck3 = iroquoian_pagan }
-link = { eu5 = dayawism ck3 = dayaw }
+link = { eu5 = anitism_religion ck3 = dayaw } # Dayawism is the CK3 name for Philippine anitism
 link = { eu5 = nuo_religion ck3 = nuo }
 
 # Mod: The Fallen Eagle
 link = { eu5 = sunni ck3 = united_islam ck3 = sunni }
-link = { eu5 = shiite ck3 = shia }
+link = { eu5 = shia ck3 = shia }
 link = { eu5 = ibadi ck3 = khawariji }
-link = { eu5 = buddhism ck3 = pudgalavada ck3 = dharmaguptaka ck3 = sarvastivada ck3 = vibhajjavada ck3 = mahasanghika }
+link = { eu5 = ibadi ck3 = najdat ck3 = sufri ck3 = azraqi } # Kharijite sects; Ibadis are their EU5 survivors
+link = { eu5 = sammitiya ck3 = pudgalavada } # Sammitiya is EU5's surviving Pudgalavada school
+link = { eu5 = theravada ck3 = dharmaguptaka ck3 = sarvastivada ck3 = vibhajjavada } # early schools closest to Theravada
+link = { eu5 = mahayana ck3 = mahasanghika } # Mahasanghika is the precursor of Mahayana
 link = { eu5 = orthodox ck3 = nicene ck3 = hesychasm }
-link = { eu5 = coptic ck3 = syriac }
+link = { eu5 = miaphysite ck3 = syriac } # Syriac Orthodox are miaphysites in EU5 terms
 link = { eu5 = catholic ck3 = abelian } # https://en.wikipedia.org/wiki/Abelians
 #link = { eu5 = arianism ck3 = arianism ck3 = macedonianism ck3 = montanist }
 link = { eu5 = catholic ck3 = novatianism } # MS Copilot: "Novatianism was an early Christian sect that held a strict view refusing readmission to communion of lapsi, those baptized Christians who had denied their faith or performed the formalities of a ritual sacrifice to the pagan gods under the pressures of persecution. This strictness towards lapsi is not a mainstream belief in any of the listed denominations. However, if we must choose one, the Catholic Church might be the closest in terms of its historical context and its emphasis on the sacrament of penance for those who have lapsed. But it's important to note that the Catholic Church does not refuse readmission to lapsi, which is a significant difference from Novatianism."
 link = { eu5 = catholic ck3 = collyridian } # Cursed mapping. MS Copilot: "Collyridianism was an early Christian movement in which adherents apparently worshipped the Virgin Mary, mother of Jesus, as a goddess. This particular veneration of Mary is not a mainstream belief in any of the listed denominations. However, if we must choose one, the Catholic Church might be the closest in terms of the high regard and special devotion given to Mary. But it's important to note that the Catholic Church does not worship Mary as a goddess, which is a significant difference from Collyridianism."
-link = { eu5 = cathar ck3 = donatism ck3 = rogatism } # Mapped to Cathar because that's what CK2Toeu5 did, but it would be better to have a separate Donatist religion.
-link = { eu5 = cathar ck3 = encratite } # MS Copilot: "Encratitism was an early Christian movement that practiced asceticism, forbidding marriage and advocating for abstinence from meat. While none of the listed denominations fully align with these practices, the Cathar denomination might be the closest. The Cathars, also known as Albigensians, were a medieval Christian sect that practiced a form of asceticism and were known for their belief in the dualistic nature of good and evil. However, it's important to note that while there may be similarities, Encratitism and Catharism are distinct movements with different beliefs and practices."
+link = { eu5 = catharism ck3 = donatism ck3 = rogatism } # Mapped to Cathar because that's what CK2Toeu5 did, but it would be better to have a separate Donatist religion.
+link = { eu5 = catharism ck3 = encratite } # MS Copilot: "Encratitism was an early Christian movement that practiced asceticism, forbidding marriage and advocating for abstinence from meat. While none of the listed denominations fully align with these practices, the Cathar denomination might be the closest. The Cathars, also known as Albigensians, were a medieval Christian sect that practiced a form of asceticism and were known for their belief in the dualistic nature of good and evil. However, it's important to note that while there may be similarities, Encratitism and Catharism are distinct movements with different beliefs and practices."
 link = { eu5 = waldensian ck3 = pelagianism ck3 = marcionite } # Doing what CK2Toeu5 did.
 link = { eu5 = judaism ck3 = rahmanani }
 link = { eu5 = judaism ck3 = nazarene ck3 = ebionite ck3 = elkesaite } # Sects of Jewish Christianity, should ideally be mapped to that if it existed in the converter.

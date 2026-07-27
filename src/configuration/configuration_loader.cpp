@@ -73,6 +73,46 @@ configuration::Configuration configuration::LoadConfiguration(const path& config
       configuration.SetOutputName(commonItems::getString(stream));
       Log(LogLevel::Info) << "\tOutput name given in config is " << configuration.GetOutputName();
    });
+   configuration_parser.registerKeyword("shatter_empires", [&configuration](std::istream& stream) {
+      configuration.SetShatterEmpires(commonItems::getString(stream) == "yes");
+      Log(LogLevel::Info) << "\tShatter empires: " << (configuration.GetShatterEmpires() ? "yes" : "no");
+   });
+   configuration_parser.registerKeyword("vassal_splitoff", [&configuration](std::istream& stream) {
+      configuration.SetVassalSplitoff(commonItems::getString(stream) == "yes");
+      Log(LogLevel::Info) << "\tVassal splitoff: " << (configuration.GetVassalSplitoff() ? "yes" : "no");
+   });
+   configuration_parser.registerKeyword("hre_mode", [&configuration](std::istream& stream) {
+      configuration.SetHREMode(commonItems::getString(stream));
+      Log(LogLevel::Info) << "\tHRE mode: " << configuration.GetHREMode();
+   });
+   configuration_parser.registerKeyword("dev_import", [&configuration](std::istream& stream) {
+      configuration.SetDevImport(commonItems::getString(stream) != "no");
+      Log(LogLevel::Info) << "\tDevelopment import: " << (configuration.GetDevImport() ? "yes" : "no");
+   });
+   configuration_parser.registerKeyword("dynamic_cultures", [&configuration](std::istream& stream) {
+      configuration.SetDynamicCultures(commonItems::getString(stream) != "no");
+      Log(LogLevel::Info) << "\tDynamic cultures: " << (configuration.GetDynamicCultures() ? "yes" : "no");
+   });
+   configuration_parser.registerKeyword("dynamic_religions", [&configuration](std::istream& stream) {
+      configuration.SetDynamicReligions(commonItems::getString(stream) != "no");
+      Log(LogLevel::Info) << "\tDynamic religions: " << (configuration.GetDynamicReligions() ? "yes" : "no");
+   });
+   configuration_parser.registerKeyword("tech_source", [&configuration](std::istream& stream) {
+      configuration.SetTechSource(commonItems::getString(stream));
+      Log(LogLevel::Info) << "\tTechnology source: " << configuration.GetTechSource();
+   });
+   configuration_parser.registerKeyword("army_scale", [&configuration](std::istream& stream) {
+      configuration.SetArmyScale(commonItems::getString(stream));
+      Log(LogLevel::Info) << "\tArmy scale: " << configuration.GetArmyScale();
+   });
+   configuration_parser.registerKeyword("treasury_import", [&configuration](std::istream& stream) {
+      configuration.SetTreasuryImport(commonItems::getString(stream) != "no");
+      Log(LogLevel::Info) << "\tTreasury import: " << (configuration.GetTreasuryImport() ? "yes" : "no");
+   });
+   configuration_parser.registerKeyword("war_import", [&configuration](std::istream& stream) {
+      configuration.SetWarImport(commonItems::getString(stream) != "no");
+      Log(LogLevel::Info) << "\tWar import: " << (configuration.GetWarImport() ? "yes" : "no");
+   });
 
    configuration_parser.parseFile(configuration_file);
 

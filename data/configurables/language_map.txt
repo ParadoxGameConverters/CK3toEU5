@@ -13,7 +13,8 @@
 #link = { eu5 = azeri_dialect ck3 = ??? }
 
 ##Arabia
-link = { eu5 = arabic_language ck3 = language_arabic }
+# arabic_language itself is not referenceable - the game only accepts its dialects.
+link = { eu5 = peninsular_dialect ck3 = language_arabic }
 #link = { eu5 = maghrebi_dialect ck3 = ??? }
 #link = { eu5 = egyptian_dialect ck3 = ??? }
 #link = { eu5 = iraqi_dialect ck3 = ??? }
@@ -33,7 +34,7 @@ link = { eu5 = arabic_language ck3 = language_arabic }
 ##Balkans
 link = { eu5 = greek_language ck3 = language_greek }
 
-link = { eu5 = serbo_croatian_language ck3 = language_south_slavic }
+link = { eu5 = serbian_dialect ck3 = language_south_slavic } # serbo_croatian_language has dialects and can't be referenced itself
 #link = { eu5 = serbian_dialect ck3 = ??? }
 #link = { eu5 = croatian_dialect ck3 = ??? }
 #link = { eu5 = slovene_dialect ck3 = ??? }
@@ -43,7 +44,7 @@ link = { eu5 = bulgarian_language ck3 = language_slavonic }
 #link = { eu5 = church_slavonic_language ck3 = ??? }
 
 ##Baltic
-link = { eu5 = baltic_language ck3 = language_baltic }
+link = { eu5 = lithuanian_dialect ck3 = language_baltic } # baltic_language has dialects and can't be referenced itself
 #link = { eu5 = latvian_dialect ck3 = ??? }
 #link = { eu5 = lithuanian_dialect ck3 = ??? }
 #link = { eu5 = western_baltic_dialect ck3 = ??? }
@@ -83,7 +84,7 @@ link = { eu5 = georgian_language ck3 = language_georgian }
 #Out of scope
 
 ##China
-link = { eu5 = mandarin_language ck3 = language_chinese }
+link = { eu5 = northern_mandarin_dialect ck3 = language_chinese } # mandarin_language has dialects and can't be referenced itself
 #link = { eu5 = northern_mandarin_dialect ck3 = ??? }
 #link = { eu5 = southern_mandarin_dialect ck3 = ??? }
 
@@ -117,7 +118,7 @@ link = { eu5 = tamil_language ck3 = language_tamil }
 link = { eu5 = kannada_language ck3 = language_kannada }
 #link = { eu5 = hindustani_language ck3 = ??? }
 #link = { eu5 = bihari_language ck3 = ??? }
-link = { eu5 = bengali_language ck3 = language_magadhan heritage name_list = name_list_bengali }
+link = { eu5 = bengali_language ck3 = language_magadhan name_list = name_list_bengali }
 link = { eu5 = kamarupi_language ck3 = language_magadhan name_list = name_list_assamese }
 link = { eu5 = marathi_language ck3 = language_marathi }
 link = { eu5 = sinhala_language ck3 = language_sinhalese }
@@ -167,13 +168,13 @@ link = { eu5 = french_language ck3 = language_french }
 #link = { eu5 = poitevin_dialect ck3 = ??? }
 #link = { eu5 = arpitan_dialect ck3 = ??? }
 
-link = { eu5 = occitan_language ck3 = language_occitano_romance }
+link = { eu5 = occitan_dialect ck3 = language_occitano_romance } # occitan_language has dialects and can't be referenced itself
 #link = { eu5 = occitan_dialect ck3 = ??? }
 #link = { eu5 = gascon_dialect ck3 = ??? }
 #link = { eu5 = catalan_dialect ck3 = ??? }
 
 ##Germany
-link = { eu5 = german_language ck3 = language_high_german }
+link = { eu5 = upper_german_dialect ck3 = language_high_german } # german_language has dialects and can't be referenced itself
 link = { eu5 = dutch_dialect ck3 = language_dutch }
 #link = { eu5 = low_german_dialect ck3 = ??? }
 link = { eu5 = central_german_dialect ck3 = language_central_germanic }
@@ -187,7 +188,7 @@ link = { eu5 = frisian_language ck3 = language_anglic }
 #Out of scope
 
 ##Great Britain
-link = { eu5 = brythonic_language ck3 = language_brythonic }
+link = { eu5 = welsh_dialect ck3 = language_brythonic } # brythonic_language has dialects and can't be referenced itself
 #link = { eu5 = welsh_dialect ck3 = ??? }
 #link = { eu5 = breton_dialect ck3 = ??? }
 
@@ -239,7 +240,7 @@ link = { eu5 = portuguese_dialect ck3 = language_iberian name_list = name_list_p
 link = { eu5 = basque_language ck3 = language_basque }
 
 ##Indochina
-link = { eu5 = tai_language ck3 = language_tai }
+link = { eu5 = thai_dialect ck3 = language_tai } # tai_language has dialects and can't be referenced itself
 #link = { eu5 = thai_dialect ck3 = ??? }
 #link = { eu5 = shan_dialect ck3 = ??? }
 #link = { eu5 = lao_dialect ck3 = ??? }
@@ -259,7 +260,7 @@ link = { eu5 = aslian_language ck3 = language_asli }
 link = { eu5 = khmer_language ck3 = language_mon_khmer name_list = name_list_khmer }
 link = { eu5 = vietnamese_language ck3 = language_vietnamese }
 
-link = { eu5 = cham_language ck3 = language_chamic }
+link = { eu5 = cham_dialect ck3 = language_chamic } # cham_language has dialects and can't be referenced itself
 #link = { eu5 = cham_dialect ck3 = ??? }
 #link = { eu5 = achenese_dialect ck3 = ??? }
 
@@ -322,12 +323,12 @@ link = { eu5 = burmese_language ck3 = language_burmese }
 #link = { eu5 = kapampangan_language ck3 = ??? }
 
 ##Ireland
-link = { eu5 = gaelic_language ck3 = language_goidelic }
+link = { eu5 = irish_dialect ck3 = language_goidelic } # gaelic_language has dialects and can't be referenced itself
 #link = { eu5 = irish_dialect ck3 = ??? }
 #link = { eu5 = scottish_gaelic_dialect ck3 = ??? }
 
 ##Italy
-link = { eu5 = latin_language ck3 = language_latin }
+link = { eu5 = roman_dialect ck3 = language_latin } # latin_language has dialects and can't be referenced itself
 
 #link = { eu5 = north_italian_language ck3 = ??? }
 link = { eu5 = lombard_dialect ck3 = language_italian name_list = name_list_lombard }
@@ -460,19 +461,19 @@ link = { eu5 = afghani_language ck3 = language_scythian } #Blame CK3
 #link = { eu5 = tabaristani_language ck3 = ??? }
 
 ##Polish
-link = { eu5 = west_slavic_language ck3 = language_lechitic }
+link = { eu5 = polish_dialect ck3 = language_lechitic } # west_slavic_language has dialects and can't be referenced itself
 #link = { eu5 = kashubian_dialect ck3 = ??? }
 #link = { eu5 = polabian_dialect ck3 = ??? }
 #link = { eu5 = polish_dialect ck3 = ??? }
 #link = { eu5 = silesian_dialect ck3 = ??? }
 
-link = { eu5 = czechslovak_language ck3 = language_czech_slovak }
+link = { eu5 = czech_dialect ck3 = language_czech_slovak } # czechslovak_language has dialects and can't be referenced itself
 #link = { eu5 = czech_dialect ck3 = ??? }
 #link = { eu5 = slovak_dialect ck3 = ??? }
 #link = { eu5 = sorbian_dialect ck3 = ??? }
 
 ##Russian
-link = { eu5 = east_slavic_language ck3 = language_east_slavic }
+link = { eu5 = russian_dialect ck3 = language_east_slavic } # east_slavic_language has dialects and can't be referenced itself
 #link = { eu5 = russian_dialect ck3 = ??? }
 #link = { eu5 = novgorodian_dialect ck3 = ??? }
 

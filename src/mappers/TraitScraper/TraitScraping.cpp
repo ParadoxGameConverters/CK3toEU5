@@ -1,0 +1,18 @@
+#include "TraitScraping.h"
+#include "CommonRegexes.h"
+#include "ParserHelpers.h"
+
+mappers::TraitScraping::TraitScraping(std::istream& theStream)
+{
+	registerKeys();
+	parseStream(theStream);
+	clearRegisteredKeywords();
+}
+
+void mappers::TraitScraping::registerKeys()
+{
+	registerKeyword("index", [this](const std::string&, std::istream& theStream) {
+		index = commonItems::singleInt(theStream).getInt();
+	});
+	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+}

@@ -27,3 +27,199 @@ option = {
 		tooltip = MODNAMETIP2
 	}
 }
+option = {
+	name = shatter_empires
+	displayName = SHATTEREMPIRES
+	tooltip = SHATTEREMPIRESTIP
+	radioSelector = {
+		radioOption = {
+			name = no
+			displayName = NO
+			tooltip = SHATTEREMPIRESNOTIP
+			default = true
+		}
+		radioOption = {
+			name = yes
+			displayName = YES
+			tooltip = SHATTEREMPIRESYESTIP
+			default = false
+		}
+	}
+}
+option = {
+	name = vassal_splitoff
+	displayName = VASSALSPLITOFF
+	tooltip = VASSALSPLITOFFTIP
+	radioSelector = {
+		radioOption = {
+			name = no
+			displayName = NO
+			tooltip = VASSALSPLITOFFNOTIP
+			default = true
+		}
+		radioOption = {
+			name = yes
+			displayName = YES
+			tooltip = VASSALSPLITOFFYESTIP
+			default = false
+		}
+	}
+}
+option = {
+	name = hre_mode
+	displayName = HREMODE
+	tooltip = HREMODETIP
+	radioSelector = {
+		radioOption = {
+			name = io
+			displayName = HREMODEIO
+			tooltip = HREMODEIOTIP
+			default = true
+		}
+		radioOption = {
+			name = none
+			displayName = HREMODENONE
+			tooltip = HREMODENONETIP
+			default = false
+		}
+	}
+}
+option = {
+	name = dev_import
+	displayName = DEVIMPORT
+	tooltip = DEVIMPORTTIP
+	radioSelector = {
+		radioOption = {
+			name = yes
+			displayName = YES
+			tooltip = DEVIMPORTYESTIP
+			default = true
+		}
+		radioOption = {
+			name = no
+			displayName = NO
+			tooltip = DEVIMPORTNOTIP
+			default = false
+		}
+	}
+}
+option = {
+	name = dynamic_cultures
+	displayName = DYNCULTURES
+	tooltip = DYNCULTURESTIP
+	radioSelector = {
+		radioOption = {
+			name = yes
+			displayName = YES
+			tooltip = DYNCULTURESYESTIP
+			default = true
+		}
+		radioOption = {
+			name = no
+			displayName = NO
+			tooltip = DYNCULTURESNOTIP
+			default = false
+		}
+	}
+}
+option = {
+	name = dynamic_religions
+	displayName = DYNRELIGIONS
+	tooltip = DYNRELIGIONSTIP
+	radioSelector = {
+		radioOption = {
+			name = yes
+			displayName = YES
+			tooltip = DYNRELIGIONSYESTIP
+			default = true
+		}
+		radioOption = {
+			name = no
+			displayName = NO
+			tooltip = DYNRELIGIONSNOTIP
+			default = false
+		}
+	}
+}
+option = {
+	name = tech_source
+	displayName = TECHSOURCE
+	tooltip = TECHSOURCETIP
+	radioSelector = {
+		radioOption = {
+			name = ck3
+			displayName = TECHSOURCECK3
+			tooltip = TECHSOURCECK3TIP
+			default = true
+		}
+		radioOption = {
+			name = vanilla
+			displayName = TECHSOURCEVANILLA
+			tooltip = TECHSOURCEVANILLATIP
+			default = false
+		}
+	}
+}
+option = {
+	name = army_scale
+	displayName = ARMYSCALE
+	tooltip = ARMYSCALETIP
+	radioSelector = {
+		radioOption = {
+			name = small
+			displayName = ARMYSCALESMALL
+			tooltip = ARMYSCALESMALLTIP
+			default = false
+		}
+		radioOption = {
+			name = normal
+			displayName = ARMYSCALENORMAL
+			tooltip = ARMYSCALENORMALTIP
+			default = true
+		}
+		radioOption = {
+			name = large
+			displayName = ARMYSCALELARGE
+			tooltip = ARMYSCALELARGETIP
+			default = false
+		}
+	}
+}
+option = {
+	name = treasury_import
+	displayName = TREASURYIMPORT
+	tooltip = TREASURYIMPORTTIP
+	radioSelector = {
+		radioOption = {
+			name = yes
+			displayName = YES
+			tooltip = TREASURYIMPORTYESTIP
+			default = true
+		}
+		radioOption = {
+			name = no
+			displayName = NO
+			tooltip = TREASURYIMPORTNOTIP
+			default = false
+		}
+	}
+}
+option = {
+	name = war_import
+	displayName = WARIMPORT
+	tooltip = WARIMPORTTIP
+	radioSelector = {
+		radioOption = {
+			name = yes
+			displayName = YES
+			tooltip = WARIMPORTYESTIP
+			default = true
+		}
+		radioOption = {
+			name = no
+			displayName = NO
+			tooltip = WARIMPORTNOTIP
+			default = false
+		}
+	}
+}

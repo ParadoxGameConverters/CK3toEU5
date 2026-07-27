@@ -13,6 +13,26 @@
 namespace configuration
 {
 
+namespace
+{
+// Redirects the log for as long as it is alive. Restoring by hand does not survive a test that throws,
+// and a std::cout left pointing at a destroyed buffer takes down every later test that logs.
+class CapturedLog
+{
+  public:
+   CapturedLog(): cout_buffer_(std::cout.rdbuf(log_.rdbuf())) {}
+   ~CapturedLog() { std::cout.rdbuf(cout_buffer_); }
+   CapturedLog(const CapturedLog&) = delete;
+   CapturedLog& operator=(const CapturedLog&) = delete;
+
+   [[nodiscard]] std::string str() const { return log_.str(); }
+
+  private:
+   std::stringstream log_;
+   std::streambuf* cout_buffer_;
+};
+}  // namespace
+
 TEST(ConfigurationTest, DefaultsAreDefaulted)  // NOLINT : clang-tidy doens't like gtest
 {
    const auto configuration = LoadConfiguration("test_files/configuration/blank_configuration.txt");
@@ -44,9 +64,7 @@ TEST(ConfigurationTest, ItemsCanBeImported)  // NOLINT : clang-tidy doens't like
 
 TEST(ConfigurationTest, ItemsAreLoggedWhenImported)  // NOLINT : clang-tidy doens't like gtest
 {
-   const std::stringstream log;
-   std::streambuf* cout_buffer = std::cout.rdbuf();
-   std::cout.rdbuf(log.rdbuf());
+   const CapturedLog log;
 
    const auto ignore = LoadConfiguration("test_files/configuration/test_configuration.txt");
 
@@ -59,8 +77,6 @@ TEST(ConfigurationTest, ItemsAreLoggedWhenImported)  // NOLINT : clang-tidy doen
    EXPECT_THAT(log.str(), testing::HasSubstr(R"(Save game is "test_save.ck3")"));
    EXPECT_THAT(log.str(), testing::HasSubstr(R"(Debug is active)"));
    EXPECT_THAT(log.str(), testing::HasSubstr(R"(Using output name test_output_name)"));
-
-   std::cout.rdbuf(cout_buffer);
 }
 
 
@@ -131,18 +147,14 @@ TEST(ConfigurationTest, TooNewCk3VersionThrowsException)  // NOLINT : clang-tidy
 TEST(ConfigurationTest, TooNewCk3VersionLogsError)  // NOLINT : clang-tidy doens't like gtest
 {
    commonItems::ConverterVersion converter_version;
-   const std::stringstream log;
-   std::streambuf* cout_buffer = std::cout.rdbuf();
-   std::cout.rdbuf(log.rdbuf());
+   const CapturedLog log;
 
    converter_version.loadVersion("test_files/version_old.txt");
    const auto configuration = LoadConfiguration("test_files/configuration/ck3_version.txt");
    EXPECT_THROW(configuration.Validate(converter_version),  // NOLINT : clang-tidy doens't like gtest
        std::runtime_error);
    EXPECT_THAT(log.str(), testing::HasSubstr(R"(CK3 version: 1.19.11.3)"));
-   EXPECT_THAT(log.str(), testing::HasSubstr(R"(CK3 version is v1.19.11.3, converter requires maximum v1.5!)"));
-   std::cout.rdbuf(cout_buffer);
-}
+   EXPECT_THAT(log.str(), testing::HasSubstr(R"(CK3 version is v1.19.11.3, converter requires maximum v1.5!)"));}
 
 TEST(ConfigurationTest, OldCk3VersionThrowsException)  // NOLINT : clang-tidy doens't like gtest
 {
@@ -156,9 +168,7 @@ TEST(ConfigurationTest, OldCk3VersionThrowsException)  // NOLINT : clang-tidy do
 TEST(ConfigurationTest, OldCk3VersionLogsError)  // NOLINT : clang-tidy doens't like gtest
 {
    commonItems::ConverterVersion converter_version;
-   const std::stringstream log;
-   std::streambuf* cout_buffer = std::cout.rdbuf();
-   std::cout.rdbuf(log.rdbuf());
+   const CapturedLog log;
 
    converter_version.loadVersion("test_files/version_new.txt");
    const auto configuration = LoadConfiguration("test_files/configuration/ck3_version.txt");
@@ -167,16 +177,12 @@ TEST(ConfigurationTest, OldCk3VersionLogsError)  // NOLINT : clang-tidy doens't 
        std::runtime_error);
    EXPECT_THAT(log.str(), testing::HasSubstr(R"(CK3 version: 1.19.11.3)"));
    EXPECT_THAT(log.str(), testing::HasSubstr(R"(CK3 version is v1.19.11.3, converter requires minimum v2.5!)"));
-
-   std::cout.rdbuf(cout_buffer);
 }
 
 TEST(ConfigurationTest, CorrectCk3VersionValidatesAndLogs)  // NOLINT : clang-tidy doens't like gtest
 {
    commonItems::ConverterVersion converter_version;
-   const std::stringstream log;
-   std::streambuf* cout_buffer = std::cout.rdbuf();
-   std::cout.rdbuf(log.rdbuf());
+   const CapturedLog log;
 
    converter_version.loadVersion("test_files/version.txt");
    const auto configuration = LoadConfiguration("test_files/configuration/ck3_version.txt");
@@ -185,14 +191,33 @@ TEST(ConfigurationTest, CorrectCk3VersionValidatesAndLogs)  // NOLINT : clang-ti
    EXPECT_THAT(log.str(),
        testing::HasSubstr(R"(Crusader Kings 3 install path is "test_files/test_folders/ck3_folder_with_version")"));
    EXPECT_THAT(log.str(), testing::HasSubstr(R"(CK3 version: 1.19.11.3)"));
-
-   std::cout.rdbuf(cout_buffer);
 }
 
 TEST(ConfigurationTest, CorrectConfigurationValidatedWithoutErrors)  // NOLINT : clang-tidy doens't like gtest
 {
    const auto configuration = LoadConfiguration("test_files/configuration/test_configuration.txt");
    configuration.Validate(commonItems::ConverterVersion());
+}
+
+// EU5 ships no version number, so the game data layout stands in for one.
+TEST(ConfigurationTest, EU5InstallMissingGameDataThrowsException)  // NOLINT : clang-tidy doens't like gtest
+{
+   const CapturedLog log;
+   const auto configuration = LoadConfiguration("test_files/configuration/unsupported_eu5_directory.txt");
+
+   EXPECT_THROW(configuration.Validate(commonItems::ConverterVersion()),  // NOLINT : clang-tidy doens't like gtest
+       std::runtime_error);
+   EXPECT_THAT(log.str(), testing::HasSubstr("Missing EU5 game data: game/main_menu/setup/start/10_countries.txt"));
+}
+
+TEST(ConfigurationTest, EU5BuildChecksumIsLogged)  // NOLINT : clang-tidy doens't like gtest
+{
+   const CapturedLog log;
+   const auto configuration = LoadConfiguration("test_files/configuration/test_configuration.txt");
+
+   configuration.Validate(commonItems::ConverterVersion());
+
+   EXPECT_THAT(log.str(), testing::HasSubstr("EU5 build checksum: abcdef0123456789"));
 }
 
 }  // namespace configuration

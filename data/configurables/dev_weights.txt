@@ -1,0 +1,28 @@
+# Weights for translating CK3 county development and holdings into EU5 numbers.
+
+dev_divisor = 4          # CK3 development / this = base development bonus per location
+max_bonus = 15           # bonus ceiling per location
+building_weight = 0.2    # extra bonus per building in the source CK3 holding
+# How urban the converted world is allowed to be. CK3 hands out city holdings far more freely than
+# EU5 places towns - vanilla runs about one urban location in fourteen - and every town's setup
+# brings some fifteen buildings that need pops to staff and goods to run. So rather than an absolute
+# development cutoff (which drifts as a campaign inflates development), the most developed CK3 city
+# holdings compete for a fixed number of slots measured against vanilla's own footprint on the same
+# land. 1.2 lets a late-game save read as somewhat more urban than 1337 without flooding the market.
+urban_density_allowance = 1.2 # urban locations on converted land, as a multiple of vanilla's there
+city_share_of_urban = 0.26    # how many of those hold city rank rather than town; vanilla's own ratio
+
+pop_base_factor = 0.6    # pop size multiplier at zero CK3 development
+pop_dev_factor = 0.03    # extra multiplier per point of development
+pop_max_factor = 2.5     # multiplier ceiling
+
+maa_ratio = 0.05         # fraction of CK3 men-at-arms kept as EU5 standing regulars. CK3 regiments
+                         # are wartime mobilization; EU5 regulars are the professional core that
+                         # stays under arms in peacetime, and vanilla countries start almost bare -
+                         # the whole 1337 world fields five standing regiments, all of them in a war
+                         # already. Every regiment draws goods every month, so a converted world of
+                         # hundreds of them is a world of hundreds of budgets bleeding from month one.
+                         # Relative CK3 investment still shows through: a realm that maintained ten
+                         # times its neighbour's men-at-arms still starts with the larger army.
+regiment_cap_per_locations = 60 # starting regiment cap = 2 + owned locations / this. Keeps every
+                         # realm's peacetime army affordable at its starting income.

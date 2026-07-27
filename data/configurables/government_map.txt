@@ -1,0 +1,58 @@
+# CK3 government category + the country's EU5 religion -> EU5 government setup.
+# gov: converted category (monarchy/republic/theocracy/tribe/horde), derived from the CK3 government string.
+# religion: one or more exact EU5 religions this link serves. Beats a religion_group link.
+# religion_group: EU5 religion group; links with neither religion nor group are the category fallback.
+# template: main_menu/setup/templates file to include.
+# type: the EU5 government type the template expects (mismatches make the game reject the template's laws).
+# parliament: parliament_type matching the template, written explicitly so the engine never complains.
+# heir: default heir_selection; CK3 succession laws override it where mapped.
+# tech: starting_technology_level, used only when the realm's own innovations give no better estimate.
+#
+# Templates carry laws and privileges the engine gates on religion, and it strips any that don't
+# apply at load. The gates that matter here:
+#   patriarchate_law      - orthodox, strigolniki, miaphysite only
+#   iqta_law, muslim_marriage, freedom_of_interpretation, efficient_tax_farming - muslim group only
+#   clergy_land_rights    - everyone EXCEPT the christian group
+#   civil_law_policy      - christian group, or a capital in Europe
+#   polygyny              - pagan faiths, hindu, or an Indian culture
+#   legal_code_law        - any non-tribal government, or a muslim one
+# Pick templates whose content clears those gates for the religion in question.
+
+### Monarchies
+# The eastern european template is built around patriarchate_law, so it belongs to the Orthodox family.
+link = { gov = monarchy religion = orthodox religion = strigolniki religion = miaphysite religion = nestorianism religion = paulicianism religion = bogomilism
+	template = eastern_european_monarchy type = monarchy parliament = estate_parliament heir = cognatic_primogeniture tech = 3 }
+# Western Christendom: civil law and the powerful-dioceses privileges instead of clergy land rights.
+link = { gov = monarchy religion_group = christian template = catholic_monarchy type = monarchy parliament = estate_parliament heir = cognatic_primogeniture tech = 3 }
+link = { gov = monarchy religion_group = muslim template = muslim_monarchy type = monarchy parliament = council heir = cognatic_primogeniture tech = 3 }
+link = { gov = monarchy religion_group = buddhist template = east_asia_monarchy type = monarchy parliament = council heir = cognatic_primogeniture tech = 3 }
+link = { gov = monarchy religion_group = dharmic template = indian_hindu_monarchy type = monarchy parliament = council heir = cognatic_primogeniture tech = 3 }
+# Everyone else - Jewish, Zoroastrian, Manichaean, Yazidi, Mandean and every folk faith. This
+# template's laws are religiously neutral (traditional legal code, monogamy, any-religion heirs).
+link = { gov = monarchy template = subsaharan_monarchy type = monarchy parliament = assembly heir = cognatic_primogeniture tech = 2 }
+
+### Republics
+link = { gov = republic religion_group = muslim template = muslim_republic type = republic parliament = council heir = oligarchic_elective tech = 3 }
+link = { gov = republic template = catholic_republic type = republic parliament = estate_parliament heir = oligarchic_elective tech = 3 }
+
+### Theocracies
+link = { gov = theocracy religion_group = christian template = catholic_bishopric type = theocracy parliament = estate_parliament heir = bishopric_elective tech = 3 }
+# Islam has no theocratic government in EU5; a caliphate is a monarchy whose ruler happens to be imam.
+link = { gov = theocracy religion_group = muslim template = muslim_monarchy type = monarchy parliament = council heir = cognatic_primogeniture tech = 3 }
+link = { gov = theocracy template = subsaharan_theocracy type = theocracy parliament = assembly heir = ritual_selection tech = 2 }
+
+### Tribes
+link = { gov = tribe religion_group = muslim template = muslim_tribe type = tribe parliament = council heir = tribal_oldest_male tech = 2 }
+# Christian tribes need a template with no clergy_land_rights and no polygyny; the Gaelic one carries
+# almost no laws at all, which is exactly right for a tribe outside those traditions.
+link = { gov = tribe religion_group = christian template = gaelic_tribe type = tribe parliament = assembly heir = tanistry_elective tech = 2 }
+link = { gov = tribe religion_group = israelite_group template = gaelic_tribe type = tribe parliament = assembly heir = tribal_oldest_male tech = 2 }
+link = { gov = tribe religion_group = zoroastrian_group template = gaelic_tribe type = tribe parliament = assembly heir = tribal_oldest_male tech = 2 }
+# Pagan tribes can hold polygyny, which is the one law the Eurasian template adds.
+link = { gov = tribe template = eurasian_tribe type = tribe parliament = assembly heir = tribal_oldest_male tech = 1 }
+
+### Steppe hordes
+# The default horde template is a Muslim khanate down to its sharia legal code and iqta land law.
+link = { gov = horde religion_group = muslim template = eurasian_horde type = steppe_horde parliament = assembly heir = tribal_oldest_male tech = 2 }
+# Tengri, Buddhist and every other horde takes vanilla's own de-Islamised variant.
+link = { gov = horde template = eurasian_horde_no_muslim type = steppe_horde parliament = assembly heir = tribal_oldest_male tech = 2 }

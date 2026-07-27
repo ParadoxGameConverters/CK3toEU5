@@ -1,0 +1,8 @@
+l_english:
+ # A trimmed stand-in for EU5's character_names_dynamic_l_english.yml.
+ name_henry: "Henrik"
+ name_henry.brythonic_language: "Harri"
+ name_henry.french_language: "Henri"
+ name_christopher:0 "Christopher"
+ name_abd_al_qadir: "Abd al-Qadir"
+ SOME_OTHER_KEY: "Not a name"
