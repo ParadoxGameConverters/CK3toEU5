@@ -1,5 +1,4 @@
-"""
-Checks the cultures the converter generates from CK3's custom, hybrid and divergent cultures.
+"""Checks the cultures the converter generates from CK3's dynamic cultures.
 
 Verifies that everything they reference exists in EU5, that they carry the same fields
 vanilla cultures do, that they are localized, and that the pops and countries using them
@@ -19,8 +18,7 @@ def read(path):
 
 
 def blocks(text, want_depth=0, _depth=0):
-    """
-    Yields (name, body) for every named block at the wanted brace depth.
+    """Yields (name, body) for every named block at the wanted brace depth.
 
     Paradox files indent as they please, so this walks braces rather than
     trusting column zero.
@@ -47,8 +45,7 @@ def blocks(text, want_depth=0, _depth=0):
 
 
 def gather(folder, depth=0):
-    """
-    Collects every named block at the given depth across a folder's files.
+    """Collects every named block at the given depth across a folder's files.
 
     Nested definitions such as dialects inside their parent language are
     picked up too.

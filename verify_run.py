@@ -1,5 +1,4 @@
-"""
-Compares the freshly converted mod against vanilla's 1337 start.
+"""Compares the freshly converted mod against vanilla's 1337 start.
 
 The comparison covers the numbers the economy calibration was aimed at:
 urban footprint, standing armies, accepted cultures and treasuries.

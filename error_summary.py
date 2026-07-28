@@ -1,5 +1,4 @@
-"""
-Buckets an EU5 error log into recurring shapes so a mod's remaining noise reads at a glance.
+"""Buckets an EU5 error log into recurring shapes so it reads at a glance.
 
 Point it at the log folder; it reads error.log and its rotated siblings.
 """
