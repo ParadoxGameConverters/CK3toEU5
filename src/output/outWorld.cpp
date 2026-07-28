@@ -1151,20 +1151,64 @@ void writePops(const std::filesystem::path& startFolder, const EU5::World& world
 	Log(LogLevel::Info) << "<> Pops recultured in " << reculturedCount << " locations.";
 }
 
-// 07 - cities and buildings. Vanilla town/city ranks are kept; CK3 city holdings add new towns,
-// using the most common town_setup among the owning country's vanilla towns for starting buildings.
-// Vanilla buildings on converted land are re-tagged to their new owners; CK3 holy sites, top-tier
-// fortifications and universities add matching state-owned EU5 buildings.
-void writeCitiesAndBuildings(const std::filesystem::path& startFolder,
-	 const std::filesystem::path& modFolder,
-	 const EU5::World& world,
-	 const std::filesystem::path& vanillaStartFolder,
-	 const std::filesystem::path& eu5GameFolder,
-	 const std::set<std::string>& keptTags)
+// The building types whose placement rules constrain conversion, scanned from the game's definitions.
+struct BuildingTypeTraits
+{
+	// Requirements ask for a harbor or shoreline; can't stand in a landlocked town.
+	std::set<std::string> port;
+	// Foreign-investment buildings (is_foreign = yes: trade offices, banks, shoen...) represent a
+	// relationship between two specific countries. Re-tagging one to the location's own country is
+	// invalid (the game rejects a "foreign" building owned by the location owner), so they drop
+	// when their investor didn't survive the conversion.
+	std::set<std::string> foreign;
+	// Buildings whose requirements name a particular country, culture, faith or capital belong to
+	// whoever vanilla built them for. Re-tagged to a new owner they become impossible - a gallowglass
+	// sept outside Gaeldom, England's sergeantry in Irish hands, a royal court in a country whose
+	// capital is somewhere else - so they drop instead of converting. Only the requirement blocks are
+	// read; a building that merely mentions culture in its modifiers is not tied to one.
+	std::set<std::string> tied;
+};
+
+BuildingTypeTraits scanBuildingTypes(const std::filesystem::path& eu5GameFolder)
+{
+	BuildingTypeTraits traits;
+	const auto buildingTypesFolder = eu5GameFolder / "in_game" / "common" / "building_types";
+	if (!std::filesystem::exists(buildingTypesFolder))
+		return traits;
+	for (const auto& file: std::filesystem::directory_iterator(buildingTypesFolder))
+	{
+		if (file.path().extension() != ".txt")
+			continue;
+		const auto typesText = slurpFile(file.path());
+		for (const auto& [typeName, block]: extractNamedBlocks(typesText, 0))
+		{
+			if (block.find("is_port = yes") != std::string::npos || block.find("is_coastal = yes") != std::string::npos)
+				traits.port.insert(typeName);
+			if (block.find("is_foreign = yes") != std::string::npos)
+				traits.foreign.insert(typeName);
+			const auto requirements = extractBlockBody(block, "country_potential") + extractBlockBody(block, "location_potential") +
+											  extractBlockBody(block, "allow") + extractBlockBody(block, "potential");
+			static const std::regex ownerBound(R"(\b(tag|culture|has_culture_group|religion|is_capital|dominant_culture|has_dynasty)\s*\??=)");
+			if (std::regex_search(requirements, ownerBound))
+				traits.tied.insert(typeName);
+		}
+	}
+	return traits;
+}
+
+// Where towns get founded and who owns which converted location.
+struct TownPlan
+{
+	std::map<std::string, std::string> newTownSetups;	// location -> regional setup
+	std::map<std::string, std::string> locationOwners; // converted location -> owning tag
+};
+
+// Per new town, prefer the most common setup among the owning country's locations - a decent
+// geographic proxy; the globally most common one is the last resort for countries with no
+// vanilla towns at all.
+TownPlan planTownFoundations(const EU5::World& world)
 {
 	const auto& vanillaTowns = world.getVanillaTowns().getTowns();
-
-	// The globally most common town_setup is the last-resort fallback for countries with no vanilla towns.
 	std::map<std::string, int> globalSetupCounts;
 	for (const auto& [location, entry]: vanillaTowns)
 		if (!entry.setup.empty())
@@ -1178,16 +1222,14 @@ void writeCitiesAndBuildings(const std::filesystem::path& startFolder,
 			globalSetup = setup;
 		}
 
-	// Per new town, prefer the most common setup among the owning country's locations - a decent geographic proxy.
+	TownPlan plan;
 	const auto& details = world.getLocationDetails();
-	std::map<std::string, std::string> newTownSetups; // location -> setup
-	std::map<std::string, std::string> locationOwners; // converted location -> owning tag
 	for (const auto& [tag, country]: world.getCountries())
 	{
 		std::map<std::string, int> countrySetupCounts;
 		for (const auto& location: country.locations)
 		{
-			locationOwners[location] = tag;
+			plan.locationOwners[location] = tag;
 			if (const auto& match = vanillaTowns.find(location); match != vanillaTowns.end() && !match->second.setup.empty())
 				++countrySetupCounts[match->second.setup];
 		}
@@ -1204,34 +1246,27 @@ void writeCitiesAndBuildings(const std::filesystem::path& startFolder,
 			const auto detailItr = details.find(location);
 			if (detailItr == details.end() || !detailItr->second.town || vanillaTowns.contains(location))
 				continue;
-			newTownSetups[location] = countrySetup;
+			plan.newTownSetups[location] = countrySetup;
 		}
 	}
+	return plan;
+}
 
-	// Town setups implicitly grant starting buildings, and nearly every vanilla setup includes a
-	// castle or stockade - both fort buildings. Towns on converted land instead use "conv_" copies
-	// of their regional setup with the defensive buildings stripped, so CK3's walls remain the only
-	// source of forts on the converted map.
-	static const std::set<std::string> fortBuildings = {"stockade", "castle", "bastion", "star_fort", "fortress", "coastal_fort"};
-	// A setup picked as a country's regional average may be a coastal one, and handing its wharf and
-	// docks to an inland town gives the game a building it can never satisfy. Any building type whose
-	// requirements ask for a harbor or a shoreline is stripped again for landlocked towns.
-	std::set<std::string> portBuildingTypes;
-	const auto buildingTypesFolder = eu5GameFolder / "in_game" / "common" / "building_types";
-	if (std::filesystem::exists(buildingTypesFolder))
-		for (const auto& file: std::filesystem::directory_iterator(buildingTypesFolder))
-		{
-			if (file.path().extension() != ".txt")
-				continue;
-			const auto typesText = slurpFile(file.path());
-			for (const auto& [typeName, block]: extractNamedBlocks(typesText, 0))
-				if (block.find("is_port = yes") != std::string::npos || block.find("is_coastal = yes") != std::string::npos)
-					portBuildingTypes.insert(typeName);
-		}
-	std::map<std::string, std::string> sanitizedSetups;			 // setup name -> fort-free body
-	std::map<std::string, std::string> landlockedSetups;		 // setup name -> fort-free and port-free body
-	const auto setupsFolder = eu5GameFolder / "in_game" / "common" / "town_setups";
-	if (std::filesystem::exists(setupsFolder))
+// Town setups implicitly grant starting buildings, and nearly every vanilla setup includes a
+// castle or stockade - both fort buildings. Towns on converted land instead use "conv_" copies
+// of their regional setup with the defensive buildings stripped, so CK3's walls remain the only
+// source of forts on the converted map. A setup picked as a country's regional average may also
+// be a coastal one, and handing its wharf and docks to an inland town gives the game a building
+// it can never satisfy, so landlocked towns get "conv_inland_" copies stripped of those too.
+class SetupSanitizer
+{
+  public:
+	SetupSanitizer(const std::filesystem::path& eu5GameFolder, const std::set<std::string>& portBuildingTypes)
+	{
+		static const std::set<std::string> fortBuildings = {"stockade", "castle", "bastion", "star_fort", "fortress", "coastal_fort"};
+		const auto setupsFolder = eu5GameFolder / "in_game" / "common" / "town_setups";
+		if (!std::filesystem::exists(setupsFolder))
+			return;
 		for (const auto& file: std::filesystem::directory_iterator(setupsFolder))
 		{
 			if (file.path().extension() != ".txt")
@@ -1257,59 +1292,29 @@ void writeCitiesAndBuildings(const std::filesystem::path& startFolder,
 					landlockedSetups[setupName] = landlocked;
 			}
 		}
-	std::set<std::string> usedConvSetups;
-	std::set<std::string> usedLandlockedSetups;
-	const auto convSetupFor = [&sanitizedSetups, &usedConvSetups](const std::string& setup) -> std::string {
+	}
+
+	std::string convSetupFor(const std::string& setup)
+	{
 		if (!sanitizedSetups.contains(setup))
 			return setup;
 		usedConvSetups.insert(setup);
 		return "conv_" + setup;
-	};
+	}
+
 	// For a founded town, the same setup minus anything that needs a harbor it hasn't got.
-	const auto foundedSetupFor = [&](const std::string& setup, const std::string& location) -> std::string {
-		if (!world.getLocationDefinitions().getPortSeaZone(location).empty() || !landlockedSetups.contains(setup))
+	std::string foundedSetupFor(const std::string& setup, const bool coastal)
+	{
+		if (coastal || !landlockedSetups.contains(setup))
 			return convSetupFor(setup);
 		usedLandlockedSetups.insert(setup);
 		return "conv_inland_" + setup;
-	};
-
-	std::ofstream cities(startFolder / "07_cities_and_buildings.txt");
-	cities << "locations={\n";
-	auto upgradedCount = 0;
-	for (const auto& [location, entry]: vanillaTowns)
-	{
-		auto rank = entry.rank;
-		if (const auto detailItr = details.find(location); detailItr != details.end() && detailItr->second.city && rank == "town")
-		{
-			rank = "city";
-			++upgradedCount;
-		}
-		cities << "\t" << location << " = { rank = " << rank;
-		if (!entry.setup.empty())
-			cities << " town_setup = " << (locationOwners.contains(location) ? convSetupFor(entry.setup) : entry.setup);
-		cities << " }\n";
 	}
-	// Founded towns tier by CK3 development: only city-grade locations get the full regional guild
-	// spread; ordinary towns start with the essentials and grow into the rest. Anything more
-	// floods the market with unprofitable guilds no pops can work.
-	auto basicSetupUsed = false;
-	for (const auto& [location, setup]: newTownSetups)
-	{
-		const auto& detail = details.at(location);
-		std::string chosenSetup;
-		if (detail.city)
-			chosenSetup = foundedSetupFor(setup, location);
-		else
-		{
-			chosenSetup = "conv_basic_town";
-			basicSetupUsed = true;
-		}
-		cities << "\t" << location << " = { rank = " << (detail.city ? "city" : "town") << " town_setup = " << chosenSetup << " }\n";
-	}
-	cities << "}\n\n";
 
-	if (!usedConvSetups.empty() || !usedLandlockedSetups.empty() || basicSetupUsed)
+	void writeUsedSetups(const std::filesystem::path& modFolder, const bool basicSetupUsed) const
 	{
+		if (usedConvSetups.empty() && usedLandlockedSetups.empty() && !basicSetupUsed)
+			return;
 		const auto setupsOutFolder = modFolder / "in_game" / "common" / "town_setups";
 		std::filesystem::create_directories(setupsOutFolder);
 		std::ofstream setupsOut(setupsOutFolder / "zzz_converted_town_setups.txt");
@@ -1322,107 +1327,136 @@ void writeCitiesAndBuildings(const std::filesystem::path& startFolder,
 		setupsOut.close();
 	}
 
-	// Foreign-investment buildings (is_foreign = yes: trade offices, banks, shoen...) represent a
-	// relationship between two specific countries. Re-tagging one to the location's own country is
-	// invalid (the game rejects a "foreign" building owned by the location owner), so they drop
-	// when their investor didn't survive the conversion.
-	std::set<std::string> foreignBuildingTypes;
-	// Buildings whose requirements name a particular country, culture, faith or capital belong to
-	// whoever vanilla built them for. Re-tagged to a new owner they become impossible - a gallowglass
-	// sept outside Gaeldom, England's sergeantry in Irish hands, a royal court in a country whose
-	// capital is somewhere else - so they drop instead of converting. Only the requirement blocks are
-	// read; a building that merely mentions culture in its modifiers is not tied to one.
-	std::set<std::string> tiedBuildingTypes;
-	if (std::filesystem::exists(buildingTypesFolder))
-		for (const auto& file: std::filesystem::directory_iterator(buildingTypesFolder))
-		{
-			if (file.path().extension() != ".txt")
-				continue;
-			const auto typesText = slurpFile(file.path());
-			for (const auto& [typeName, block]: extractNamedBlocks(typesText, 0))
-			{
-				if (block.find("is_foreign = yes") != std::string::npos)
-					foreignBuildingTypes.insert(typeName);
-				const auto requirements = extractBlockBody(block, "country_potential") + extractBlockBody(block, "location_potential") +
-												  extractBlockBody(block, "allow") + extractBlockBody(block, "potential");
-				static const std::regex ownerBound(R"(\b(tag|culture|has_culture_group|religion|is_capital|dominant_culture|has_dynasty)\s*\??=)");
-				if (std::regex_search(requirements, ownerBound))
-					tiedBuildingTypes.insert(typeName);
-			}
-		}
+	[[nodiscard]] auto convSetupCount() const { return usedConvSetups.size(); }
+	[[nodiscard]] auto landlockedSetupCount() const { return usedLandlockedSetups.size(); }
 
-	// Buildings. Vanilla entries keep their tag when the owner survived, get re-tagged when the
-	// land converted to a new country, and drop when neither applies.
-	cities << "building_manager = {\n";
-	auto keptBuildings = 0;
-	auto retaggedBuildings = 0;
-	auto droppedTiedBuildings = 0;
-	// One building of a type per location: retagging can merge two countries' buildings onto one
-	// owner, and CK3 holy sites can land where vanilla already placed the same cathedral - the
-	// game rejects such duplicates.
-	std::set<std::string> writtenBuildingSlots; // "type|location"
-	const auto vanillaText = slurpFile(vanillaStartFolder / "07_cities_and_buildings.txt");
-	if (const auto body = findBlockBody(vanillaText, "building_manager"); body != std::string::npos)
+  private:
+	std::map<std::string, std::string> sanitizedSetups;	// setup name -> fort-free body
+	std::map<std::string, std::string> landlockedSetups; // setup name -> fort-free and port-free body
+	std::set<std::string> usedConvSetups;
+	std::set<std::string> usedLandlockedSetups;
+};
+
+// The locations block: vanilla towns keep their rank (upgrading to city where CK3 grew one),
+// founded towns tier by CK3 development - only city-grade locations get the full regional guild
+// spread; ordinary towns start with the essentials and grow into the rest. Anything more floods
+// the market with unprofitable guilds no pops can work. Returns the city upgrade count.
+int writeTownEntries(std::ofstream& cities, const EU5::World& world, const TownPlan& plan, SetupSanitizer& setups, bool& basicSetupUsed)
+{
+	const auto& details = world.getLocationDetails();
+	auto upgradedCount = 0;
+	for (const auto& [location, entry]: world.getVanillaTowns().getTowns())
 	{
-		static const std::regex tagRef(R"(\btag\s*=\s*(\w+))");
-		static const std::regex locationRef(R"(\blocation\s*=\s*(\w+))");
-		for (const auto& [buildingType, block]: extractNamedBlocks(vanillaText, body))
+		auto rank = entry.rank;
+		if (const auto detailItr = details.find(location); detailItr != details.end() && detailItr->second.city && rank == "town")
 		{
-			std::smatch tagMatch;
-			std::smatch locationMatch;
-			const auto hasTag = std::regex_search(block, tagMatch, tagRef);
-			const auto hasLocation = std::regex_search(block, locationMatch, locationRef);
-			if (hasTag && keptTags.contains(tagMatch[1].str()))
-			{
-				if (hasLocation)
-					writtenBuildingSlots.insert(buildingType + "|" + locationMatch[1].str());
-				cities << "\t" << block << "\n";
-				++keptBuildings;
-				continue;
-			}
-			if (hasTag && hasLocation)
-			{
-				const auto owner = locationOwners.find(locationMatch[1].str());
-				if (owner == locationOwners.end())
-					continue;
-				// Vanilla fort buildings don't transfer onto converted land: fortifications there
-				// come from CK3's own walls, otherwise vanilla's hundreds of stockades and castles
-				// blanket the converted map in forts CK3 never had.
-				static const std::set<std::string> fortTypes = {"stockade", "castle", "bastion", "star_fort", "fortress", "coastal_fort"};
-				if (fortTypes.contains(buildingType) || foreignBuildingTypes.contains(buildingType))
-					continue;
-				if (tiedBuildingTypes.contains(buildingType))
-				{
-					++droppedTiedBuildings;
-					continue;
-				}
-				if (!writtenBuildingSlots.insert(buildingType + "|" + locationMatch[1].str()).second)
-					continue;
-				auto retagged = block;
-				retagged = std::regex_replace(retagged, tagRef, "tag = " + owner->second, std::regex_constants::format_first_only);
-				cities << "\t" << retagged << "\n";
-				++retaggedBuildings;
-			}
+			rank = "city";
+			++upgradedCount;
 		}
+		cities << "\t" << location << " = { rank = " << rank;
+		if (!entry.setup.empty())
+			cities << " town_setup = " << (plan.locationOwners.contains(location) ? setups.convSetupFor(entry.setup) : entry.setup);
+		cities << " }\n";
 	}
-	// CK3 holdings add their own buildings on top. Explicit entries here are government-owned
-	// (tag = country) and the state pays their input goods each month, so only types vanilla
-	// state-owns are allowed through - the pop-owned economy comes from town setups instead.
+	for (const auto& [location, setup]: plan.newTownSetups)
+	{
+		const auto& detail = details.at(location);
+		std::string chosenSetup;
+		if (detail.city)
+			chosenSetup = setups.foundedSetupFor(setup, !world.getLocationDefinitions().getPortSeaZone(location).empty());
+		else
+		{
+			chosenSetup = "conv_basic_town";
+			basicSetupUsed = true;
+		}
+		cities << "\t" << location << " = { rank = " << (detail.city ? "city" : "town") << " town_setup = " << chosenSetup << " }\n";
+	}
+	return upgradedCount;
+}
+
+struct BuildingCounts
+{
+	int kept = 0;
+	int retagged = 0;
+	int droppedTied = 0;
+};
+
+// Vanilla building entries keep their tag when the owner survived, get re-tagged when the land
+// converted to a new country, and drop when neither applies.
+BuildingCounts writeVanillaBuildings(std::ofstream& cities,
+	 const std::filesystem::path& vanillaStartFolder,
+	 const std::set<std::string>& keptTags,
+	 const TownPlan& plan,
+	 const BuildingTypeTraits& types,
+	 std::set<std::string>& writtenBuildingSlots)
+{
+	BuildingCounts counts;
+	const auto vanillaText = slurpFile(vanillaStartFolder / "07_cities_and_buildings.txt");
+	const auto body = findBlockBody(vanillaText, "building_manager");
+	if (body == std::string::npos)
+		return counts;
+	static const std::regex tagRef(R"(\btag\s*=\s*(\w+))");
+	static const std::regex locationRef(R"(\blocation\s*=\s*(\w+))");
+	for (const auto& [buildingType, block]: extractNamedBlocks(vanillaText, body))
+	{
+		std::smatch tagMatch;
+		std::smatch locationMatch;
+		const auto hasTag = std::regex_search(block, tagMatch, tagRef);
+		const auto hasLocation = std::regex_search(block, locationMatch, locationRef);
+		if (hasTag && keptTags.contains(tagMatch[1].str()))
+		{
+			if (hasLocation)
+				writtenBuildingSlots.insert(buildingType + "|" + locationMatch[1].str());
+			cities << "\t" << block << "\n";
+			++counts.kept;
+			continue;
+		}
+		if (!hasTag || !hasLocation)
+			continue;
+		const auto owner = plan.locationOwners.find(locationMatch[1].str());
+		if (owner == plan.locationOwners.end())
+			continue;
+		// Vanilla fort buildings don't transfer onto converted land: fortifications there
+		// come from CK3's own walls, otherwise vanilla's hundreds of stockades and castles
+		// blanket the converted map in forts CK3 never had.
+		static const std::set<std::string> fortTypes = {"stockade", "castle", "bastion", "star_fort", "fortress", "coastal_fort"};
+		if (fortTypes.contains(buildingType) || types.foreign.contains(buildingType))
+			continue;
+		if (types.tied.contains(buildingType))
+		{
+			++counts.droppedTied;
+			continue;
+		}
+		if (!writtenBuildingSlots.insert(buildingType + "|" + locationMatch[1].str()).second)
+			continue;
+		auto retagged = block;
+		retagged = std::regex_replace(retagged, tagRef, "tag = " + owner->second, std::regex_constants::format_first_only);
+		cities << "\t" << retagged << "\n";
+		++counts.retagged;
+	}
+	return counts;
+}
+
+// CK3 holdings add their own buildings on top of vanilla's. Explicit entries here are
+// government-owned (tag = country) and the state pays their input goods each month, so only
+// types vanilla state-owns are allowed through - the pop-owned economy comes from town setups.
+int writeHoldingBuildings(std::ofstream& cities, const EU5::World& world, const TownPlan& plan, std::set<std::string>& writtenBuildingSlots)
+{
 	static const std::set<std::string> stateOwnableTypes = {"castle", "cathedral", "university"};
 	// Universities only exist in towns and cities (no rural_settlement flag on the building type);
 	// castles and cathedrals place anywhere, like vanilla's own rural fort and holy-site entries.
 	std::set<std::string> rankedLocations;
-	for (const auto& [location, entry]: vanillaTowns)
+	for (const auto& [location, entry]: world.getVanillaTowns().getTowns())
 		rankedLocations.insert(location);
-	for (const auto& [location, setup]: newTownSetups)
+	for (const auto& [location, setup]: plan.newTownSetups)
 		rankedLocations.insert(location);
 	std::set<std::string> rejectedTypes;
 	auto addedBuildings = 0;
 	auto ruralUniversities = 0;
-	for (const auto& [location, detail]: details)
+	for (const auto& [location, detail]: world.getLocationDetails())
 	{
-		const auto owner = locationOwners.find(location);
-		if (owner == locationOwners.end())
+		const auto owner = plan.locationOwners.find(location);
+		if (owner == plan.locationOwners.end())
 			continue;
 		for (const auto& building: detail.eu5Buildings)
 		{
@@ -1444,16 +1478,47 @@ void writeCitiesAndBuildings(const std::filesystem::path& startFolder,
 	}
 	if (ruralUniversities > 0)
 		Log(LogLevel::Info) << "<> " << ruralUniversities << " CK3 universities sat in counties too undeveloped for an EU5 town and were not converted.";
-	if (droppedTiedBuildings > 0)
-		Log(LogLevel::Info) << "<> " << droppedTiedBuildings << " vanilla buildings were bound to their original owner's country, culture or capital and dropped.";
 	for (const auto& rejected: rejectedTypes)
 		Log(LogLevel::Warning) << "building_map.txt maps to " << rejected
 									  << ", which vanilla never state-owns; skipped. Pop-owned buildings belong in town setups.";
+	return addedBuildings;
+}
+
+// 07 - cities and buildings. Vanilla town/city ranks are kept; CK3 city holdings add new towns,
+// using the most common town_setup among the owning country's vanilla towns for starting buildings.
+// Vanilla buildings on converted land are re-tagged to their new owners; CK3 holy sites, top-tier
+// fortifications and universities add matching state-owned EU5 buildings.
+void writeCitiesAndBuildings(const std::filesystem::path& startFolder,
+	 const std::filesystem::path& modFolder,
+	 const EU5::World& world,
+	 const std::filesystem::path& vanillaStartFolder,
+	 const std::filesystem::path& eu5GameFolder,
+	 const std::set<std::string>& keptTags)
+{
+	const auto types = scanBuildingTypes(eu5GameFolder);
+	const auto plan = planTownFoundations(world);
+	SetupSanitizer setups(eu5GameFolder, types.port);
+
+	std::ofstream cities(startFolder / "07_cities_and_buildings.txt");
+	cities << "locations={\n";
+	auto basicSetupUsed = false;
+	const auto upgradedCount = writeTownEntries(cities, world, plan, setups, basicSetupUsed);
+	cities << "}\n\n";
+
+	setups.writeUsedSetups(modFolder, basicSetupUsed);
+
+	cities << "building_manager = {\n";
+	std::set<std::string> writtenBuildingSlots; // "type|location" - the game rejects duplicates
+	const auto counts = writeVanillaBuildings(cities, vanillaStartFolder, keptTags, plan, types, writtenBuildingSlots);
+	const auto addedBuildings = writeHoldingBuildings(cities, world, plan, writtenBuildingSlots);
 	cities << "}\n";
 	cities.close();
-	Log(LogLevel::Info) << "<> " << newTownSetups.size() << " towns founded, " << upgradedCount << " towns upgraded to cities, " << keptBuildings
-							  << " vanilla buildings kept, " << retaggedBuildings << " re-tagged, " << addedBuildings << " added from CK3 holdings, "
-							  << usedConvSetups.size() << " town setups sanitized of forts, " << usedLandlockedSetups.size() << " of ports too.";
+
+	if (counts.droppedTied > 0)
+		Log(LogLevel::Info) << "<> " << counts.droppedTied << " vanilla buildings were bound to their original owner's country, culture or capital and dropped.";
+	Log(LogLevel::Info) << "<> " << plan.newTownSetups.size() << " towns founded, " << upgradedCount << " towns upgraded to cities, " << counts.kept
+							  << " vanilla buildings kept, " << counts.retagged << " re-tagged, " << addedBuildings << " added from CK3 holdings, "
+							  << setups.convSetupCount() << " town setups sanitized of forts, " << setups.landlockedSetupCount() << " of ports too.";
 }
 
 // 24 - town rights. Vanilla entries stay; converted towns adopt the rights most common among
@@ -2003,40 +2068,38 @@ void writeArt(const std::filesystem::path& startFolder, const EU5::World& world,
 		Log(LogLevel::Info) << "<> " << artworkCount << " CK3 artifacts placed as works of art.";
 }
 
-// Post-write sanity scan of the generated mod. Catches regressions before the game does.
-void validateOutput(const std::filesystem::path& startFolder, const std::filesystem::path& modFolder, const EU5::World& world, const std::filesystem::path& eu5GameFolder)
+// Characters: family references must point at previously defined characters. Fills seenCharacters
+// with every character key the file defines, for the country check to consult.
+int validateCharacterReferences(const std::filesystem::path& startFolder, std::set<std::string>& seenCharacters)
 {
 	auto issues = 0;
-
-	// Characters: family references must point at previously defined characters.
 	const auto charactersText = slurpFile(startFolder / "05_characters.txt");
-	std::set<std::string> seenCharacters;
-	if (const auto body = findBlockBody(charactersText, "character_db"); body != std::string::npos)
+	const auto body = findBlockBody(charactersText, "character_db");
+	if (body == std::string::npos)
+		return issues;
+	static const std::regex familyRef(R"([ \t](?:father|mother|spouse)[ \t]*=[ \t]*([\w'.]+))");
+	for (const auto& [key, block]: extractNamedBlocks(charactersText, body))
 	{
-		static const std::regex familyRef(R"([ \t](?:father|mother|spouse)[ \t]*=[ \t]*([\w'.]+))");
-		for (const auto& [key, block]: extractNamedBlocks(charactersText, body))
+		for (auto match = std::sregex_iterator(block.begin(), block.end(), familyRef); match != std::sregex_iterator(); ++match)
 		{
-			for (auto match = std::sregex_iterator(block.begin(), block.end(), familyRef); match != std::sregex_iterator(); ++match)
+			const auto target = (*match)[1].str();
+			// Converted characters are ordered parents-first; vanilla blocks tolerate forward refs.
+			if (key.starts_with("conv_") && !seenCharacters.contains(target))
 			{
-				const auto target = (*match)[1].str();
-				// Converted characters are ordered parents-first; vanilla blocks tolerate forward refs.
-				if (key.starts_with("conv_") && !seenCharacters.contains(target))
-				{
-					Log(LogLevel::Warning) << "Validator: " << key << " references " << target << " before its definition.";
-					++issues;
-				}
+				Log(LogLevel::Warning) << "Validator: " << key << " references " << target << " before its definition.";
+				++issues;
 			}
-			seenCharacters.insert(key);
 		}
+		seenCharacters.insert(key);
 	}
+	return issues;
+}
 
-	// Countries: every government character must exist, capitals must be owned and valid.
-	const auto countriesText = slurpFile(startFolder / "10_countries.txt");
-	std::set<std::string> writtenTags;
-	if (const auto outer = findBlockBody(countriesText, "countries"); outer != std::string::npos)
-		if (const auto inner = findBlockBody(countriesText, "countries", outer); inner != std::string::npos)
-			for (const auto& [tag, block]: extractNamedBlocks(countriesText, inner))
-				writtenTags.insert(tag);
+// Countries: every government character must exist, capitals must be owned and valid, and no
+// family member may carry more ruler traits than the game accepts.
+int validateCountrySheet(const EU5::World& world, const std::set<std::string>& seenCharacters)
+{
+	auto issues = 0;
 	for (const auto& [tag, country]: world.getCountries())
 	{
 		for (const auto* character: {&country.ruler, &country.consort, &country.heir})
@@ -2062,8 +2125,13 @@ void validateOutput(const std::filesystem::path& startFolder, const std::filesys
 				++issues;
 			}
 	}
+	return issues;
+}
 
-	// Diplomacy, rivals, wars and armies must only reference written tags.
+// Diplomacy, rivals, wars and armies must only reference written tags.
+int validateTagReferences(const std::filesystem::path& startFolder, const std::set<std::string>& writtenTags)
+{
+	auto issues = 0;
 	const auto checkTagRefs = [&](const std::string& fileName, const std::regex& pattern) {
 		const auto text = slurpFile(startFolder / fileName);
 		for (auto match = std::sregex_iterator(text.begin(), text.end(), pattern); match != std::sregex_iterator(); ++match)
@@ -2082,184 +2150,210 @@ void validateOutput(const std::filesystem::path& startFolder, const std::filesys
 	checkTagRefs("20_rivals.txt", firstSecondRef);
 	checkTagRefs("16_wars.txt", countryRef);
 	checkTagRefs("27_armies.txt", countryRef);
+	return issues;
+}
 
-	// Two countries owning the same location is the one error the game cannot paper over: the second
-	// owner silently wins and the first ends up with holes, or no land at all. own_core counts too -
-	// it means owned-but-occupied, not a claim. Cores on foreign land (our_cores_conquered_by_others)
-	// are deliberately left out - rival claims on the same land are the whole point of them.
-	{
-		static const std::regex ownership(R"((own_control_core|own_control_integrated|own_control_conquered|own_control_colony|own_core)\s*=\s*\{([^}]*)\})");
-		std::map<std::string, std::string> claimedBy;
-		auto doubleClaims = 0;
-		if (const auto outer = findBlockBody(countriesText, "countries"); outer != std::string::npos)
-			if (const auto inner = findBlockBody(countriesText, "countries", outer); inner != std::string::npos)
-				for (const auto& [tag, block]: extractNamedBlocks(countriesText, inner))
-					for (auto match = std::sregex_iterator(block.begin(), block.end(), ownership); match != std::sregex_iterator(); ++match)
+// Two countries owning the same location is the one error the game cannot paper over: the second
+// owner silently wins and the first ends up with holes, or no land at all. own_core counts too -
+// it means owned-but-occupied, not a claim. Cores on foreign land (our_cores_conquered_by_others)
+// are deliberately left out - rival claims on the same land are the whole point of them.
+int validateUniqueOwnership(const std::string& countriesText, const EU5::World& world)
+{
+	static const std::regex ownership(R"((own_control_core|own_control_integrated|own_control_conquered|own_control_colony|own_core)\s*=\s*\{([^}]*)\})");
+	std::map<std::string, std::string> claimedBy;
+	auto doubleClaims = 0;
+	if (const auto outer = findBlockBody(countriesText, "countries"); outer != std::string::npos)
+		if (const auto inner = findBlockBody(countriesText, "countries", outer); inner != std::string::npos)
+			for (const auto& [tag, block]: extractNamedBlocks(countriesText, inner))
+				for (auto match = std::sregex_iterator(block.begin(), block.end(), ownership); match != std::sregex_iterator(); ++match)
+				{
+					std::stringstream body((*match)[2].str());
+					std::string token;
+					while (body >> token)
 					{
-						std::stringstream body((*match)[2].str());
-						std::string token;
-						while (body >> token)
+						// Vanilla blocks may claim a whole area or region by name, so groups expand to
+						// the locations under them. A location name always wins over a group of the same
+						// name though: EU5 names a province after its main location ("qingchi" is both a
+						// location and the province holding it), and expanding those would report every
+						// neighbour as a rival claimant.
+						std::vector<std::string> claimed{token};
+						if (const auto& definitions = world.getLocationDefinitions(); !definitions.isValidLocation(token))
+							if (const auto group = definitions.getGroupLocations().find(token); group != definitions.getGroupLocations().end())
+								claimed.assign(group->second.begin(), group->second.end());
+						for (const auto& location: claimed)
 						{
-							// Vanilla blocks may claim a whole area or region by name, so groups expand to
-							// the locations under them. A location name always wins over a group of the same
-							// name though: EU5 names a province after its main location ("qingchi" is both a
-							// location and the province holding it), and expanding those would report every
-							// neighbour as a rival claimant.
-							std::vector<std::string> claimed{token};
-							if (const auto& definitions = world.getLocationDefinitions(); !definitions.isValidLocation(token))
-								if (const auto group = definitions.getGroupLocations().find(token); group != definitions.getGroupLocations().end())
-									claimed.assign(group->second.begin(), group->second.end());
-							for (const auto& location: claimed)
+							const auto [existing, fresh] = claimedBy.emplace(location, tag);
+							if (!fresh && existing->second != tag)
 							{
-								const auto [existing, fresh] = claimedBy.emplace(location, tag);
-								if (!fresh && existing->second != tag)
-								{
-									if (doubleClaims < 10)
-										Log(LogLevel::Warning) << "Validator: " << location << " is claimed by both " << existing->second << " and " << tag << ".";
-									++doubleClaims;
-								}
+								if (doubleClaims < 10)
+									Log(LogLevel::Warning) << "Validator: " << location << " is claimed by both " << existing->second << " and " << tag << ".";
+								++doubleClaims;
 							}
 						}
 					}
-		if (doubleClaims > 0)
-		{
-			Log(LogLevel::Warning) << "Validator: " << doubleClaims << " locations are claimed by more than one country.";
-			issues += doubleClaims;
-		}
-	}
+				}
+	if (doubleClaims > 0)
+		Log(LogLevel::Warning) << "Validator: " << doubleClaims << " locations are claimed by more than one country.";
+	return doubleClaims;
+}
 
-	// Templates, cultures and religions the country sheet names have to exist somewhere the game reads.
+// Templates, cultures and religions the country sheet names have to exist somewhere the game reads.
+int validateNamedDefinitions(const EU5::World& world, const std::filesystem::path& eu5GameFolder)
+{
+	std::set<std::string> knownTemplates;
+	const auto templateFolder = eu5GameFolder / "main_menu" / "setup" / "templates";
+	if (std::filesystem::exists(templateFolder))
+		for (const auto& file: std::filesystem::recursive_directory_iterator(templateFolder))
+			if (file.is_regular_file() && file.path().extension() == ".txt")
+				knownTemplates.insert(file.path().stem().string()); // a template is named by its file
+	const auto cultureExists = [&](const std::string& culture) {
+		return world.getGameDatabase().isValidCulture(culture) || world.getGeneratedCultures().contains(culture);
+	};
+	const auto religionExists = [&](const std::string& religion) {
+		return world.getGameDatabase().isValidReligion(religion) || world.getGeneratedReligions().contains(religion);
+	};
+
+	auto badTemplates = 0;
+	auto badCultures = 0;
+	auto badReligions = 0;
+	for (const auto& [tag, country]: world.getCountries())
 	{
-		std::set<std::string> knownTemplates;
-		const auto templateFolder = eu5GameFolder / "main_menu" / "setup" / "templates";
-		if (std::filesystem::exists(templateFolder))
-			for (const auto& file: std::filesystem::recursive_directory_iterator(templateFolder))
-				if (file.is_regular_file() && file.path().extension() == ".txt")
-					knownTemplates.insert(file.path().stem().string()); // a template is named by its file
-		const auto cultureExists = [&](const std::string& culture) {
-			return world.getGameDatabase().isValidCulture(culture) || world.getGeneratedCultures().contains(culture);
-		};
-		const auto religionExists = [&](const std::string& religion) {
-			return world.getGameDatabase().isValidReligion(religion) || world.getGeneratedReligions().contains(religion);
-		};
-
-		auto badTemplates = 0;
-		auto badCultures = 0;
-		auto badReligions = 0;
-		for (const auto& [tag, country]: world.getCountries())
+		if (!knownTemplates.empty() && !country.templateInclude.empty() && !knownTemplates.contains(country.templateInclude))
 		{
-			if (!knownTemplates.empty() && !country.templateInclude.empty() && !knownTemplates.contains(country.templateInclude))
-			{
-				if (badTemplates < 5)
-					Log(LogLevel::Warning) << "Validator: " << tag << " includes unknown template " << country.templateInclude << ".";
-				++badTemplates;
-			}
-			if (!country.culture.empty() && !cultureExists(country.culture))
+			if (badTemplates < 5)
+				Log(LogLevel::Warning) << "Validator: " << tag << " includes unknown template " << country.templateInclude << ".";
+			++badTemplates;
+		}
+		if (!country.culture.empty() && !cultureExists(country.culture))
+		{
+			if (badCultures < 5)
+				Log(LogLevel::Warning) << "Validator: " << tag << " has unknown primary culture " << country.culture << ".";
+			++badCultures;
+		}
+		for (const auto& culture: country.acceptedCultures)
+			if (!cultureExists(culture))
 			{
 				if (badCultures < 5)
-					Log(LogLevel::Warning) << "Validator: " << tag << " has unknown primary culture " << country.culture << ".";
+					Log(LogLevel::Warning) << "Validator: " << tag << " accepts unknown culture " << culture << ".";
 				++badCultures;
 			}
-			for (const auto& culture: country.acceptedCultures)
-				if (!cultureExists(culture))
-				{
-					if (badCultures < 5)
-						Log(LogLevel::Warning) << "Validator: " << tag << " accepts unknown culture " << culture << ".";
-					++badCultures;
-				}
-			if (!country.religion.empty() && !religionExists(country.religion))
-			{
-				if (badReligions < 5)
-					Log(LogLevel::Warning) << "Validator: " << tag << " has unknown religion " << country.religion << ".";
-				++badReligions;
-			}
-		}
-		issues += badTemplates + badCultures + badReligions;
-	}
-
-	// Building entries: one per type and location, and only in locations that exist.
-	{
-		const auto buildingsText = slurpFile(startFolder / "07_cities_and_buildings.txt");
-		static const std::regex buildingEntry(R"(add_building\s*=\s*\{[^}]*?type\s*=\s*(\w+)[^}]*?location\s*=\s*(\w+))");
-		std::set<std::string> slots;
-		auto duplicates = 0;
-		auto badLocations = 0;
-		for (auto match = std::sregex_iterator(buildingsText.begin(), buildingsText.end(), buildingEntry); match != std::sregex_iterator(); ++match)
+		if (!country.religion.empty() && !religionExists(country.religion))
 		{
-			const auto slot = (*match)[1].str() + "|" + (*match)[2].str();
-			if (!slots.insert(slot).second)
-			{
-				if (duplicates < 5)
-					Log(LogLevel::Warning) << "Validator: duplicate building " << slot << ".";
-				++duplicates;
-			}
-			if (!world.getLocationDefinitions().isValidLocation((*match)[2].str()))
-			{
-				if (badLocations < 5)
-					Log(LogLevel::Warning) << "Validator: building in unknown location " << (*match)[2].str() << ".";
-				++badLocations;
-			}
+			if (badReligions < 5)
+				Log(LogLevel::Warning) << "Validator: " << tag << " has unknown religion " << country.religion << ".";
+			++badReligions;
 		}
-		issues += duplicates + badLocations;
 	}
+	return badTemplates + badCultures + badReligions;
+}
 
-	// International organizations: members and leaders have to be countries that made it into the save.
+// Building entries: one per type and location, and only in locations that exist.
+int validateBuildingEntries(const std::filesystem::path& startFolder, const EU5::World& world)
+{
+	const auto buildingsText = slurpFile(startFolder / "07_cities_and_buildings.txt");
+	static const std::regex buildingEntry(R"(add_building\s*=\s*\{[^}]*?type\s*=\s*(\w+)[^}]*?location\s*=\s*(\w+))");
+	std::set<std::string> slots;
+	auto duplicates = 0;
+	auto badLocations = 0;
+	for (auto match = std::sregex_iterator(buildingsText.begin(), buildingsText.end(), buildingEntry); match != std::sregex_iterator(); ++match)
 	{
-		const auto organizationsText = slurpFile(startFolder / "15_international_organizations.txt");
-		static const std::regex memberList(R"((members|emperor)\s*=\s*\{([^}]*)\})");
-		static const std::regex leaderRef(R"(leader\s*=\s*([A-Z0-9]{3})\b)");
-		auto badMembers = 0;
-		for (auto match = std::sregex_iterator(organizationsText.begin(), organizationsText.end(), memberList); match != std::sregex_iterator(); ++match)
+		const auto slot = (*match)[1].str() + "|" + (*match)[2].str();
+		if (!slots.insert(slot).second)
 		{
-			std::stringstream body((*match)[2].str());
-			std::string tag;
-			while (body >> tag)
-				if (!writtenTags.contains(tag))
-				{
-					Log(LogLevel::Warning) << "Validator: international organization has unknown member " << tag << ".";
-					++badMembers;
-				}
+			if (duplicates < 5)
+				Log(LogLevel::Warning) << "Validator: duplicate building " << slot << ".";
+			++duplicates;
 		}
-		for (auto match = std::sregex_iterator(organizationsText.begin(), organizationsText.end(), leaderRef); match != std::sregex_iterator(); ++match)
-			if (!writtenTags.contains((*match)[1].str()))
+		if (!world.getLocationDefinitions().isValidLocation((*match)[2].str()))
+		{
+			if (badLocations < 5)
+				Log(LogLevel::Warning) << "Validator: building in unknown location " << (*match)[2].str() << ".";
+			++badLocations;
+		}
+	}
+	return duplicates + badLocations;
+}
+
+// International organizations: members and leaders have to be countries that made it into the save.
+int validateOrganizationMembers(const std::filesystem::path& startFolder, const std::set<std::string>& writtenTags)
+{
+	const auto organizationsText = slurpFile(startFolder / "15_international_organizations.txt");
+	static const std::regex memberList(R"((members|emperor)\s*=\s*\{([^}]*)\})");
+	static const std::regex leaderRef(R"(leader\s*=\s*([A-Z0-9]{3})\b)");
+	auto badMembers = 0;
+	for (auto match = std::sregex_iterator(organizationsText.begin(), organizationsText.end(), memberList); match != std::sregex_iterator(); ++match)
+	{
+		std::stringstream body((*match)[2].str());
+		std::string tag;
+		while (body >> tag)
+			if (!writtenTags.contains(tag))
 			{
-				Log(LogLevel::Warning) << "Validator: international organization led by unknown tag " << (*match)[1].str() << ".";
+				Log(LogLevel::Warning) << "Validator: international organization has unknown member " << tag << ".";
 				++badMembers;
 			}
-		issues += badMembers;
 	}
-
-	// Town setups: every location we rank as a town has to name a setup the mod or the game defines.
-	{
-		std::set<std::string> knownSetups;
-		static const std::regex setupName(R"(^([\w]+)\s*=\s*\{)");
-		for (const auto& folder: {eu5GameFolder / "in_game" / "common" / "town_setups", modFolder / "in_game" / "common" / "town_setups"})
+	for (auto match = std::sregex_iterator(organizationsText.begin(), organizationsText.end(), leaderRef); match != std::sregex_iterator(); ++match)
+		if (!writtenTags.contains((*match)[1].str()))
 		{
-			if (!std::filesystem::exists(folder))
-				continue;
-			for (const auto& file: std::filesystem::recursive_directory_iterator(folder))
-			{
-				if (!file.is_regular_file() || file.path().extension() != ".txt")
-					continue;
-				std::ifstream input(file.path());
-				std::string line;
-				while (std::getline(input, line))
-					if (std::smatch match; std::regex_search(line, match, setupName))
-						knownSetups.insert(match[1].str());
-			}
+			Log(LogLevel::Warning) << "Validator: international organization led by unknown tag " << (*match)[1].str() << ".";
+			++badMembers;
 		}
-		const auto townRightsText = slurpFile(startFolder / "24_town_rights.txt");
-		const auto buildingsText = slurpFile(startFolder / "07_cities_and_buildings.txt");
-		static const std::regex setupRef(R"(town_setup\s*=\s*(\w+))");
-		std::set<std::string> missingSetups;
-		for (const auto* text: {&townRightsText, &buildingsText})
-			for (auto match = std::sregex_iterator(text->begin(), text->end(), setupRef); match != std::sregex_iterator(); ++match)
-				if (!knownSetups.empty() && !knownSetups.contains((*match)[1].str()))
-					missingSetups.insert((*match)[1].str());
-		for (const auto& setup: missingSetups)
-			Log(LogLevel::Warning) << "Validator: unknown town setup " << setup << ".";
-		issues += static_cast<int>(missingSetups.size());
+	return badMembers;
+}
+
+// Town setups: every location we rank as a town has to name a setup the mod or the game defines.
+int validateTownSetupReferences(const std::filesystem::path& startFolder, const std::filesystem::path& modFolder, const std::filesystem::path& eu5GameFolder)
+{
+	std::set<std::string> knownSetups;
+	static const std::regex setupName(R"(^([\w]+)\s*=\s*\{)");
+	for (const auto& folder: {eu5GameFolder / "in_game" / "common" / "town_setups", modFolder / "in_game" / "common" / "town_setups"})
+	{
+		if (!std::filesystem::exists(folder))
+			continue;
+		for (const auto& file: std::filesystem::recursive_directory_iterator(folder))
+		{
+			if (!file.is_regular_file() || file.path().extension() != ".txt")
+				continue;
+			std::ifstream input(file.path());
+			std::string line;
+			while (std::getline(input, line))
+				if (std::smatch match; std::regex_search(line, match, setupName))
+					knownSetups.insert(match[1].str());
+		}
 	}
+	const auto townRightsText = slurpFile(startFolder / "24_town_rights.txt");
+	const auto buildingsText = slurpFile(startFolder / "07_cities_and_buildings.txt");
+	static const std::regex setupRef(R"(town_setup\s*=\s*(\w+))");
+	std::set<std::string> missingSetups;
+	for (const auto* text: {&townRightsText, &buildingsText})
+		for (auto match = std::sregex_iterator(text->begin(), text->end(), setupRef); match != std::sregex_iterator(); ++match)
+			if (!knownSetups.empty() && !knownSetups.contains((*match)[1].str()))
+				missingSetups.insert((*match)[1].str());
+	for (const auto& setup: missingSetups)
+		Log(LogLevel::Warning) << "Validator: unknown town setup " << setup << ".";
+	return static_cast<int>(missingSetups.size());
+}
+
+// Post-write sanity scan of the generated mod. Catches regressions before the game does.
+void validateOutput(const std::filesystem::path& startFolder, const std::filesystem::path& modFolder, const EU5::World& world, const std::filesystem::path& eu5GameFolder)
+{
+	std::set<std::string> seenCharacters;
+	auto issues = validateCharacterReferences(startFolder, seenCharacters);
+
+	const auto countriesText = slurpFile(startFolder / "10_countries.txt");
+	std::set<std::string> writtenTags;
+	if (const auto outer = findBlockBody(countriesText, "countries"); outer != std::string::npos)
+		if (const auto inner = findBlockBody(countriesText, "countries", outer); inner != std::string::npos)
+			for (const auto& [tag, block]: extractNamedBlocks(countriesText, inner))
+				writtenTags.insert(tag);
+
+	issues += validateCountrySheet(world, seenCharacters);
+	issues += validateTagReferences(startFolder, writtenTags);
+	issues += validateUniqueOwnership(countriesText, world);
+	issues += validateNamedDefinitions(world, eu5GameFolder);
+	issues += validateBuildingEntries(startFolder, world);
+	issues += validateOrganizationMembers(startFolder, writtenTags);
+	issues += validateTownSetupReferences(startFolder, modFolder, eu5GameFolder);
 
 	if (issues == 0)
 		Log(LogLevel::Info) << "<> Validation passed: no dangling references detected.";

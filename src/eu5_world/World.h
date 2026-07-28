@@ -133,6 +133,17 @@ class World
 	void loadMappers();
 	void importCountries(const CK3::World& sourceWorld, const configuration::Configuration& theConfiguration);
 	std::optional<std::string> importCountry(const std::string& ck3TitleName, const std::shared_ptr<CK3::Title>& title, const CK3::World& sourceWorld);
+	// The stages importCountry runs a realm through, in call order.
+	void gatherRealmLand(const CK3::Title& title, const std::shared_ptr<CK3::Character>& holder, Country& country);
+	void determineCapital(const std::shared_ptr<CK3::Character>& holder, Country& country);
+	void resolveCountryIdentity(const CK3::World& sourceWorld, const CK3::Title& title, const std::shared_ptr<CK3::Character>& holder, Country& country) const;
+	void setupGovernment(const std::shared_ptr<CK3::Character>& holder, Country& country) const;
+	void applySocietalValuesAndTech(const CK3::Title& title, const std::shared_ptr<CK3::Character>& holder, Country& country);
+	void rankMinorityCultures(Country& country) const;
+	void assignLanguages(Country& country) const;
+	void setupRuler(const CK3::Title& title, const std::shared_ptr<CK3::Character>& holder, Country& country, const CK3::World& sourceWorld);
+	void recordPastReigns(const CK3::Title& title, const std::shared_ptr<CK3::Character>& holder, Country& country) const;
+	void assignConsortAndHeir(const CK3::Title& title, const std::shared_ptr<CK3::Character>& holder, Country& country, const CK3::World& sourceWorld);
 	void importClaims(const CK3::World& sourceWorld);
 	void importTributaries(const CK3::World& sourceWorld);
 	void importAlliances(const CK3::World& sourceWorld);
@@ -140,6 +151,10 @@ class World
 	void importWars(const CK3::World& sourceWorld);
 	void importArtifacts(const CK3::World& sourceWorld);
 	void importArmies(const CK3::World& sourceWorld);
+	[[nodiscard]] std::vector<std::string> gatherWarSide(const std::vector<long long>& participants, const std::string& primaryTag) const;
+	[[nodiscard]] std::string findWarGoal(const std::vector<long long>& targetedTitles,
+		 const std::vector<std::string>& defenders,
+		 const std::map<long long, std::shared_ptr<CK3::Title>>& titlesByID) const;
 	void importConfederations(const CK3::World& sourceWorld);
 	void classifyLandControl();
 	void applyUrbanQuota();
@@ -147,6 +162,8 @@ class World
 
 	[[nodiscard]] std::vector<std::string> getLocationsForCounty(const CK3::Title& county);
 	[[nodiscard]] std::string convertCulture(const std::shared_ptr<CK3::Culture>& culture, const std::string& location);
+	[[nodiscard]] std::optional<std::string> generateDynamicCulture(const CK3::Culture& culture);
+	[[nodiscard]] std::string pickCultureFromGroups(const std::vector<std::string>& groups, const std::string& ck3Language) const;
 	[[nodiscard]] std::string convertFaith(const std::shared_ptr<CK3::Faith>& faith, const std::string& location);
 	[[nodiscard]] std::string resolveDisplayName(const CK3::World& sourceWorld, const CK3::Title& title) const;
 	[[nodiscard]] std::string resolveAdjective(const CK3::World& sourceWorld, const CK3::Title& title, const std::string& displayName) const;

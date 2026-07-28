@@ -485,20 +485,8 @@ void EU5::World::importWars(const CK3::World& sourceWorld)
 		if (converted.startDate > date("1337.4.1"))
 			converted.startDate = date("1337.1.1");
 
-		const auto gatherSide = [this](const std::vector<long long>& participants, const std::string& primaryTag) {
-			std::vector<std::string> tags{primaryTag};
-			for (const auto participant: participants)
-			{
-				const auto participantTag = rulerTags.find(participant);
-				if (participantTag == rulerTags.end())
-					continue;
-				if (std::ranges::find(tags, participantTag->second) == tags.end())
-					tags.push_back(participantTag->second);
-			}
-			return tags;
-		};
-		converted.attackers = gatherSide(war.attackerParticipants, attackerTag->second);
-		converted.defenders = gatherSide(war.defenderParticipants, defenderTag->second);
+		converted.attackers = gatherWarSide(war.attackerParticipants, attackerTag->second);
+		converted.defenders = gatherWarSide(war.defenderParticipants, defenderTag->second);
 		// A tag can't fight itself; drop overlaps from the defenders.
 		std::erase_if(converted.defenders, [&converted](const std::string& tag) {
 			return std::ranges::find(converted.attackers, tag) != converted.attackers.end();
@@ -506,50 +494,60 @@ void EU5::World::importWars(const CK3::World& sourceWorld)
 		if (converted.defenders.empty())
 			continue;
 
-		// The wargoal: land of the CK3 casus belli's targeted title that a defender actually owns.
-		// Wars without usable targeted titles are fought over the primary defender's seat instead.
-		std::set<std::string> defenderLand;
-		for (const auto& tag: converted.defenders)
-			if (const auto& defender = countries.find(tag); defender != countries.end())
-				defenderLand.insert(defender->second.locations.begin(), defender->second.locations.end());
-		for (const auto titleID: war.targetedTitles)
-		{
-			const auto targeted = titlesByID.find(titleID);
-			if (targeted == titlesByID.end() || !targeted->second)
-				continue;
-			for (const auto& [countyName, county]: targeted->second->coalesceDJCounties())
-			{
-				if (!county)
-					continue;
-				for (const auto& [baronyID, barony]: county->getDJVassals())
-				{
-					if (!barony || !barony->getClay() || !barony->getClay()->getProvince())
-						continue;
-					for (const auto& location: provinceMapper.getEU5Locations(barony->getClay()->getProvince()->first))
-						if (defenderLand.contains(location))
-						{
-							converted.goalLocation = location;
-							break;
-						}
-					if (!converted.goalLocation.empty())
-						break;
-				}
-				if (!converted.goalLocation.empty())
-					break;
-			}
-			if (!converted.goalLocation.empty())
-				break;
-		}
-		if (converted.goalLocation.empty() && !defenderLand.empty())
-		{
-			const auto& primaryDefender = countries.find(converted.defenders.front());
-			if (primaryDefender != countries.end() && defenderLand.contains(primaryDefender->second.capital))
-				converted.goalLocation = primaryDefender->second.capital;
-			else
-				converted.goalLocation = *defenderLand.begin();
-		}
+		converted.goalLocation = findWarGoal(war.targetedTitles, converted.defenders, titlesByID);
 		wars.push_back(converted);
 	}
+}
+
+std::vector<std::string> EU5::World::gatherWarSide(const std::vector<long long>& participants, const std::string& primaryTag) const
+{
+	std::vector<std::string> tags{primaryTag};
+	for (const auto participant: participants)
+	{
+		const auto participantTag = rulerTags.find(participant);
+		if (participantTag == rulerTags.end())
+			continue;
+		if (std::ranges::find(tags, participantTag->second) == tags.end())
+			tags.push_back(participantTag->second);
+	}
+	return tags;
+}
+
+// The wargoal: land of the CK3 casus belli's targeted title that a defender actually owns.
+// Wars without usable targeted titles are fought over the primary defender's seat instead.
+std::string EU5::World::findWarGoal(const std::vector<long long>& targetedTitles,
+	 const std::vector<std::string>& defenders,
+	 const std::map<long long, std::shared_ptr<CK3::Title>>& titlesByID) const
+{
+	std::set<std::string> defenderLand;
+	for (const auto& tag: defenders)
+		if (const auto& defender = countries.find(tag); defender != countries.end())
+			defenderLand.insert(defender->second.locations.begin(), defender->second.locations.end());
+	for (const auto titleID: targetedTitles)
+	{
+		const auto targeted = titlesByID.find(titleID);
+		if (targeted == titlesByID.end() || !targeted->second)
+			continue;
+		for (const auto& [countyName, county]: targeted->second->coalesceDJCounties())
+		{
+			if (!county)
+				continue;
+			for (const auto& [baronyID, barony]: county->getDJVassals())
+			{
+				if (!barony || !barony->getClay() || !barony->getClay()->getProvince())
+					continue;
+				for (const auto& location: provinceMapper.getEU5Locations(barony->getClay()->getProvince()->first))
+					if (defenderLand.contains(location))
+						return location;
+			}
+		}
+	}
+	if (defenderLand.empty())
+		return {};
+	const auto& primaryDefender = countries.find(defenders.front());
+	if (primaryDefender != countries.end() && defenderLand.contains(primaryDefender->second.capital))
+		return primaryDefender->second.capital;
+	return *defenderLand.begin();
 }
 
 void EU5::World::importArtifacts(const CK3::World& sourceWorld)
@@ -788,6 +786,19 @@ void EU5::World::importArmies(const CK3::World& sourceWorld)
 							  << " belonged to unconverted characters and disbanded.";
 }
 
+namespace
+{
+// The family member exported under this CK3 character's ID, if buildFamily reached them.
+EU5::ConvertedCharacter* findInFamily(EU5::Country& country, long long ck3ID)
+{
+	const auto key = "conv_char_" + std::to_string(ck3ID) + "_" + country.tag;
+	for (auto& member: country.family)
+		if (member.key == key)
+			return &member;
+	return nullptr;
+}
+} // namespace
+
 std::optional<std::string> EU5::World::importCountry(const std::string& ck3TitleName, const std::shared_ptr<CK3::Title>& title, const CK3::World& sourceWorld)
 {
 	if (!title || !title->isHolderLinked())
@@ -797,33 +808,7 @@ std::optional<std::string> EU5::World::importCountry(const std::string& ck3Title
 	Country country;
 	country.ck3Title = ck3TitleName;
 
-	// The realm's de jure counties. Land held outside them is a possession rather than homeland,
-	// though how firmly the realm holds it only gets decided in classifyLandControl.
-	std::set<std::string> deJureCounties;
-	for (const auto& [countyName, county]: title->getOwnedDJCounties())
-		deJureCounties.insert(countyName);
-	if (holder->getCharacterDomain())
-		for (const auto& [domainTitleID, domainTitle]: holder->getCharacterDomain()->getDomain())
-			if (domainTitle)
-				for (const auto& [countyName, county]: domainTitle->getOwnedDJCounties())
-					deJureCounties.insert(countyName);
-
-	// Gather owned locations from all defacto counties.
-	for (const auto& [countyName, county]: title->getOwnedDFCounties())
-	{
-		if (!county)
-			continue;
-		const auto outsideDeJure = !deJureCounties.contains(countyName);
-		const auto claimant = findDeJureClaimant(*county);
-		for (const auto& location: getLocationsForCounty(*county))
-		{
-			country.locations.push_back(location);
-			if (outsideDeJure)
-				country.nonDeJureLocations.insert(location);
-			if (claimant)
-				country.disputedLocations.emplace(location, *claimant);
-		}
-	}
+	gatherRealmLand(*title, holder, country);
 	if (country.locations.empty())
 		return std::nullopt; // Landless or fully contested realms don't make it onto the map.
 
@@ -841,6 +826,83 @@ std::optional<std::string> EU5::World::importCountry(const std::string& ck3Title
 		return existingTag->second;
 	}
 
+	determineCapital(holder, country);
+
+	// Tag, preferring capital-based mappings.
+	const auto tag = tagMapper.getTagForTitle(ck3TitleName, country.capital);
+	if (!tag)
+		return std::nullopt;
+	country.tag = *tag;
+
+	resolveCountryIdentity(sourceWorld, *title, holder, country);
+
+	country.religion = determineReligion(holder, country.capital);
+	country.culture = determineCulture(holder, country.capital);
+
+	setupGovernment(holder, country);
+	applySocietalValuesAndTech(*title, holder, country);
+	rankMinorityCultures(country);
+	assignLanguages(country);
+
+	setupRuler(*title, holder, country, sourceWorld);
+	assignConsortAndHeir(*title, holder, country, sourceWorld);
+
+	buildCourt(holder, country, sourceWorld);
+
+	if (ck3TitleName == "e_hre")
+		hreTag = country.tag;
+	// Whoever holds the Papacy in CK3 leads EU5's catholic_church, and their court is the Curia.
+	if (title->isThePope() || ck3TitleName == "k_papal_state")
+		papacyTag = country.tag;
+	if (holder->getHouse().second)
+		houseTags.emplace(holder->getHouse().first, country.tag);
+
+	// No realm opens its books at nothing. CK3 rulers habitually sit near zero gold, having just
+	// spent everything on a war or a cathedral, but a country starting at zero ducats has no runway:
+	// control and tax efficiency both climb over the first years, so the opening months run lean by
+	// design and the first unlucky one means a loan. Vanilla hands explicit gold to twenty-one
+	// countries; here every realm gets a floor scaled to the land it has to administer, and anything
+	// its ruler actually hoarded counts over that.
+	country.treasury = std::max(country.treasury, std::min(500, 50 + 2 * static_cast<int>(country.locations.size())));
+
+	rulerTags[holder->getID()] = country.tag;
+	countries.emplace(country.tag, country);
+	return country.tag;
+}
+
+void EU5::World::gatherRealmLand(const CK3::Title& title, const std::shared_ptr<CK3::Character>& holder, Country& country)
+{
+	// The realm's de jure counties. Land held outside them is a possession rather than homeland,
+	// though how firmly the realm holds it only gets decided in classifyLandControl.
+	std::set<std::string> deJureCounties;
+	for (const auto& [countyName, county]: title.getOwnedDJCounties())
+		deJureCounties.insert(countyName);
+	if (holder->getCharacterDomain())
+		for (const auto& [domainTitleID, domainTitle]: holder->getCharacterDomain()->getDomain())
+			if (domainTitle)
+				for (const auto& [countyName, county]: domainTitle->getOwnedDJCounties())
+					deJureCounties.insert(countyName);
+
+	// Gather owned locations from all defacto counties.
+	for (const auto& [countyName, county]: title.getOwnedDFCounties())
+	{
+		if (!county)
+			continue;
+		const auto outsideDeJure = !deJureCounties.contains(countyName);
+		const auto claimant = findDeJureClaimant(*county);
+		for (const auto& location: getLocationsForCounty(*county))
+		{
+			country.locations.push_back(location);
+			if (outsideDeJure)
+				country.nonDeJureLocations.insert(location);
+			if (claimant)
+				country.disputedLocations.emplace(location, *claimant);
+		}
+	}
+}
+
+void EU5::World::determineCapital(const std::shared_ptr<CK3::Character>& holder, Country& country)
+{
 	// Capital: the holder's realm capital barony, widening to its whole county if the barony's own
 	// location was contested away, and only then falling back to the first owned location.
 	if (holder->getCharacterDomain() && holder->getCharacterDomain()->getRealmCapital().second)
@@ -884,16 +946,16 @@ std::optional<std::string> EU5::World::importCountry(const std::string& ck3Title
 		country.capital = country.locations.front();
 		++capitalFallbacks;
 	}
+}
 
-	// Tag, preferring capital-based mappings.
-	const auto tag = tagMapper.getTagForTitle(ck3TitleName, country.capital);
-	if (!tag)
-		return std::nullopt;
-	country.tag = *tag;
-
-	country.displayName = resolveDisplayName(sourceWorld, *title);
+void EU5::World::resolveCountryIdentity(const CK3::World& sourceWorld,
+	 const CK3::Title& title,
+	 const std::shared_ptr<CK3::Character>& holder,
+	 Country& country) const
+{
+	country.displayName = resolveDisplayName(sourceWorld, title);
 	// The player's realm displays under its CK3 UI name (dynamic titles often carry stale internal names).
-	if (sourceWorld.getPlayerTitle() && *sourceWorld.getPlayerTitle() == ck3TitleName && sourceWorld.getMetaTitleName())
+	if (sourceWorld.getPlayerTitle() && *sourceWorld.getPlayerTitle() == country.ck3Title && sourceWorld.getMetaTitleName())
 	{
 		auto metaName = *sourceWorld.getMetaTitleName();
 		if (metaName.starts_with("the ") || metaName.starts_with("The "))
@@ -901,23 +963,23 @@ std::optional<std::string> EU5::World::importCountry(const std::string& ck3Title
 		if (!metaName.empty())
 			country.displayName = metaName;
 	}
-	country.adjective = resolveAdjective(sourceWorld, *title, country.displayName);
-	country.color = title->getColor();
-	if (title->getCoA() && title->getCoA()->second)
-		country.coa = title->getCoA()->second;
+	country.adjective = resolveAdjective(sourceWorld, title, country.displayName);
+	country.color = title.getColor();
+	if (title.getCoA() && title.getCoA()->second)
+		country.coa = title.getCoA()->second;
 	// Dynamic realm titles (nomads, adventurers - x_ prefixed) display their ruling dynasty's arms
 	// in CK3, not the internal title arms, which are often stale leftovers.
-	if (ck3TitleName.starts_with("x_") && holder->getHouse().second)
+	if (country.ck3Title.starts_with("x_") && holder->getHouse().second)
 	{
 		const auto& house = holder->getHouse().second;
 		if (house->getDynasty().second && house->getDynasty().second->getCoA() && house->getDynasty().second->getCoA()->second)
 			country.coa = house->getDynasty().second->getCoA()->second;
 	}
 	// The player realm's displayed arms are stored verbatim in the save metadata - the best source there is.
-	if (sourceWorld.getPlayerTitle() && *sourceWorld.getPlayerTitle() == ck3TitleName && sourceWorld.getMetaCoA())
+	if (sourceWorld.getPlayerTitle() && *sourceWorld.getPlayerTitle() == country.ck3Title && sourceWorld.getMetaCoA())
 		country.coa = sourceWorld.getMetaCoA();
 
-	switch (title->getLevel())
+	switch (title.getLevel())
 	{
 		case CK3::LEVEL::EMPIRE:
 		case CK3::LEVEL::HEGEMONY:
@@ -932,10 +994,10 @@ std::optional<std::string> EU5::World::importCountry(const std::string& ck3Title
 		default:
 			country.rank = "rank_county";
 	}
+}
 
-	country.religion = determineReligion(holder, country.capital);
-	country.culture = determineCulture(holder, country.capital);
-
+void EU5::World::setupGovernment(const std::shared_ptr<CK3::Character>& holder, Country& country) const
+{
 	// Government: category from the CK3 government string, everything else from the government map,
 	// so the written type/parliament always match the included template.
 	const auto category = determineGovernmentCategory(holder);
@@ -958,7 +1020,7 @@ std::optional<std::string> EU5::World::importCountry(const std::string& ck3Title
 	}
 	else
 	{
-		Log(LogLevel::Warning) << "No government mapping for " << category << "/" << templateGroup << "; " << ck3TitleName << " defaults to a monarchy.";
+		Log(LogLevel::Warning) << "No government mapping for " << category << "/" << templateGroup << "; " << country.ck3Title << " defaults to a monarchy.";
 		country.governmentType = "monarchy";
 		country.templateInclude = "subsaharan_monarchy";
 		country.parliamentType = "assembly";
@@ -986,11 +1048,14 @@ std::optional<std::string> EU5::World::importCountry(const std::string& ck3Title
 		if (mapping && mapping->school)
 			country.religiousSchool = *mapping->school;
 	}
+}
 
+void EU5::World::applySocietalValuesAndTech(const CK3::Title& title, const std::shared_ptr<CK3::Character>& holder, Country& country)
+{
 	// Societal values: the template's own numbers are the starting point, realm laws overrule them
 	// outright, and the culture's ethos and traditions nudge the result.
 	country.societalValues = gameDatabase.getTemplateValues(country.templateInclude);
-	const auto& laws = title->getLaws();
+	const auto& laws = title.getLaws();
 	for (const auto& [value, position]: lawMapper.getValuePositions(laws))
 		country.societalValues[value] = position;
 	if (holder->getCulture() && holder->getCulture()->second)
@@ -1037,36 +1102,40 @@ std::optional<std::string> EU5::World::importCountry(const std::string& ck3Title
 	}
 	if (const auto heirSelection = lawMapper.getHeirSelection(laws))
 		country.heirSelection = *heirSelection;
+}
 
+void EU5::World::rankMinorityCultures(Country& country) const
+{
 	// Accepted and tolerated cultures: whoever else lives on this realm's land. Without them a
 	// converted empire treats nine tenths of its own population as foreign.
+	std::map<std::string, int> cultureShares;
+	for (const auto& location: country.locations)
+		if (const auto& detail = locationDetails.find(location); detail != locationDetails.end() && !detail->second.culture.empty())
+			++cultureShares[detail->second.culture];
+	const auto total = static_cast<double>(country.locations.size());
+	std::vector<std::pair<int, std::string>> ranked;
+	for (const auto& [culture, count]: cultureShares)
+		if (culture != country.culture)
+			ranked.emplace_back(count, culture);
+	std::ranges::sort(ranked, std::greater{});
+	for (const auto& [count, culture]: ranked)
 	{
-		std::map<std::string, int> cultureShares;
-		for (const auto& location: country.locations)
-			if (const auto& detail = locationDetails.find(location); detail != locationDetails.end() && !detail->second.culture.empty())
-				++cultureShares[detail->second.culture];
-		const auto total = static_cast<double>(country.locations.size());
-		std::vector<std::pair<int, std::string>> ranked;
-		for (const auto& [culture, count]: cultureShares)
-			if (culture != country.culture)
-				ranked.emplace_back(count, culture);
-		std::ranges::sort(ranked, std::greater{});
-		for (const auto& [count, culture]: ranked)
-		{
-			const auto share = total > 0 ? count / total : 0.0;
-			// Acceptance is expensive - three times what tolerance costs - and EU5 caps how much of
-			// it a government can afford, so vanilla spends it sparingly: 72 accepted cultures in
-			// the whole 1337 world against some 1,269 tolerated ones, with tolerated lists running
-			// dozens of entries long. Only a minority holding a fifth of the realm earns the crown's
-			// full recognition, and only the largest such; everyone else is tolerated, however many
-			// of them there are.
-			if (share >= 0.2 && country.acceptedCultures.empty())
-				country.acceptedCultures.push_back(culture);
-			else
-				country.toleratedCultures.push_back(culture);
-		}
+		const auto share = total > 0 ? count / total : 0.0;
+		// Acceptance is expensive - three times what tolerance costs - and EU5 caps how much of
+		// it a government can afford, so vanilla spends it sparingly: 72 accepted cultures in
+		// the whole 1337 world against some 1,269 tolerated ones, with tolerated lists running
+		// dozens of entries long. Only a minority holding a fifth of the realm earns the crown's
+		// full recognition, and only the largest such; everyone else is tolerated, however many
+		// of them there are.
+		if (share >= 0.2 && country.acceptedCultures.empty())
+			country.acceptedCultures.push_back(culture);
+		else
+			country.toleratedCultures.push_back(culture);
 	}
+}
 
+void EU5::World::assignLanguages(Country& country) const
+{
 	// Court language follows the primary culture; liturgical language follows the faith. Both are
 	// resolved to leaf languages - the game rejects references to dialect-bearing parents.
 	if (const auto generatedCulture = generatedCultures.find(country.culture); generatedCulture != generatedCultures.end())
@@ -1077,102 +1146,106 @@ std::optional<std::string> EU5::World::importCountry(const std::string& ck3Title
 		country.liturgicalLanguage = gameDatabase.resolveLanguage(generatedReligion->second.language);
 	else
 		country.liturgicalLanguage = gameDatabase.resolveLanguage(gameDatabase.getReligionLanguage(country.religion));
+}
 
+void EU5::World::setupRuler(const CK3::Title& title, const std::shared_ptr<CK3::Character>& holder, Country& country, const CK3::World& sourceWorld)
+{
 	// Ruler, family tree and dynasties.
 	buildFamily(holder, country, sourceWorld);
-	const auto findInFamily = [&country](long long ck3ID) -> ConvertedCharacter* {
-		const auto key = "conv_char_" + std::to_string(ck3ID) + "_" + country.tag;
-		for (auto& member: country.family)
-			if (member.key == key)
-				return &member;
-		return nullptr;
-	};
-	if (auto* ruler = findInFamily(holder->getID()))
+	auto* ruler = findInFamily(country, holder->getID());
+	if (!ruler)
+		return;
+	// The realm's religion and culture are derived from this very character; disagreements are
+	// mapping artifacts (fallbacks taking different paths), so the ruler follows the realm.
+	ruler->religion = country.religion;
+	ruler->culture = country.culture;
+	// The title's date field records the last succession, i.e. when this ruler took the crown.
+	// EU5 grants rulers roughly one ruler trait per five years of reign and logs errors past
+	// that, so the reign carries over and the traits are capped to what the reign justifies.
+	if (title.getCreationDate() != date("1.1.1") && title.getCreationDate() <= sourceWorld.getConversionDate())
 	{
-		// The realm's religion and culture are derived from this very character; disagreements are
-		// mapping artifacts (fallbacks taking different paths), so the ruler follows the realm.
-		ruler->religion = country.religion;
-		ruler->culture = country.culture;
-		// The title's date field records the last succession, i.e. when this ruler took the crown.
-		// EU5 grants rulers roughly one ruler trait per five years of reign and logs errors past
-		// that, so the reign carries over and the traits are capped to what the reign justifies.
-		if (title->getCreationDate() != date("1.1.1") && title->getCreationDate() <= sourceWorld.getConversionDate())
-		{
-			auto reignStart = title->getCreationDate();
-			reignStart.ChangeByYears(yearOffset);
-			country.reignStart = reignStart;
-			const auto reignYears = std::max(0, 1337 - reignStart.getYear());
-			if (ruler->rulerTraits.size() > static_cast<size_t>(reignYears / 5))
-				ruler->rulerTraits.resize(reignYears / 5);
-		}
-		else
-			ruler->rulerTraits.clear(); // no known reign start; the game expects zero traits
-		// A prince-bishop answers to the church and a doge to the merchants, whatever their birth.
-		if (country.governmentType == "theocracy")
-			ruler->estate = "clergy_estate";
-		else if (country.governmentType == "republic")
-			ruler->estate = "burghers_estate";
-		country.ruler = *ruler;
-		// The ruler's personal CK3 gold arrives as starting treasury (1 gold ~ 1 ducat), capped
-		// below Mansa Musa's vanilla 2500.
-		country.treasury = importTreasury ? std::clamp(static_cast<int>(holder->getGold()), 0, 2000) : 0;
-		if (!ruler->dynastyKey.empty())
-			country.dynasty = dynasties.at(ruler->dynastyKey);
-
-		// The line of rule behind the throne. CK3 records who held the title before, and most of
-		// them are ancestors already exported with the family tree, so their reigns can be written
-		// out as real ruler_terms: the dynasty arrives in EU5 having ruled for generations, and the
-		// current monarch is numbered against the namesakes who came before.
-		std::vector<std::pair<date, const CK3::Character*>> line; // death date -> holder
-		for (const auto& [previousID, previous]: title->getPreviousHolders())
-			if (previous && previous->getID() != holder->getID() && previous->getDeathDate())
-				line.emplace_back(*previous->getDeathDate(), previous.get());
-		std::ranges::sort(line, [](const auto& lhs, const auto& rhs) {
-			return lhs.first < rhs.first;
-		});
-		std::map<std::string, int> namesakes; // first name -> reigns already counted under it
-		std::optional<date> previousEnd;
-		for (const auto& [death, previous]: line)
-		{
-			auto reignEnd = death;
-			reignEnd.ChangeByYears(yearOffset);
-			// A reign runs from the last one's end. The earliest we know of has to start somewhere,
-			// so it starts when its holder came of age.
-			auto reignStart = previousEnd.value_or([&] {
-				auto comingOfAge = previous->getBirthDate();
-				comingOfAge.ChangeByYears(yearOffset + 16);
-				return comingOfAge;
-			}());
-			previousEnd = reignEnd;
-			if (reignEnd <= reignStart)
-				continue; // a reign the shifted dates can't place in order
-			const auto number = ++namesakes[previous->getName()];
-			if (const auto* ancestor = findInFamily(previous->getID()))
-				country.pastReigns.push_back({ancestor->key, reignStart, reignEnd, number});
-		}
-		country.regnalNumber = 1;
-		if (const auto& shared = namesakes.find(holder->getName()); shared != namesakes.end())
-			country.regnalNumber = shared->second + 1;
-
-		// Hand the tally to EU5 so the heir born after the conversion is crowned the next in line
-		// rather than restarting at the first of his name. Names the game doesn't know are dropped.
-		namesakes[holder->getName()] = country.regnalNumber;
-		for (const auto& [name, count]: namesakes)
-			if (const auto key = gameDatabase.getNameKey(name); !key.empty())
-				country.regnalNames[key] = std::max(country.regnalNames[key], count);
-
-		country.aiPersonality = determineAIPersonality(holder, country);
+		auto reignStart = title.getCreationDate();
+		reignStart.ChangeByYears(yearOffset);
+		country.reignStart = reignStart;
+		const auto reignYears = std::max(0, 1337 - reignStart.getYear());
+		if (ruler->rulerTraits.size() > static_cast<size_t>(reignYears / 5))
+			ruler->rulerTraits.resize(reignYears / 5);
 	}
+	else
+		ruler->rulerTraits.clear(); // no known reign start; the game expects zero traits
+	// A prince-bishop answers to the church and a doge to the merchants, whatever their birth.
+	if (country.governmentType == "theocracy")
+		ruler->estate = "clergy_estate";
+	else if (country.governmentType == "republic")
+		ruler->estate = "burghers_estate";
+	country.ruler = *ruler;
+	// The ruler's personal CK3 gold arrives as starting treasury (1 gold ~ 1 ducat), capped
+	// below Mansa Musa's vanilla 2500.
+	country.treasury = importTreasury ? std::clamp(static_cast<int>(holder->getGold()), 0, 2000) : 0;
+	if (!ruler->dynastyKey.empty())
+		country.dynasty = dynasties.at(ruler->dynastyKey);
+
+	recordPastReigns(title, holder, country);
+	country.aiPersonality = determineAIPersonality(holder, country);
+}
+
+void EU5::World::recordPastReigns(const CK3::Title& title, const std::shared_ptr<CK3::Character>& holder, Country& country) const
+{
+	// The line of rule behind the throne. CK3 records who held the title before, and most of
+	// them are ancestors already exported with the family tree, so their reigns can be written
+	// out as real ruler_terms: the dynasty arrives in EU5 having ruled for generations, and the
+	// current monarch is numbered against the namesakes who came before.
+	std::vector<std::pair<date, const CK3::Character*>> line; // death date -> holder
+	for (const auto& [previousID, previous]: title.getPreviousHolders())
+		if (previous && previous->getID() != holder->getID() && previous->getDeathDate())
+			line.emplace_back(*previous->getDeathDate(), previous.get());
+	std::ranges::sort(line, [](const auto& lhs, const auto& rhs) {
+		return lhs.first < rhs.first;
+	});
+	std::map<std::string, int> namesakes; // first name -> reigns already counted under it
+	std::optional<date> previousEnd;
+	for (const auto& [death, previous]: line)
+	{
+		auto reignEnd = death;
+		reignEnd.ChangeByYears(yearOffset);
+		// A reign runs from the last one's end. The earliest we know of has to start somewhere,
+		// so it starts when its holder came of age.
+		auto reignStart = previousEnd.value_or([&] {
+			auto comingOfAge = previous->getBirthDate();
+			comingOfAge.ChangeByYears(yearOffset + 16);
+			return comingOfAge;
+		}());
+		previousEnd = reignEnd;
+		if (reignEnd <= reignStart)
+			continue; // a reign the shifted dates can't place in order
+		const auto number = ++namesakes[previous->getName()];
+		if (const auto* ancestor = findInFamily(country, previous->getID()))
+			country.pastReigns.push_back({ancestor->key, reignStart, reignEnd, number});
+	}
+	country.regnalNumber = 1;
+	if (const auto& shared = namesakes.find(holder->getName()); shared != namesakes.end())
+		country.regnalNumber = shared->second + 1;
+
+	// Hand the tally to EU5 so the heir born after the conversion is crowned the next in line
+	// rather than restarting at the first of his name. Names the game doesn't know are dropped.
+	namesakes[holder->getName()] = country.regnalNumber;
+	for (const auto& [name, count]: namesakes)
+		if (const auto key = gameDatabase.getNameKey(name); !key.empty())
+			country.regnalNames[key] = std::max(country.regnalNames[key], count);
+}
+
+void EU5::World::assignConsortAndHeir(const CK3::Title& title, const std::shared_ptr<CK3::Character>& holder, Country& country, const CK3::World& sourceWorld)
+{
 	if (holder->getSpouse() && holder->getSpouse()->second && !holder->getSpouse()->second->isDead())
 	{
-		if (const auto* consort = findInFamily(holder->getSpouse()->first))
+		if (const auto* consort = findInFamily(country, holder->getSpouse()->first))
 			country.consort = *consort;
 	}
-	for (const auto& [heirID, heir]: title->getHeirs())
+	for (const auto& [heirID, heir]: title.getHeirs())
 	{
 		if (!heir || heir->isDead())
 			continue;
-		if (const auto* member = findInFamily(heirID))
+		if (const auto* member = findInFamily(country, heirID))
 			country.heir = *member;
 		else
 		{
@@ -1188,28 +1261,6 @@ std::optional<std::string> EU5::World::importCountry(const std::string& ck3Title
 	// A consort who is also the designated heir reads as nonsense in EU5; succession sorts itself out.
 	if (country.heir && country.consort && country.heir->key == country.consort->key)
 		country.heir.reset();
-
-	buildCourt(holder, country, sourceWorld);
-
-	if (ck3TitleName == "e_hre")
-		hreTag = country.tag;
-	// Whoever holds the Papacy in CK3 leads EU5's catholic_church, and their court is the Curia.
-	if (title->isThePope() || ck3TitleName == "k_papal_state")
-		papacyTag = country.tag;
-	if (holder->getHouse().second)
-		houseTags.emplace(holder->getHouse().first, country.tag);
-
-	// No realm opens its books at nothing. CK3 rulers habitually sit near zero gold, having just
-	// spent everything on a war or a cathedral, but a country starting at zero ducats has no runway:
-	// control and tax efficiency both climb over the first years, so the opening months run lean by
-	// design and the first unlucky one means a loan. Vanilla hands explicit gold to twenty-one
-	// countries; here every realm gets a floor scaled to the land it has to administer, and anything
-	// its ruler actually hoarded counts over that.
-	country.treasury = std::max(country.treasury, std::min(500, 50 + 2 * static_cast<int>(country.locations.size())));
-
-	rulerTags[holder->getID()] = country.tag;
-	countries.emplace(country.tag, country);
-	return country.tag;
 }
 
 std::vector<std::string> EU5::World::getLocationsForCounty(const CK3::Title& county)
@@ -1400,41 +1451,8 @@ std::string EU5::World::convertCulture(const std::shared_ptr<CK3::Culture>& cult
 	// Dynamic (hybrid/divergent) CK3 cultures become real EU5 cultures when their language and
 	// heritage map cleanly; the definition is written into the mod.
 	if (culture->isDynamic() && dynamicCultures)
-	{
-		if (const auto& generated = generatedCultureNames.find(culture->getID()); generated != generatedCultureNames.end())
-			return generated->second;
-		const auto eu5Language = cultureMapper.getEU5LanguageForCK3Language(culture->getLanguage());
-		const auto groups = cultureMapper.getEU5GroupsForHeritage(culture->getHeritage());
-		if (eu5Language && !groups.empty())
-		{
-			GeneratedCulture generated;
-			generated.name = "conv_cul_" + sanitizeKey(culture->getName());
-			generated.rawName = culture->getLocalizedName().value_or(culture->getName());
-			// The map may point at a dialect-bearing parent (german_language); the game only
-			// accepts leaves, and an invalid language breaks the culture and everyone named by it.
-			generated.language = gameDatabase.resolveLanguage(*eu5Language);
-			generated.groups = groups;
-			// Every vanilla culture has a color, and a player who built a hybrid culture already
-			// knows it by the one it wore on the CK3 map, so carry that across.
-			generated.color = culture->getColor();
-			// Without graphical culture tags the game can't render pops or characters of this
-			// culture and logs errors; borrow the tags of a vanilla culture from the same group.
-			for (const auto& group: groups)
-			{
-				for (const auto& relative: gameDatabase.getCulturesInGroup(group))
-					if (const auto tags = gameDatabase.getCultureGfxTags(relative); !tags.empty())
-					{
-						generated.gfxTags = tags;
-						break;
-					}
-				if (!generated.gfxTags.empty())
-					break;
-			}
-			generatedCultures.emplace(generated.name, generated);
-			generatedCultureNames.emplace(culture->getID(), generated.name);
-			return generated.name;
-		}
-	}
+		if (const auto generated = generateDynamicCulture(*culture))
+			return *generated;
 
 	// CK3 and EU5 share many culture names outright; a direct hit is the best possible match.
 	const auto& cultureName = culture->getName();
@@ -1464,24 +1482,69 @@ std::string EU5::World::convertCulture(const std::shared_ptr<CK3::Culture>& cult
 	}
 
 	// Otherwise pick a culture from the mapped groups, preferring one that speaks the mapped language.
-	if (!groups.empty())
-	{
-		const auto eu5Language = cultureMapper.getEU5LanguageForCK3Language(culture->getLanguage());
-		std::vector<std::string> candidates;
-		for (const auto& group: groups)
-			for (const auto& candidate: gameDatabase.getCulturesInGroup(group))
-				candidates.push_back(candidate);
-		if (eu5Language)
-		{
-			for (const auto& candidate: candidates)
-				if (gameDatabase.getCultureLanguage(candidate) == *eu5Language)
-					return candidate;
-		}
-		if (!candidates.empty())
-			return candidates.front();
-	}
+	if (const auto picked = pickCultureFromGroups(groups, culture->getLanguage()); !picked.empty())
+		return picked;
 
 	return vanillaCulture.value_or("swedish");
+}
+
+// Registers an EU5 culture generated from a dynamic (hybrid/divergent) CK3 one, or reports that
+// its language or heritage don't map and the regular fallbacks have to decide instead.
+std::optional<std::string> EU5::World::generateDynamicCulture(const CK3::Culture& culture)
+{
+	if (const auto& existing = generatedCultureNames.find(culture.getID()); existing != generatedCultureNames.end())
+		return existing->second;
+	const auto eu5Language = cultureMapper.getEU5LanguageForCK3Language(culture.getLanguage());
+	const auto groups = cultureMapper.getEU5GroupsForHeritage(culture.getHeritage());
+	if (!eu5Language || groups.empty())
+		return std::nullopt;
+
+	GeneratedCulture generated;
+	generated.name = "conv_cul_" + sanitizeKey(culture.getName());
+	generated.rawName = culture.getLocalizedName().value_or(culture.getName());
+	// The map may point at a dialect-bearing parent (german_language); the game only
+	// accepts leaves, and an invalid language breaks the culture and everyone named by it.
+	generated.language = gameDatabase.resolveLanguage(*eu5Language);
+	generated.groups = groups;
+	// Every vanilla culture has a color, and a player who built a hybrid culture already
+	// knows it by the one it wore on the CK3 map, so carry that across.
+	generated.color = culture.getColor();
+	// Without graphical culture tags the game can't render pops or characters of this
+	// culture and logs errors; borrow the tags of a vanilla culture from the same group.
+	for (const auto& group: groups)
+	{
+		for (const auto& relative: gameDatabase.getCulturesInGroup(group))
+			if (const auto tags = gameDatabase.getCultureGfxTags(relative); !tags.empty())
+			{
+				generated.gfxTags = tags;
+				break;
+			}
+		if (!generated.gfxTags.empty())
+			break;
+	}
+	generatedCultures.emplace(generated.name, generated);
+	generatedCultureNames.emplace(culture.getID(), generated.name);
+	return generated.name;
+}
+
+// A culture out of the given EU5 groups, preferring one that speaks the mapped language;
+// empty when the groups offer no candidates at all.
+std::string EU5::World::pickCultureFromGroups(const std::vector<std::string>& groups, const std::string& ck3Language) const
+{
+	if (groups.empty())
+		return {};
+	const auto eu5Language = cultureMapper.getEU5LanguageForCK3Language(ck3Language);
+	std::vector<std::string> candidates;
+	for (const auto& group: groups)
+		for (const auto& candidate: gameDatabase.getCulturesInGroup(group))
+			candidates.push_back(candidate);
+	if (eu5Language)
+		for (const auto& candidate: candidates)
+			if (gameDatabase.getCultureLanguage(candidate) == *eu5Language)
+				return candidate;
+	if (!candidates.empty())
+		return candidates.front();
+	return {};
 }
 
 std::string EU5::World::determineGovernmentCategory(const std::shared_ptr<CK3::Character>& holder)
@@ -1506,18 +1569,30 @@ std::string EU5::World::determineAIPersonality(const std::shared_ptr<CK3::Charac
 	// Vanilla hands out personalities by hand and leaves most countries on the default. A converted
 	// world has no such curation, so the ruler's own character decides how their realm behaves:
 	// the traits CK3 already uses to drive its AI translate directly.
+	static const std::map<std::string, int> traitAggression = {{"ambitious", 2},
+		 {"brave", 2},
+		 {"wrathful", 2},
+		 {"sadistic", 2},
+		 {"adventurer", 2},
+		 {"berserker", 2},
+		 {"arrogant", 1},
+		 {"impatient", 1},
+		 {"vengeful", 1},
+		 {"callous", 1},
+		 {"eager_reveler", 1},
+		 {"content", -1},
+		 {"humble", -1},
+		 {"compassionate", -1},
+		 {"forgiving", -1},
+		 {"temperate", -1},
+		 {"craven", -2},
+		 {"shy", -2},
+		 {"lazy", -2},
+		 {"patient", -2}};
 	auto aggression = 0;
 	for (const auto& [index, trait]: holder->getTraits())
-	{
-		if (trait == "ambitious" || trait == "brave" || trait == "wrathful" || trait == "sadistic" || trait == "adventurer" || trait == "berserker")
-			aggression += 2;
-		else if (trait == "arrogant" || trait == "impatient" || trait == "vengeful" || trait == "callous" || trait == "eager_reveler")
-			++aggression;
-		else if (trait == "content" || trait == "humble" || trait == "compassionate" || trait == "forgiving" || trait == "temperate")
-			--aggression;
-		else if (trait == "craven" || trait == "shy" || trait == "lazy" || trait == "patient")
-			aggression -= 2;
-	}
+		if (const auto& weight = traitAggression.find(trait); weight != traitAggression.end())
+			aggression += weight->second;
 	// A tribe of three counties cannot act on grand ambition; an empire hardly needs to.
 	const auto large = country.rank == "rank_empire" || country.locations.size() > 60;
 	const auto small = country.locations.size() < 8;
