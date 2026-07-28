@@ -52,7 +52,7 @@ std::string resolveNestedName(std::string name, const mappers::LocalizationMappe
 			break;
 		auto key = name.substr(first + 1, second - first - 1);
 		if (const auto pipe = key.find('|'); pipe != std::string::npos)
-			key = key.substr(0, pipe); // formatting instructions we can't honor anyway
+			key.resize(pipe); // cut off formatting instructions we can't honor anyway
 		std::string replacement;
 		if (const auto& block = localizationMapper.getLocBlockForKey(key); block && !block->english.empty())
 			replacement = block->english;
@@ -69,7 +69,7 @@ std::string resolveNestedName(std::string name, const mappers::LocalizationMappe
 		}
 		if (replacement.find('$') != std::string::npos)
 			std::erase(replacement, '$'); // a self-referential loc would loop forever
-		name = name.substr(0, first) + replacement + name.substr(second + 1);
+		name.replace(first, second - first + 1, replacement);
 	}
 	return name;
 }

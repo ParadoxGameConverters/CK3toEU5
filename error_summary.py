@@ -1,5 +1,8 @@
-"""Buckets an EU5 error log into recurring shapes so a converted mod's remaining noise can be read
-at a glance. Point it at the log folder; it reads error.log and its rotated siblings."""
+"""
+Buckets an EU5 error log into recurring shapes so a mod's remaining noise reads at a glance.
+
+Point it at the log folder; it reads error.log and its rotated siblings.
+"""
 import os
 import re
 import sys

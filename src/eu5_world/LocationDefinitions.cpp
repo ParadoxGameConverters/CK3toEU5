@@ -28,7 +28,7 @@ void EU5::LocationDefinitions::parseTokens(std::istream& theStream)
 	while (std::getline(theStream, line))
 	{
 		if (const auto commentPos = line.find('#'); commentPos != std::string::npos)
-			line = line.substr(0, commentPos);
+			line.resize(commentPos);
 		std::string current;
 		for (const auto character: line)
 		{

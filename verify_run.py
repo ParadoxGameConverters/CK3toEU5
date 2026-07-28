@@ -1,5 +1,9 @@
-"""Compares the freshly converted mod against vanilla's 1337 start on the numbers the economy
-calibration was aimed at: urban footprint, standing armies, accepted cultures and treasuries."""
+"""
+Compares the freshly converted mod against vanilla's 1337 start.
+
+The comparison covers the numbers the economy calibration was aimed at:
+urban footprint, standing armies, accepted cultures and treasuries.
+"""
 import re
 import os
 import sys
