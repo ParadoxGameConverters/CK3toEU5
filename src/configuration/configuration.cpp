@@ -4,9 +4,9 @@
 #include <external/commonItems/GameVersion.h>
 #include <external/commonItems/Log.h>
 #include <external/commonItems/OSCompatibilityLayer.h>
-#include <external/fmt/include/fmt/format.h>
 
 #include <filesystem>
+#include <format>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -87,13 +87,13 @@ void Configuration::VerifyCK3Path() const
 {
    if (!commonItems::DoesFolderExist(ck3_directory_))
    {
-      throw std::runtime_error(fmt::format("Crusader Kings 3 path {} doesn't exist.", ck3_directory_.string()));
+      throw std::runtime_error(std::format("Crusader Kings 3 path {} doesn't exist.", ck3_directory_.string()));
    }
    if (!commonItems::DoesFileExist(ck3_directory_ / "binaries/ck3.exe") &&
        !commonItems::DoesFileExist(ck3_directory_ / "CK3game") &&
        !commonItems::DoesFileExist(ck3_directory_ / "binaries/ck3"))
    {
-      throw std::runtime_error(fmt::format("{} does not contain Crusader Kings 3.", ck3_directory_.string()));
+      throw std::runtime_error(std::format("{} does not contain Crusader Kings 3.", ck3_directory_.string()));
    }
 }
 
@@ -101,12 +101,12 @@ void Configuration::VerifyEU5Path() const
 {
    if (!commonItems::DoesFolderExist(eu5_directory_))
    {
-      throw std::runtime_error(fmt::format("Europa Universalis 5 path {} doesn't exist.", eu5_directory_.string()));
+      throw std::runtime_error(std::format("Europa Universalis 5 path {} doesn't exist.", eu5_directory_.string()));
    }
    if (!commonItems::DoesFileExist(eu5_directory_ / "binaries/eu5.exe") &&
        !commonItems::DoesFileExist(eu5_directory_ / "binaries/eu5"))
    {
-      throw std::runtime_error(fmt::format("{} does not contain Europa Universalis 5.", eu5_directory_.string()));
+      throw std::runtime_error(std::format("{} does not contain Europa Universalis 5.", eu5_directory_.string()));
    }
 }
 

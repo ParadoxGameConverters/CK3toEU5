@@ -2,7 +2,6 @@
 #include <external/commonItems/Log.h>
 
 #include <exception>
-#include <print>
 
 #include "ck3_to_eu5_converter.hpp"
 #include "src/configuration/configuration.hpp"
@@ -22,10 +21,13 @@ int main()  // NOLINT(bugprone-exception-escape)
 
       const auto configuration = configuration::LoadConfiguration("configuration.txt");
       configuration.Validate(converter_version);
+      Log(LogLevel::Progress) << "5%";
+      Log(LogLevel::Info) << "Converter configuration valid, starting conversion";
 
-      // Meet C++23's new hotness!
-      std::println("Hello, world!");
-      ck3_to_eu5::ConvertCk3ToEu5();
+      auto converter = ck3_to_eu5::Converter(configuration, converter_version);
+      converter.Convert();
+      Log(LogLevel::Progress) << "100%";
+      Log(LogLevel::Notice) << "* Conversion complete *";
    }
    catch (const std::exception& e)
    {

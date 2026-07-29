@@ -23,7 +23,7 @@ if (PLATFORM STREQUAL "Windows")
 	add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 elseif (PLATFORM STREQUAL "Linux")
 	if (COVERAGE STREQUAL true)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage -fno-inline -fno-inline-small-functions -fno-default-inline")
 		set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 	else (COVERAGE STREQUAL true)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -Wall")
@@ -171,7 +171,6 @@ endif (PLATFORM STREQUAL "Windows" AND NOT RUN_CLANG_TIDY)
 #### Converter ####
 
 include_directories(.)
-include_directories("./external/fmt/include")
 include_directories("./external/commonItems")
 
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
@@ -203,10 +202,19 @@ set(MAIN_SOURCE "src/main.cpp")
 
 # converter sources will be added one by one like so:
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_to_eu5_converter.cpp")
+
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/configuration/configuration.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/configuration/configuration_loader.cpp")
 
-add_subdirectory("./external/fmt")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/output.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/utils/folder_manager_impl.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/utils/file_writer_impl.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/output_folder.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/resource_copy.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/metadata/metadata.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/history/generic_advisors.cpp")
+
+
 link_directories("./external/rakaly")
 
 add_subdirectory(external/commonItems EXCLUDE_FROM_ALL)
@@ -222,9 +230,9 @@ if (PLATFORM STREQUAL "Windows")
 	target_compile_options(CK3toEU5lib PRIVATE /permissive /W4 /w14242 /w14254 /w14263 /w14265 /w14287 /we4289 /w14296 
         /w14311 /w14545 /w14546 /w14547 /w14549 /w14555 /w14619 /w14640 /w14826 /w14905 /w14906 /w14928 
         /external:anglebrackets /external:W0 /WX)
-	target_link_libraries(CK3toEU5lib LINK_PUBLIC commonLib fmt::fmt rakaly.dll.lib)
+	target_link_libraries(CK3toEU5lib LINK_PUBLIC commonLib rakaly.dll.lib)
 elseif (PLATFORM STREQUAL "Linux")
-	target_link_libraries(CK3toEU5lib LINK_PUBLIC commonLib fmt::fmt rakaly)
+	target_link_libraries(CK3toEU5lib LINK_PUBLIC commonLib rakaly)
 endif (PLATFORM  STREQUAL "Windows")
 
 add_executable(
@@ -249,7 +257,7 @@ endif (PLATFORM  STREQUAL "Windows")
 if (NOT RUN_CLANG_TIDY)
 	configure_file("data/version.txt" "${FRONTER_OUTPUT_DIRECTORY}/version.txt" COPYONLY)
 	configure_file("data/readme.txt" "${FRONTER_OUTPUT_DIRECTORY}/readme.txt" COPYONLY)
-	file(COPY "data/blank_mod" DESTINATION "${CONVERTER_OUTPUT_DIRECTORY}")
+	file(COPY "data/resources" DESTINATION "${CONVERTER_OUTPUT_DIRECTORY}")
 	file(COPY "data/configurables" DESTINATION "${CONVERTER_OUTPUT_DIRECTORY}")
 	if (PLATFORM STREQUAL "Windows")
 		configure_file("external/rakaly/rakaly.dll" "${FRONTER_OUTPUT_DIRECTORY}/CK3toEU5/rakaly.dll" COPYONLY)
@@ -268,6 +276,13 @@ include_directories("./external/commonItems/external/googletest/googlemock/inclu
 # test sources will be added one by one like so:
 set(TEST_SOURCES ${TEST_SOURCES} "src/configuration/configuration_tests.cpp")
 
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/file_writer_impl_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/folder_manager_impl_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/output_folder_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/resource_copy_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/metadata/metadata_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/history/generic_advisors_tests.cpp")
+
 add_executable(
 	CK3toEU5Tests
 	${TEST_SOURCES}
@@ -284,7 +299,6 @@ if (PLATFORM STREQUAL "Windows")
 elseif (PLATFORM STREQUAL "Linux")
 endif (PLATFORM STREQUAL "Windows")
 
-file(COPY "data/blank_mod" DESTINATION "${TEST_OUTPUT_DIRECTORY}")
 file(COPY "data/test_files" DESTINATION "${TEST_OUTPUT_DIRECTORY}")
 if (PLATFORM STREQUAL "Windows")
 	configure_file("external/rakaly/rakaly.dll" "${TEST_OUTPUT_DIRECTORY}/rakaly.dll" COPYONLY)
@@ -337,7 +351,6 @@ if (COVERAGE STREQUAL true)
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/lib/gcc/x86_64-linux-gnu/14/include/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info '*/external/bitmap/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info '*/external/commonItems/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info '*/external/fmt/include/fmt/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info '*/external/rakaly/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info '*/external/stb/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info '*/gmock/*' -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
