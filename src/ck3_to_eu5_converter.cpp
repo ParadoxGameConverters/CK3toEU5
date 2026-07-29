@@ -25,7 +25,7 @@ void Converter::Convert()
 
    Log(LogLevel::Info) << "Outputting mod";
    out::Output output = out::Output(configuration_.GetOutputName(), converter_version_);
-   output.GenereteOutputMod();
+   output.GenerateOutputMod();
 
    Log(LogLevel::Progress) << "85%";
 }

@@ -60,7 +60,7 @@ Output::Output(std::string name, commonItems::ConverterVersion& converter_versio
    root_folder_->RegisterSubfolder(std::move(mod_folder));
 }
 
-void Output::GenereteOutputMod()
+void Output::GenerateOutputMod()
 {
    folder_manager_.RemoveFolder(output_path_);  // Removes previous output folder
 

@@ -27,7 +27,7 @@ class Output  // class with the structure of the output mod
    Output(Output&&) noexcept = default;
    Output& operator=(Output&&) noexcept = default;
 
-   void GenereteOutputMod();
+   void GenerateOutputMod();
 
   private:
    std::unique_ptr<OutputFolder> root_folder_;
