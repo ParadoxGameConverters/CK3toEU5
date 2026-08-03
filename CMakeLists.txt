@@ -214,6 +214,11 @@ set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/resource
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/metadata/metadata.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/history/generic_advisors.cpp")
 
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/save_parser.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/cultures/culture_parser.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/cultures/culture_parser_map.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/characters/character_parser.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/characters/character_realm_parser.cpp")
 
 link_directories("./external/rakaly")
 

@@ -1,0 +1,222 @@
+#include "character_parser.hpp"
+
+#include <iostream>
+#include <sstream>
+
+#include "CommonRegexes.h"
+#include "Log.h"
+#include "Parser.h"
+#include "ParserHelpers.h"
+#include "character_realm_parser.hpp"
+
+namespace
+{
+const int kSkillsArraySize = 6;
+}  // namespace
+
+ck3::CharacterParser::CharacterParser(std::istream& input_stream, long long character_id): character_id_(character_id)
+{
+   ParseCharacter(input_stream);
+}
+
+void ck3::CharacterParser::ParseCharacter(std::istream& input_stream)
+{
+   registerKeyword("first_name", [this](const std::string&, std::istream& input_stream) {
+      name_ = commonItems::singleString(input_stream).getString();
+   });
+   registerKeyword("birth", [this](const std::string&, std::istream& input_stream) {
+      birth_date_ = date(commonItems::singleString(input_stream).getString());
+   });
+   registerKeyword("dead_data", [this](const std::string&, std::istream& input_stream) {
+      ParseDeadData(input_stream);
+   });
+   registerKeyword("alive_data", [this](const std::string&, std::istream& input_stream) {
+      ParseAliveData(input_stream);
+   });
+   registerKeyword("culture", [this](const std::string&, std::istream& input_stream) {
+      culture_ = commonItems::singleLlong(input_stream).getLlong();
+   });
+   registerKeyword("faith", [this](const std::string&, std::istream& input_stream) {
+      faith_ = commonItems::singleLlong(input_stream).getLlong();
+   });
+   registerKeyword("dynasty_house", [this](const std::string&, std::istream& input_stream) {
+      house_ = commonItems::singleLlong(input_stream).getLlong();
+   });
+   registerKeyword("skill", [this](const std::string&, std::istream& input_stream) {
+      const auto& skills_list = commonItems::intList(input_stream).getInts();
+      if (skills_list.size() == kSkillsArraySize)
+      {
+         skills_.diplomacy = skills_list[0];
+         skills_.martial = skills_list[1];
+         skills_.stewardship = skills_list[2];
+         skills_.intrigue = skills_list[3];
+         skills_.learning = skills_list[4];
+         // skills_.prowess = skills_list[5];
+      }
+      else
+      {
+         Log(LogLevel::Error) << "Character " << character_id_
+                              << " has a malformed skills block! Size: " << skills_list.size();
+      }
+   });
+   registerKeyword("traits", [this](const std::string&, std::istream& input_stream) {
+      for (const auto trait_id: commonItems::intList(input_stream).getInts())
+      {
+         traits_.push_back(trait_id);
+      }
+   });
+   registerKeyword("obedience_target", [this](const std::string&, std::istream& input_stream) {
+      suzerain_ = commonItems::singleLlong(input_stream).getLlong();
+   });
+   registerKeyword("court_data", [this](const std::string&, std::istream& input_stream) {
+      ParseCourtData(input_stream);
+   });
+   registerKeyword("female", [this](const std::string&, std::istream& input_stream) {
+      female_ = commonItems::singleString(input_stream).getString() == "yes";
+   });
+   registerKeyword("landed_data", [this](const std::string&, std::istream& input_stream) {
+      realm_ = CharacterRealmParser(input_stream);
+   });
+   registerKeyword("family_data", [this](const std::string&, std::istream& input_stream) {
+      ParseFamilyData(input_stream);
+   });
+   registerKeyword("claim", [this](const std::string&, std::istream& input_stream) {
+      const auto blob_list = commonItems::blobList(input_stream).getBlobs();
+      for (const auto& blob: blob_list)
+      {
+         auto blob_stream = std::stringstream(blob);
+         ParseClaim(blob_stream);
+      }
+   });
+   registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+   parseStream(input_stream);
+   clearRegisteredKeywords();
+}
+
+void ck3::CharacterParser::ParseDeadData(std::istream& input_stream)
+{
+   commonItems::parser dead_data_parser;
+   dead_data_parser.registerKeyword("date", [this](const std::string&, std::istream& input_stream) {
+      death_date_ = date(commonItems::singleString(input_stream).getString());
+   });
+   dead_data_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+   dead_data_parser.parseStream(input_stream);
+   dead_data_parser.clearRegisteredKeywords();
+}
+
+void ck3::CharacterParser::ParseAliveData(std::istream& input_stream)
+{
+   commonItems::parser alive_data_parser;
+   alive_data_parser.registerKeyword("piety", [this](const std::string&, std::istream& input_stream) {
+      piety_ = RetrieveAccumulated(input_stream);
+   });
+   alive_data_parser.registerKeyword("prestige", [this](const std::string&, std::istream& input_stream) {
+      prestige_ = RetrieveAccumulated(input_stream);
+   });
+   alive_data_parser.registerKeyword("influence", [this](const std::string&, std::istream& input_stream) {
+      influence_ = RetrieveAccumulated(input_stream);
+   });
+   alive_data_parser.registerKeyword("merit", [this](const std::string&, std::istream& input_stream) {
+      merit_ = RetrieveAccumulated(input_stream);
+   });
+   alive_data_parser.registerKeyword("gold", [this](const std::string&, std::istream& input_stream) {
+      ParseGold(input_stream);
+   });
+   alive_data_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+   alive_data_parser.parseStream(input_stream);
+   alive_data_parser.clearRegisteredKeywords();
+}
+
+double ck3::CharacterParser::RetrieveAccumulated(std::istream& input_stream)
+{
+   commonItems::parser accumulated_parser;
+   double accumulated = 0;
+   accumulated_parser.registerKeyword("accumulated", [&accumulated](const std::string&, std::istream& input_stream) {
+      accumulated = commonItems::singleDouble(input_stream).getDouble();
+   });
+   accumulated_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+   accumulated_parser.parseStream(input_stream);
+   accumulated_parser.clearRegisteredKeywords();
+   return accumulated;
+}
+
+void ck3::CharacterParser::ParseGold(std::istream& input_stream)
+{
+   commonItems::parser gold_parser;
+   gold_parser.registerKeyword("value", [this](const std::string&, std::istream& input_stream) {
+      gold_ = commonItems::singleDouble(input_stream).getDouble();
+   });
+   gold_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+   gold_parser.parseStream(input_stream);
+   gold_parser.clearRegisteredKeywords();
+}
+
+void ck3::CharacterParser::ParseCourtData(std::istream& input_stream)
+{
+   commonItems::parser court_data_parser;
+   court_data_parser.registerKeyword("employer", [this](const std::string&, std::istream& input_stream) {
+      employer_ = commonItems::singleLlong(input_stream).getLlong();
+   });
+   court_data_parser.registerKeyword("knight", [this](const std::string&, std::istream& input_stream) {
+      knight_ = commonItems::singleString(input_stream).getString() == "yes";
+   });
+   court_data_parser.registerRegex("council_task|special_council_tasks",
+       [this](const std::string&, std::istream& input_stream) {
+          councilor_ = true;
+          commonItems::ignoreItem("unused", input_stream);
+       });
+   court_data_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+   court_data_parser.parseStream(input_stream);
+   court_data_parser.clearRegisteredKeywords();
+}
+
+void ck3::CharacterParser::ParsePlayableData(std::istream& input_stream)
+{
+   commonItems::parser playable_data_parser;
+   playable_data_parser.registerKeyword("knights", [this](const std::string&, std::istream& input_stream) {
+      for (auto character_id: commonItems::llongList(input_stream).getLlongs())
+      {
+         knights_.emplace_back(character_id);
+      }
+   });
+   playable_data_parser.registerKeyword("legitimacy", [this](const std::string&, std::istream& input_stream) {
+      legitimacy_ = commonItems::singleDouble(input_stream).getDouble();
+   });
+   playable_data_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+   playable_data_parser.parseStream(input_stream);
+   playable_data_parser.clearRegisteredKeywords();
+}
+
+void ck3::CharacterParser::ParseFamilyData(std::istream& input_stream)
+{
+   commonItems::parser family_data_parser;
+   family_data_parser.registerKeyword("primary_spouse", [this](const std::string&, std::istream& input_stream) {
+      primary_spouse_ = commonItems::singleLlong(input_stream).getLlong();
+   });
+   family_data_parser.registerKeyword("spouse", [this](const std::string&, std::istream& input_stream) {
+      spouses_.emplace_back(commonItems::singleLlong(input_stream).getLlong());
+   });
+   family_data_parser.registerKeyword("concubine", [this](const std::string&, std::istream& input_stream) {
+      concubines_.emplace_back(commonItems::singleLlong(input_stream).getLlong());
+   });
+   family_data_parser.registerKeyword("child", [this](const std::string&, std::istream& input_stream) {
+      for (const auto child_id: commonItems::llongList(input_stream).getLlongs())
+      {
+         children_.emplace_back(child_id);
+      }
+   });
+   family_data_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+   family_data_parser.parseStream(input_stream);
+   family_data_parser.clearRegisteredKeywords();
+}
+
+void ck3::CharacterParser::ParseClaim(std::istream& input_stream)
+{
+   commonItems::parser claims_parser;
+   registerKeyword("title", [this](const std::string&, std::istream& input_stream) {
+      claims_.push_back(commonItems::singleLlong(input_stream).getLlong());
+   });
+   claims_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+   claims_parser.parseStream(input_stream);
+   claims_parser.clearRegisteredKeywords();
+}
