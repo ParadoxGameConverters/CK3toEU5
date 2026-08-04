@@ -219,6 +219,11 @@ set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/cultures/culture_par
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/cultures/culture_parser_map.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/characters/character_parser.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/characters/character_realm_parser.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/flags/flag.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/flags/flags.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/dynasties/dynasty_parser.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/dynasties/dynasties_parser.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_parsers/dynasties/house_parser.cpp")
 
 link_directories("./external/rakaly")
 

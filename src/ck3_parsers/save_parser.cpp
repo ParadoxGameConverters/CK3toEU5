@@ -18,7 +18,9 @@
 #include "ParserHelpers.h"
 #include "characters/character_parser.hpp"
 #include "cultures/culture_parser_map.hpp"
+#include "dynasties/dynasties_parser.hpp"
 #include "external/commonItems/ConverterVersion.h"
+#include "flags/flags.hpp"
 #include "src/configuration/configuration.hpp"
 
 namespace
@@ -96,13 +98,15 @@ void ck3::SaveParser::ParseGamestate(std::istream& input_stream, const commonIte
                                   << converter_version.getMaxSource().toShortString();
              throw std::runtime_error("Savegame vs converter version mismatch!");
           }
+          Log(LogLevel::Progress) << "8 %";
        });
-   Log(LogLevel::Progress) << "8 %";
-   // registerKeyword("variables", [this](const std::string&, std::istream& input_stream) {
-   //	Log(LogLevel::Info) << "-> Loading variable flags.";
-   //	flags = Flags(input_stream);
-   //	Log(LogLevel::Info) << "<> Loaded " << flags.getFlags().size() << " variable flags.";
-   // });
+
+   parser.registerKeyword("variables", [this](const std::string&, std::istream& input_stream) {
+      Log(LogLevel::Info) << "-> Loading variable flags.";
+      flags_ = Flags(input_stream);
+      Log(LogLevel::Info) << "<> Loaded " << flags_.GetFlags().size() << " variable flags and "
+                          << flags_.GetUnavailableDecisionFlags().size() << " unavailable decision flags.";
+   });
    // registerKeyword("landed_titles", [this](const std::string&, std::istream& input_stream) {
    //	Log(LogLevel::Info) << "-> Loading titles.";
    //	titles = Titles(input_stream);
@@ -117,7 +121,7 @@ void ck3::SaveParser::ParseGamestate(std::istream& input_stream, const commonIte
    //	province_holdings_ = ProvinceHoldings(input_stream);
    //	Log(LogLevel::Info) << "<> Loaded " << province_holdings_.getProvinceHoldings().size() << " provinces.";
    // });
-   Log(LogLevel::Progress) << "10 %";
+
    parser.registerKeyword("living", [this](std::istream& input_stream) {
       Log(LogLevel::Info) << "-> Loading alive characters.";
       commonItems::parser character_parser;
@@ -129,8 +133,9 @@ void ck3::SaveParser::ParseGamestate(std::istream& input_stream, const commonIte
       character_parser.parseStream(input_stream);
       character_parser.clearRegisteredKeywords();
       Log(LogLevel::Info) << "<> Loaded " << characters_alive_.size() << " living characters.";
+      Log(LogLevel::Progress) << "14 %";
    });
-   Log(LogLevel::Progress) << "14 %";
+
    parser.registerKeyword("dead_unprunable", [this](const std::string&, std::istream& input_stream) {
       Log(LogLevel::Info) << "-> Loading dead people.";
       commonItems::parser character_parser;
@@ -143,24 +148,20 @@ void ck3::SaveParser::ParseGamestate(std::istream& input_stream, const commonIte
       character_parser.clearRegisteredKeywords();
       Log(LogLevel::Info) << "<> Loaded " << characters_dead_.size() << " dead human memories.";
    });
-   // registerKeyword("dynasties", [this](const std::string&, std::istream& input_stream) {
-   //	Log(LogLevel::Info) << "-> Loading dynasties.";
-   //	dynasties = Dynasties(input_stream);
-   //	houses = dynasties.getHouses(); // Do not access houses in dynasties after this - there are none and will crash.
-   //	Log(LogLevel::Info) << "<> Loaded " << dynasties.getDynasties().size() << " dynasties and " <<
-   // houses.getHouses().size() << " houses.";
-   // });
+   parser.registerKeyword("dynasties", [this](const std::string&, std::istream& input_stream) {
+      Log(LogLevel::Info) << "-> Loading dynasties.";
+      dynasties_ = DynastiesMap(input_stream);
+      Log(LogLevel::Info) << "<> Loaded " << dynasties_.GetDynasties().size() << " dynasties and "
+                          << dynasties_.GetHouses().size() << " houses.";
+      Log(LogLevel::Progress) << "15 %";
+   });
+
    // registerKeyword("religion", [this](const std::string&, std::istream& input_stream) {
    //	Log(LogLevel::Info) << "-> Loading religions.";
    //	religions = Religions(input_stream);
    //	faiths = religions.getFaiths(); // Do not access faiths in religions after this - there are none and will crash.
    //	Log(LogLevel::Info) << "<> Loaded " << religions.getReligions().size() << " religions and " <<
    // faiths.getFaiths().size() << " faiths.";
-   // });
-   // registerKeyword("coat_of_arms", [this](const std::string&, std::istream& input_stream) {
-   //	Log(LogLevel::Info) << "-> Loading garments of limbs.";
-   //	coats = CoatsOfArms(input_stream);
-   //	Log(LogLevel::Info) << "<> Loaded " << coats.getCoats().size() << " wearables.";
    // });
    // registerKeyword("county_manager", [this](const std::string&, std::istream& input_stream) {
    //	Log(LogLevel::Info) << "-> Loading county details.";
@@ -171,8 +172,9 @@ void ck3::SaveParser::ParseGamestate(std::istream& input_stream, const commonIte
       Log(LogLevel::Info) << "-> Loading cultures.";
       cultures_map_ = CultureParserMap(input_stream);
       Log(LogLevel::Info) << "<> Loaded " << cultures_map_.GetCultures().size() << " cultures.";
+      Log(LogLevel::Progress) << "17 %";
    });
-   Log(LogLevel::Progress) << "17 %";
+
    // registerKeyword("confederation_manager", [this](const std::string&, std::istream& input_stream) {
    //	Log(LogLevel::Info) << "-> Loading confederations.";
    //	confederations = Confederations(input_stream);
@@ -188,26 +190,10 @@ void ck3::SaveParser::ParseGamestate(std::istream& input_stream, const commonIte
    //	opinions = Opinions(input_stream);
    //	Log(LogLevel::Info) << "<> Loaded " << opinions.getRivalPairs().size() << " rivalries.";
    // });
-   // registerKeyword("wars", [this](const std::string&, std::istream& input_stream) {
-   //	Log(LogLevel::Info) << "-> Loading wars.";
-   //	wars = Wars(input_stream);
-   //	Log(LogLevel::Info) << "<> Loaded " << wars.getWars().size() << " active wars.";
-   // });
-   // registerKeyword("armies", [this](const std::string&, std::istream& input_stream) {
-   //	Log(LogLevel::Info) << "-> Loading men-at-arms.";
-   //	armies = Armies(input_stream);
-   //	Log(LogLevel::Info) << "<> Loaded " << armies.getRegimentCount() << " men-at-arms regiments held by " <<
-   // armies.getMenAtArms().size() << " rulers.";
-   // });
    // registerKeyword("vassal_contracts", [this](const std::string&, std::istream& input_stream) {
    //	Log(LogLevel::Info) << "-> Loading vassal contracts.";
    //	vassalContracts = VassalContracts(input_stream);
    //	Log(LogLevel::Info) << "<> Loaded " << vassalContracts.getContractGroups().size() << " vassal contracts.";
-   // });
-   // registerKeyword("artifacts", [this](const std::string&, std::istream& input_stream) {
-   //	Log(LogLevel::Info) << "-> Loading artifacts.";
-   //	artifacts = Artifacts(input_stream);
-   //	Log(LogLevel::Info) << "<> Loaded " << artifacts.getArtifacts().size() << " artifacts.";
    // });
    parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 
@@ -236,8 +222,10 @@ void ck3::SaveParser::ParseMeta(std::istream& input_stream)
    meta_parser.registerKeyword("meta_title_name", [this](std::istream& input_stream) {
       // The realm name as CK3 displays it (e.g. "the Yamamoto Empire") - dynamic nomad/adventurer
       // titles_ often carry a stale internal name, so this is the better source for the player realm.
-      meta_realm_title_ = commonItems::getString(input_stream);
+      meta_realm_title_ = commonItems::singleString(input_stream).getString();
+      Log(LogLevel::Info) << "Meta title name: " << meta_realm_title_.value_or("no meta title");
    });
+
    // meta_parser_.registerKeyword("meta_coat_of_arms", [this](std::istream& input_stream) {
    //	// The realm arms as CK3 displays them - for dynamic realms these are the house arms, not the title's.
    //	metaCoA = std::make_shared<CoatOfArms>(input_stream, 0);
@@ -255,14 +243,19 @@ void ck3::SaveParser::ProcessSave(const std::filesystem::path& save_game_path, b
    save_game_.gamestate = in_stream.str();
 
    const auto save = rakaly::parseCk3(save_game_.gamestate);
+
    if (const auto& melt = save.meltMeta(); melt)
    {
       Log(LogLevel::Info) << "Meta extracted successfully.";
       melt->writeData(save_game_.metadata);
    }
-   else if (save.is_binary())
+   else
    {
-      Log(LogLevel::Error) << "Binary Save and NO META!";
+      Log(LogLevel::Warning) << "NO META!";
+      if (save.is_binary())
+      {
+         Log(LogLevel::Error) << "Binary Save and NO META!";
+      }
    }
 
    if (save.is_binary())
@@ -282,6 +275,26 @@ void ck3::SaveParser::ProcessSave(const std::filesystem::path& save_game_path, b
       const auto& melt = save.melt();
       melt.writeData(save_game_.gamestate);
    }
+
+   // if (save.is_binary())
+   //{
+   //    Log(LogLevel::Info) << "Gamestate is binary, extracting metadata.";
+   //    if (const auto& melt = save.meltMeta(); melt)
+   //    {
+   //       Log(LogLevel::Info) << "Meta extracted successfully.";
+   //       melt->writeData(save_game_.metadata);
+   //    }
+   //    else
+   //    {
+   //       Log(LogLevel::Error) << "Binary Save and NO META!";
+   //    }
+   // }
+   //  const auto& melt = save.melt();
+   //  if (melt.has_unknown_tokens())
+   //  {
+   //      Log(LogLevel::Error) << "Rakaly reports errors while melting save!";
+   //  }
+   //  melt.writeData(save_game_.gamestate);
 
    if (debug)
    {

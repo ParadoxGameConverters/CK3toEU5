@@ -7,6 +7,8 @@
 #include "Parser.h"
 #include "characters/character_parser.hpp"
 #include "cultures/culture_parser_map.hpp"
+#include "dynasties/dynasties_parser.hpp"
+#include "flags/flags.hpp"
 #include "src/configuration/configuration.hpp"
 
 namespace ck3
@@ -24,15 +26,13 @@ class SaveParser
    //[[nodiscard]] const auto& GetMods() const { return mods; }
    //[[nodiscard]] const auto& GetTitles() const { return titles_; }
    [[nodiscard]] const auto& GetCharacters() const { return characters_alive_; }
-   //[[nodiscard]] const auto& GetDynasties() const { return dynasties; }
-   //[[nodiscard]] const auto& GetHouses() const { return houses; }
+   [[nodiscard]] const auto& GetDynasties() const { return dynasties_; }
    //[[nodiscard]] const auto& GetFaiths() const { return faiths; }
    //[[nodiscard]] const auto& GetReligions() const { return religions; }
    //
    //[[nodiscard]] const auto& GetConfederations() const { return confederations; }
    //[[nodiscard]] const auto& GetCountyDetails() const { return countyDetails; }
    //[[nodiscard]] const auto& GetLandedTitles() const { return landedTitles; }
-   //[[nodiscard]] auto doesIslamExist() const { return islamExists; }
    //[[nodiscard]] const auto& GetPlayerTitle() const { return playerTitle; }
    //[[nodiscard]] const auto& GetMetaTitleName() const { return metaTitleName; }
    //[[nodiscard]] const auto& GetMetaCoA() const { return metaCoA; }
@@ -56,21 +56,22 @@ class SaveParser
    date start_date_ = date("1.1.1");
 
    // meta
-   // Mods mods;
    std::optional<std::string> meta_realm_title_;
 
    GameVersion ck3_version_;
+   Flags flags_;
+   // Mods mods_;
+
+   // world
    // Titles titles_;
    // ProvinceHoldings province_holdings_;
    std::map<long long, CharacterParser> characters_alive_;
    std::map<long long, CharacterParser> characters_dead_;
-   // Dynasties dynasties;
-   // Houses houses;
+   DynastiesMap dynasties_;
    // Religions religions;
    // Faiths faiths;
    // CoatsOfArms coats;
    // LandedTitles landedTitles;
-   // Flags flags;
    // CountyDetails countyDetails;
    CultureParserMap cultures_map_;
    // HouseNameScraper houseNameScraper;
