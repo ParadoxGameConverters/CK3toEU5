@@ -4,7 +4,7 @@
 
 namespace CK3
 {
-class Faith;
+class FaithParser;
 class Culture;
 class CountyDetail: commonItems::parser
 {
@@ -18,7 +18,7 @@ class CountyDetail: commonItems::parser
    [[nodiscard]] const auto& isDeJureHRE() const { return deJureHRE; }
 
    void loadCulture(const std::pair<long long, std::shared_ptr<Culture>>& theCulture) { culture = theCulture; }
-   void loadFaith(const std::pair<long long, std::shared_ptr<Faith>>& theFaith) { faith = theFaith; }
+   void loadFaith(const std::pair<long long, std::shared_ptr<FaithParser>>& theFaith) { faith = theFaith; }
    void setDeJureHRE() { deJureHRE = true; }
 
   private:
@@ -26,7 +26,7 @@ class CountyDetail: commonItems::parser
 
    int development = 0;
    std::pair<long long, std::shared_ptr<Culture>> culture;
-   std::pair<long long, std::shared_ptr<Faith>> faith;
+   std::pair<long long, std::shared_ptr<FaithParser>> faith;
    bool deJureHRE = false;
 };
 }  // namespace CK3

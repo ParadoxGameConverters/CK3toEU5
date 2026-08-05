@@ -6,9 +6,11 @@
 #include "GameVersion.h"
 #include "Parser.h"
 #include "characters/character_parser.hpp"
+#include "confederations/confederation_parser.hpp"
 #include "cultures/culture_parser_map.hpp"
 #include "dynasties/dynasties_parser.hpp"
 #include "flags/flags.hpp"
+#include "religions/religions_parser.hpp"
 #include "src/configuration/configuration.hpp"
 
 namespace ck3
@@ -27,8 +29,7 @@ class SaveParser
    //[[nodiscard]] const auto& GetTitles() const { return titles_; }
    [[nodiscard]] const auto& GetCharacters() const { return characters_alive_; }
    [[nodiscard]] const auto& GetDynasties() const { return dynasties_; }
-   //[[nodiscard]] const auto& GetFaiths() const { return faiths; }
-   //[[nodiscard]] const auto& GetReligions() const { return religions; }
+   [[nodiscard]] const auto& GetReligions() const { return religions_; }
    //
    //[[nodiscard]] const auto& GetConfederations() const { return confederations; }
    //[[nodiscard]] const auto& GetCountyDetails() const { return countyDetails; }
@@ -47,6 +48,7 @@ class SaveParser
   private:
    void ParseGamestate(std::istream& input_stream, const commonItems::ConverterVersion& converter_version);
    void ParseMeta(std::istream& input_stream);
+   void ParseConfederations(std::istream& input_stream);
 
    // savegame processing
    static void VerifySave(const std::filesystem::path& save_game_path);
@@ -68,14 +70,14 @@ class SaveParser
    std::map<long long, CharacterParser> characters_alive_;
    std::map<long long, CharacterParser> characters_dead_;
    DynastiesMap dynasties_;
-   // Religions religions;
+   Religions religions_;
    // Faiths faiths;
    // CoatsOfArms coats;
    // LandedTitles landedTitles;
    // CountyDetails countyDetails;
    CultureParserMap cultures_map_;
    // HouseNameScraper houseNameScraper;
-   // Confederations confederations;
+   std::map<long long, ConfederationParser> confederations_;
    // Relations relations;
    // Opinions opinions;
    // Wars wars;

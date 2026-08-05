@@ -17,10 +17,12 @@
 #include "Parser.h"
 #include "ParserHelpers.h"
 #include "characters/character_parser.hpp"
+#include "confederations/confederation_parser.hpp"
 #include "cultures/culture_parser_map.hpp"
 #include "dynasties/dynasties_parser.hpp"
 #include "external/commonItems/ConverterVersion.h"
 #include "flags/flags.hpp"
+#include "religions/religions_parser.hpp"
 #include "src/configuration/configuration.hpp"
 
 namespace
@@ -98,7 +100,6 @@ void ck3::SaveParser::ParseGamestate(std::istream& input_stream, const commonIte
                                   << converter_version.getMaxSource().toShortString();
              throw std::runtime_error("Savegame vs converter version mismatch!");
           }
-          Log(LogLevel::Progress) << "8 %";
        });
 
    parser.registerKeyword("variables", [this](const std::string&, std::istream& input_stream) {
@@ -133,7 +134,6 @@ void ck3::SaveParser::ParseGamestate(std::istream& input_stream, const commonIte
       character_parser.parseStream(input_stream);
       character_parser.clearRegisteredKeywords();
       Log(LogLevel::Info) << "<> Loaded " << characters_alive_.size() << " living characters.";
-      Log(LogLevel::Progress) << "14 %";
    });
 
    parser.registerKeyword("dead_unprunable", [this](const std::string&, std::istream& input_stream) {
@@ -153,16 +153,14 @@ void ck3::SaveParser::ParseGamestate(std::istream& input_stream, const commonIte
       dynasties_ = DynastiesMap(input_stream);
       Log(LogLevel::Info) << "<> Loaded " << dynasties_.GetDynasties().size() << " dynasties and "
                           << dynasties_.GetHouses().size() << " houses.";
-      Log(LogLevel::Progress) << "15 %";
    });
 
-   // registerKeyword("religion", [this](const std::string&, std::istream& input_stream) {
-   //	Log(LogLevel::Info) << "-> Loading religions.";
-   //	religions = Religions(input_stream);
-   //	faiths = religions.getFaiths(); // Do not access faiths in religions after this - there are none and will crash.
-   //	Log(LogLevel::Info) << "<> Loaded " << religions.getReligions().size() << " religions and " <<
-   // faiths.getFaiths().size() << " faiths.";
-   // });
+   parser.registerKeyword("religion", [this](const std::string&, std::istream& input_stream) {
+      Log(LogLevel::Info) << "-> Loading religions.";
+      religions_ = Religions(input_stream);
+      Log(LogLevel::Info) << "<> Loaded " << religions_.GetReligions().size() << " religions and "
+                          << religions_.GetFaiths().size() << " faiths.";
+   });
    // registerKeyword("county_manager", [this](const std::string&, std::istream& input_stream) {
    //	Log(LogLevel::Info) << "-> Loading county details.";
    //	countyDetails = CountyDetails(input_stream);
@@ -172,14 +170,12 @@ void ck3::SaveParser::ParseGamestate(std::istream& input_stream, const commonIte
       Log(LogLevel::Info) << "-> Loading cultures.";
       cultures_map_ = CultureParserMap(input_stream);
       Log(LogLevel::Info) << "<> Loaded " << cultures_map_.GetCultures().size() << " cultures.";
-      Log(LogLevel::Progress) << "17 %";
    });
-
-   // registerKeyword("confederation_manager", [this](const std::string&, std::istream& input_stream) {
-   //	Log(LogLevel::Info) << "-> Loading confederations.";
-   //	confederations = Confederations(input_stream);
-   //	Log(LogLevel::Info) << "<> Loaded " << confederations.getConfederations().size() << " confederations.";
-   // });
+   parser.registerKeyword("confederation_manager", [this](const std::string&, std::istream& input_stream) {
+      Log(LogLevel::Info) << "-> Loading confederations.";
+      ParseConfederations(input_stream);
+      Log(LogLevel::Info) << "<> Loaded " << confederations_.size() << " confederations.";
+   });
    // registerKeyword("relations", [this](const std::string&, std::istream& input_stream) {
    //	Log(LogLevel::Info) << "-> Loading relations.";
    //	relations = Relations(input_stream);
@@ -199,6 +195,29 @@ void ck3::SaveParser::ParseGamestate(std::istream& input_stream, const commonIte
 
    parser.parseStream(input_stream);
    parser.clearRegisteredKeywords();
+}
+
+void ck3::SaveParser::ParseConfederations(std::istream& input_stream)
+{
+   commonItems::parser confederation_manager_parser;
+   confederation_manager_parser.registerKeyword("database", [this](std::istream& input_stream) {
+      commonItems::parser database_parser;
+      database_parser.registerRegex(R"(\d+)", [this](const std::string& confederation_id, std::istream& input_stream) {
+         const auto confederation_blob_as_string = commonItems::stringOfItem(input_stream).getString();
+         if (confederation_blob_as_string == "none")  // disbanded confederation
+         {
+            return;
+         }
+         auto confederation_stream = std::stringstream(confederation_blob_as_string);
+         const ConfederationParser new_confederation(confederation_stream, std::stoll(confederation_id));
+         confederations_.insert(std::make_pair(new_confederation.GetID(), new_confederation));
+      });
+      database_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+      database_parser.parseStream(input_stream);
+   });
+   confederation_manager_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+   confederation_manager_parser.parseStream(input_stream);
+   confederation_manager_parser.clearRegisteredKeywords();
 }
 
 void ck3::SaveParser::ParseMeta(std::istream& input_stream)
