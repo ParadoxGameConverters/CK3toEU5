@@ -1,7 +1,7 @@
 #include "confederations.hpp"
 
-#include <memory>
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <utility>

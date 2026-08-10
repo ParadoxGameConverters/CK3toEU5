@@ -11,7 +11,7 @@
 
 namespace ck3
 {
-const date kNeverCreatedDate = date(9999, 1, 1); // NOLINT : bugprone exception (that won't happen)
+const date kNeverCreatedDate = date(9999, 1, 1);  // NOLINT : bugprone exception (that won't happen)
 enum Level : std::uint8_t
 {
    kUnknown,

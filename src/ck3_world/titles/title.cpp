@@ -1,12 +1,12 @@
 #include "title.hpp"
 
+#include <iostream>
+
 #include "../characters/character.hpp"
 #include "CommonRegexes.h"
 #include "Parser.h"
 #include "ParserHelpers.h"
 #include "src/ck3_world/id_pointer_pair.hpp"
-
-#include <iostream>
 
 ck3::Title::Title(std::istream& input_stream, long long title_id): title_id_(title_id)
 {

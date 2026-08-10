@@ -51,7 +51,7 @@ void ck3::Faith::ParseFaith(std::istream& input_stream)
 void ck3::Faith::ParseDoctrine(std::istream& input_stream)
 {
    const std::string doctrine = commonItems::singleString(input_stream).getString();
-   if (doctrine.find("tenet") == 0)
+   if (doctrine.starts_with("tenet"))
    {
       tenets_.insert(doctrine);
    }

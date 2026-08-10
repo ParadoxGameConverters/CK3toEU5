@@ -42,7 +42,7 @@ ck3::CK3World::CK3World(const configuration::Configuration& configuration,
     const commonItems::ConverterVersion& converter_version)
 {
    Log(LogLevel::Info) << "-> Verifying CK3 save.";
-   // TODO: Kmiotek - move this to a seperate class
+   // TODO(Kmiotek): move this to a seperate class
 
    ck3::SaveMelter::VerifySave(configuration.GetSaveGamePath());
    const SaveData save_game = ck3::SaveMelter::MeltSave(configuration.GetSaveGamePath(), configuration.GetDebug());

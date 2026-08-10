@@ -1,10 +1,10 @@
 #include "dynamic_title_info.hpp"
 
+#include <iostream>
+
 #include "CommonRegexes.h"
 #include "Parser.h"
 #include "ParserHelpers.h"
-
-#include <iostream>
 
 ck3::DynamicTitleInfo::DynamicTitleInfo(std::istream& input_stream)
 {

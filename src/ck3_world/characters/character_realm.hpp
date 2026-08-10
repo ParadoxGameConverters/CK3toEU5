@@ -31,7 +31,7 @@ class CharacterRealm: commonItems::parser  // NOLINT : issues with error handlin
    std::string government_type_;
    std::set<std::string> laws_;
    std::string court_language_;
-   
+
    IdPointerPair<Title> realm_capital_;  // A barony!
    std::vector<IdPointerPair<Title>>
        domain_;  // These are all titles_ owned (b-c-d-k-e), landless included. First one is PRIMARY.

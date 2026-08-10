@@ -1,17 +1,17 @@
 #include "titles.hpp"
 
-#include <memory>
+#include <exception>
 #include <iostream>
+#include <memory>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <utility>
-#include <exception>
-#include <stdexcept>
 
 #include "CommonRegexes.h"
 #include "Log.h"
-#include "ParserHelpers.h"
 #include "Parser.h"
+#include "ParserHelpers.h"
 #include "dynamic_title_info.hpp"
 #include "title.hpp"
 
