@@ -1,6 +1,7 @@
 #include "confederation.hpp"
 
 #include <iostream>
+#include <string>
 
 #include "CommonRegexes.h"
 #include "ParserHelpers.h"
@@ -18,7 +19,7 @@ void ck3::Confederation::ParseConfederation(std::istream& input_stream)
    registerKeyword("houses", [this](std::istream& input_stream) {
       for (auto house_id: commonItems::llongList(input_stream).getLlongs())
       {
-         houses_.push_back(IdPointerPair<House>(house_id));
+         houses_.emplace_back(house_id);
       }
    });
    registerKeyword("leader", [this](std::istream& input_stream) {

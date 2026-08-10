@@ -2,7 +2,13 @@
 
 #include "CommonRegexes.h"
 #include "ParserHelpers.h"
+#include "Parser.h"
 #include "character.hpp"
+
+#include <utility>
+#include <string>
+#include <memory>
+#include <iostream>
 
 void ck3::Characters::ParseAliveCharacters(std::istream& input_stream)
 {

@@ -1,6 +1,10 @@
 #include "confederations.hpp"
 
 #include <memory>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <utility>
 
 #include "CommonRegexes.h"
 #include "Parser.h"

@@ -2,10 +2,11 @@
 
 #include "../characters/character.hpp"
 #include "CommonRegexes.h"
-#include "Log.h"
 #include "Parser.h"
 #include "ParserHelpers.h"
 #include "src/ck3_world/id_pointer_pair.hpp"
+
+#include <iostream>
 
 ck3::Title::Title(std::istream& input_stream, long long title_id): title_id_(title_id)
 {
@@ -39,9 +40,9 @@ void ck3::Title::ParseTitle(std::istream& input_stream)
       last_holder_change_date_ = date(commonItems::singleString(input_stream).getString());
    });
    parser.registerKeyword("claim", [this](const std::string&, std::istream& input_stream) {
-      for (auto claimantID: commonItems::llongList(input_stream).getLlongs())
+      for (auto claimant_id: commonItems::llongList(input_stream).getLlongs())
       {
-         claimants_.push_back(IdPointerPair<Character>(claimantID));
+         claimants_.emplace_back(claimant_id);
       }
    });
    parser.registerKeyword("history_government", [this](const std::string&, std::istream& input_stream) {
@@ -68,13 +69,13 @@ void ck3::Title::ParseTitle(std::istream& input_stream)
    parser.registerKeyword("de_jure_vassals", [this](const std::string&, std::istream& input_stream) {
       for (auto vassal_id: commonItems::llongList(input_stream).getLlongs())
       {
-         de_jure_vassals_.push_back(IdPointerPair<Title>(vassal_id));
+         de_jure_vassals_.emplace_back(vassal_id);
       }
    });
    parser.registerKeyword("heir", [this](const std::string&, std::istream& input_stream) {
-      for (auto heirID: commonItems::llongList(input_stream).getLlongs())
+      for (auto heir_id: commonItems::llongList(input_stream).getLlongs())
       {
-         heirs_.push_back(IdPointerPair<Character>(heirID));
+         heirs_.emplace_back(heir_id);
       }
    });
    parser.registerKeyword("laws", [this](const std::string&, std::istream& input_stream) {
@@ -87,9 +88,9 @@ void ck3::Title::ParseTitle(std::istream& input_stream)
    parser.registerKeyword("succession_election", [this](const std::string&, std::istream& input_stream) {
       commonItems::parser election_parser;
       election_parser.registerKeyword("electors", [this](const std::string&, std::istream& input_stream) {
-         for (auto electorID: commonItems::intList(input_stream).getInts())
+         for (auto elector_id: commonItems::intList(input_stream).getInts())
          {
-            electors_.push_back(IdPointerPair<Character>(electorID));
+            electors_.emplace_back(elector_id);
          }
       });
       election_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
@@ -142,5 +143,5 @@ void ck3::Title::DetermineLevelAfterParsing()
 
 bool ck3::Title::DoesTitleExist()
 {
-   return (holder_.has_value() && last_holder_change_date_ != date(9999, 1, 1));
+   return (holder_.has_value() && last_holder_change_date_ != kNeverCreatedDate);
 }

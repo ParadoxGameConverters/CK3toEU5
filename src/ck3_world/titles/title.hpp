@@ -11,7 +11,8 @@
 
 namespace ck3
 {
-enum class Level
+const date kNeverCreatedDate = date(9999, 1, 1); // NOLINT : bugprone exception (that won't happen)
+enum Level : std::uint8_t
 {
    kUnknown,
    kBarony,
@@ -71,7 +72,7 @@ class Title
    date last_holder_change_date_;            // Date of the last holder change 9999.1.1 for never-held titles
 
    std::set<std::string> laws_;
-   Level level_;
+   Level level_ = Level::kUnknown;
 
    IdPointerPair<Title> capital_county_;  // capital title is a COUNTY, even for county itself and baronies beneath it!
 

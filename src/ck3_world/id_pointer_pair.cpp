@@ -1,4 +1,6 @@
 #include "id_pointer_pair.hpp"
+
+#include <memory>
 //
 // template <typename T>
 // ck3::IdPointerPair<T>::IdPointerPair(long long id)

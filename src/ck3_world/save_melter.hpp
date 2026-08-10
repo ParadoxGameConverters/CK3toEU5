@@ -16,7 +16,7 @@ class SaveMelter
 {
   public:
    static void VerifySave(const std::filesystem::path& save_game_path);
-   SaveData MeltSave(const std::filesystem::path& save_game_path, bool debug);
+   static SaveData MeltSave(const std::filesystem::path& save_game_path, bool debug);
 };
 }  // namespace ck3
 

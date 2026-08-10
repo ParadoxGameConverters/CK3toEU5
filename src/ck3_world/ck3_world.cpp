@@ -5,12 +5,10 @@
 // #include "ModLoader/ModFilesystem.h"
 
 #include <filesystem>
-#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <utility>
 
 #include "OSCompatibilityLayer.h"
 #include "Parser.h"
@@ -45,9 +43,9 @@ ck3::CK3World::CK3World(const configuration::Configuration& configuration,
 {
    Log(LogLevel::Info) << "-> Verifying CK3 save.";
    // TODO: Kmiotek - move this to a seperate class
-   SaveMelter melter;
-   melter.VerifySave(configuration.GetSaveGamePath());
-   SaveData save_game = melter.MeltSave(configuration.GetSaveGamePath(), configuration.GetDebug());
+
+   ck3::SaveMelter::VerifySave(configuration.GetSaveGamePath());
+   const SaveData save_game = ck3::SaveMelter::MeltSave(configuration.GetSaveGamePath(), configuration.GetDebug());
    Log(LogLevel::Progress) << "5 %";
 
    Log(LogLevel::Info) << "* Parsing Metadata *";

@@ -26,7 +26,7 @@ class Titles: commonItems::parser
   private:
    void ParseTitles(std::istream& input_stream);
    void ParseLandedTitles(std::istream& input_stream);
-   void InsertToCorrectMap(std::shared_ptr<Title> new_title);
+   void InsertToCorrectMap(const std::shared_ptr<Title>& new_title);
    void TranscribeDynamicTitleRanks();
 
    std::map<std::string, std::shared_ptr<Title>> all_titles_;  // We use key instead of id

@@ -3,11 +3,6 @@
 #include "Parser.h"
 #include "character.hpp"
 
-namespace mappers
-{
-class TraitScraper;
-}
-
 namespace ck3
 {
 class Characters

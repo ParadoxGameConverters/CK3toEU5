@@ -1,12 +1,17 @@
 #include "titles.hpp"
 
-#include <filesystem>
-#include <fstream>
 #include <memory>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <utility>
+#include <exception>
+#include <stdexcept>
 
 #include "CommonRegexes.h"
 #include "Log.h"
 #include "ParserHelpers.h"
+#include "Parser.h"
 #include "dynamic_title_info.hpp"
 #include "title.hpp"
 
@@ -19,7 +24,9 @@ ck3::Titles::Titles(std::istream& input_stream)
    // This bit assigns CK3::Level to dynamic titles that have a rank definition in the save. It should be all of them,
    // but it's CK3, so who knows.
    if (!dynamic_titles_ranks_.empty())
+   {
       TranscribeDynamicTitleRanks();
+   }
 }
 
 void ck3::Titles::ParseTitles(std::istream& input_stream)
@@ -50,16 +57,16 @@ void ck3::Titles::ParseTitles(std::istream& input_stream)
 void ck3::Titles::ParseLandedTitles(std::istream& input_stream)
 {
    commonItems::parser titles_parser;
-   titles_parser.registerRegex(R"(\d+)", [this](const std::string& id, std::istream& input_stream) {
+   titles_parser.registerRegex(R"(\d+)", [this](const std::string& title_id, std::istream& input_stream) {
       // Incoming titles may not be actual titles but half-deleted junk.
       const auto& title_blob = commonItems::stringOfItem(input_stream).getString();
 
-      if (title_blob.find('{') != std::string::npos)
+      if (title_blob.contains('{'))
       {
          std::stringstream title_stream(title_blob);
          try
          {
-            std::shared_ptr<Title> new_title = std::make_shared<Title>(title_stream, std::stoll(id));
+            const std::shared_ptr<Title> new_title = std::make_shared<Title>(title_stream, std::stoll(title_id));
             if (new_title->DoesTitleExist())  // we skip not created/held titles, eu5 doesn't care about them
             {
                auto title_pair = std::pair(new_title->GetKey(), new_title);
@@ -69,7 +76,7 @@ void ck3::Titles::ParseLandedTitles(std::istream& input_stream)
          }
          catch (std::exception& e)
          {
-            throw std::runtime_error("Cannot import title ID: " + id + " (" + e.what() + ")");
+            throw std::runtime_error("Cannot import title ID: " + title_id + " (" + e.what() + ")");
          }
       }
    });
@@ -78,10 +85,10 @@ void ck3::Titles::ParseLandedTitles(std::istream& input_stream)
    titles_parser.clearRegisteredKeywords();
 }
 
-void ck3::Titles::InsertToCorrectMap(std::shared_ptr<Title> new_title)
+void ck3::Titles::InsertToCorrectMap(const std::shared_ptr<Title>& new_title)
 {
    auto title_pair = std::pair(new_title->GetKey(), new_title);
-   if (new_title->IsLandless() == false)
+   if (!new_title->IsLandless())
    {
       if (new_title->GetLevel() == Level::kBarony)
       {
@@ -120,7 +127,7 @@ void ck3::Titles::TranscribeDynamicTitleRanks()
       {
          continue;  // Probably a destroyed title
       }
-      std::shared_ptr<Title> dynamic_title = all_titles_.at(key);
+      const std::shared_ptr<Title> dynamic_title = all_titles_.at(key);
       auto title_pair = std::pair(key, dynamic_title);
       if (rank == "barony")
       {

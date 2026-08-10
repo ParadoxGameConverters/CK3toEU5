@@ -1,7 +1,6 @@
 #include "faith.hpp"
 
 #include <iostream>
-#include <memory>
 #include <string>
 
 #include "CommonRegexes.h"

@@ -4,6 +4,8 @@
 #include "Parser.h"
 #include "ParserHelpers.h"
 
+#include <iostream>
+
 ck3::DynamicTitleInfo::DynamicTitleInfo(std::istream& input_stream)
 {
    ParseDynamicTitleInfo(input_stream);

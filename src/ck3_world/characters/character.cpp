@@ -181,7 +181,7 @@ void ck3::Character::ParsePlayableData(std::istream& input_stream)
    playable_data_parser.registerKeyword("knights", [this](const std::string&, std::istream& input_stream) {
       for (auto character_id: commonItems::llongList(input_stream).getLlongs())
       {
-         knights_.emplace_back(IdPointerPair<Character>(character_id));
+         knights_.emplace_back(character_id);
       }
    });
    playable_data_parser.registerKeyword("legitimacy", [this](const std::string&, std::istream& input_stream) {
@@ -199,15 +199,15 @@ void ck3::Character::ParseFamilyData(std::istream& input_stream)
       primary_spouse_ = IdPointerPair<Character>(commonItems::singleLlong(input_stream).getLlong());
    });
    family_data_parser.registerKeyword("spouse", [this](const std::string&, std::istream& input_stream) {
-      spouses_.emplace_back(IdPointerPair<Character>(commonItems::singleLlong(input_stream).getLlong()));
+      spouses_.emplace_back(commonItems::singleLlong(input_stream).getLlong());
    });
    family_data_parser.registerKeyword("concubine", [this](const std::string&, std::istream& input_stream) {
-      concubines_.emplace_back(IdPointerPair<Character>(commonItems::singleLlong(input_stream).getLlong()));
+      concubines_.emplace_back(commonItems::singleLlong(input_stream).getLlong());
    });
    family_data_parser.registerKeyword("child", [this](const std::string&, std::istream& input_stream) {
       for (const auto child_id: commonItems::llongList(input_stream).getLlongs())
       {
-         children_.emplace_back(IdPointerPair<Character>(child_id));
+         children_.emplace_back(child_id);
       }
    });
    family_data_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
@@ -219,7 +219,7 @@ void ck3::Character::ParseClaim(std::istream& input_stream)
 {
    commonItems::parser claims_parser;
    registerKeyword("title", [this](const std::string&, std::istream& input_stream) {
-      claims_.push_back(IdPointerPair<Character>(commonItems::singleLlong(input_stream).getLlong()));  // TODO
+      claims_.emplace_back(commonItems::singleLlong(input_stream).getLlong());
    });
    claims_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
    claims_parser.parseStream(input_stream);

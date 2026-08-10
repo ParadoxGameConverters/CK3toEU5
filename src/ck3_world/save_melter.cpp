@@ -4,6 +4,10 @@
 
 #include <filesystem>
 #include <fstream>
+#include <iostream>
+#include <stdexcept>
+#include <sstream>
+#include <string>
 
 #include "Log.h"
 
@@ -30,7 +34,7 @@ ck3::SaveData ck3::SaveMelter::MeltSave(const std::filesystem::path& save_game_p
    const std::ifstream save_file(save_game_path, std::ios::binary);
    std::stringstream in_stream;
    in_stream << save_file.rdbuf();
-   std::string save_game_string = in_stream.str();
+   const std::string save_game_string = in_stream.str();
    SaveData save_game;
 
    const auto save = rakaly::parseCk3(save_game_string);

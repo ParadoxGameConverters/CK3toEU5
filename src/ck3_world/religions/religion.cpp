@@ -6,7 +6,6 @@
 #include "CommonRegexes.h"
 #include "ParserHelpers.h"
 #include "faith.hpp"
-#include "src/ck3_world/id_pointer_pair.hpp"
 
 ck3::Religion::Religion(std::istream& input_stream, long long religion_id): religion_id_(religion_id)
 {
@@ -24,7 +23,7 @@ void ck3::Religion::ParseReligion(std::istream& input_stream)
    registerKeyword("faiths", [this](const std::string&, std::istream& input_stream) {
       for (auto faith: commonItems::llongList(input_stream).getLlongs())
       {
-         faiths_.push_back(IdPointerPair<Faith>(faith));
+         faiths_.emplace_back(faith);
       }
    });
    registerKeyword("religion_type", [this](const std::string&, std::istream& input_stream) {

@@ -9,7 +9,7 @@
 namespace ck3
 {
 class Character;
-
+class Title;
 class CharacterRealm: commonItems::parser  // NOLINT : issues with error handling in parser
 {
   public:
@@ -31,9 +31,9 @@ class CharacterRealm: commonItems::parser  // NOLINT : issues with error handlin
    std::string government_type_;
    std::set<std::string> laws_;
    std::string court_language_;
-   // TODO
-   IdPointerPair<Character> realm_capital_;  // A barony!
-   std::vector<IdPointerPair<Character>>
+   
+   IdPointerPair<Title> realm_capital_;  // A barony!
+   std::vector<IdPointerPair<Title>>
        domain_;  // These are all titles_ owned (b-c-d-k-e), landless included. First one is PRIMARY.
    std::vector<IdPointerPair<Character>> council_;
 };

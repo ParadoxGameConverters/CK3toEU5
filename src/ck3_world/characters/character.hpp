@@ -22,6 +22,7 @@ using Skills = struct Skills
 class Faith;
 class Culture;
 class House;
+class Title;
 class Character: commonItems::parser  // NOLINT : issues with error handling in parser
 {
   public:
@@ -96,7 +97,7 @@ class Character: commonItems::parser  // NOLINT : issues with error handling in 
    std::vector<IdPointerPair<Character>> concubines_;
    std::vector<IdPointerPair<Character>> knights_;  // employed champions and commanders, not council staff
 
-   std::vector<IdPointerPair<Character>> claims_;  // TODO
+   std::vector<IdPointerPair<Title>> claims_;
    std::optional<CharacterRealm> realm_;
 
    Skills skills_;
