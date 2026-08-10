@@ -5,7 +5,7 @@
 
 #include <utility>
 
-#include "ck3_parsers/save_parser.hpp"
+#include "ck3_world/ck3_world.hpp"
 #include "configuration/configuration.hpp"
 #include "output/output.hpp"
 
@@ -22,9 +22,7 @@ Converter::Converter(configuration::Configuration configuration, commonItems::Co
 void Converter::Convert()
 {
    Log(LogLevel::Progress) << "5%";
-   const ck3::SaveParser parsed_ck3_save(configuration_, converter_version_);
-
-
+   const ck3::CK3World ck3_world(configuration_, converter_version_);
 
    Log(LogLevel::Progress) << "80%";
 
