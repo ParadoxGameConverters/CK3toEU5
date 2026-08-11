@@ -12,6 +12,7 @@
 #include "flags/flags.hpp"
 #include "religions/religions.hpp"
 #include "src/configuration/configuration.hpp"
+#include "titles/landed_titles.hpp"
 #include "titles/titles.hpp"
 
 namespace ck3
@@ -50,6 +51,7 @@ class CK3World
    void ParseGamestate(std::istream& input_stream, const commonItems::ConverterVersion& converter_version);
    void ParseMeta(std::istream& input_stream);
    void ParseConfederations(std::istream& input_stream);
+   void LoadLandedTitles(const configuration::Configuration& configuration);
 
    // savegame processing
 
@@ -70,7 +72,6 @@ class CK3World
    Dynasties dynasties_;
    Religions religions_;
    // CoatsOfArms coats;
-   // LandedTitles landedTitles;
    // CountyDetails countyDetails;
    Cultures cultures_;
    // HouseNameScraper houseNameScraper;
@@ -86,6 +87,7 @@ class CK3World
    // mappers::LocalizationMapper localizationMapper;
 
    // std::map<std::string, std::shared_ptr<Title>> independentTitles;
+   LandedTitles landed_titles_;
 };
 }  // namespace ck3
 

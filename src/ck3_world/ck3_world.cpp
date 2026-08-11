@@ -1,15 +1,16 @@
 #include "ck3_world.hpp"
 // #include "CommonFunctions.h"
-#include "CommonRegexes.h"
-#include "Log.h"
-// #include "ModLoader/ModFilesystem.h"
-
 #include <filesystem>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
+#include "CommonRegexes.h"
+#include "Log.h"
+#include "ModLoader/Mod.h"
+#include "ModLoader/ModFilesystem.h"
 #include "OSCompatibilityLayer.h"
 #include "Parser.h"
 #include "ParserHelpers.h"
@@ -52,13 +53,17 @@ ck3::CK3World::CK3World(const configuration::Configuration& configuration,
    auto metadata_stream = std::istringstream(save_game.metadata);
    ParseMeta(metadata_stream);
    Log(LogLevel::Progress) << "7 %";
-
    Log(LogLevel::Info) << "* Parsing Gamestate *";
    auto game_state_stream = std::istringstream(save_game.gamestate);
    ParseGamestate(game_state_stream, converter_version);
+
    Log(LogLevel::Progress) << "20 %";
 
-   Log(LogLevel::Info) << "* Gamestate Parsing Complete, Weaving Internals *";
+   Log(LogLevel::Info) << "* Gamestate Parsing Complete, Parsing Game Files *";
+   LoadLandedTitles(configuration);
+   Log(LogLevel::Progress) << "25 %";
+
+   Log(LogLevel::Info) << "* Parsing Complete, Weaving Internals *";
    Log(LogLevel::Progress) << "30 %";
 
    Log(LogLevel::Info) << "*** Good-bye CK3, rest in peace. ***";
@@ -215,4 +220,19 @@ void ck3::CK3World::ParseMeta(std::istream& input_stream)
    meta_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
    meta_parser.parseStream(input_stream);
    meta_parser.clearRegisteredKeywords();
+}
+
+void ck3::CK3World::LoadLandedTitles(const configuration::Configuration& configuration)
+{
+   Log(LogLevel::Info) << "-> Loading Landed Titles.";
+   const std::vector<Mod> empty_vector;  // TODO(Kmiotek): when implementing mod support change this
+   const commonItems::ModFilesystem mod_filesystem(configuration.GetCK3Directory(), empty_vector);
+   for (const auto& file: mod_filesystem.GetAllFilesInFolder("game/common/landed_titles"))
+   {
+      if (file.extension() == ".txt")
+      {
+         landed_titles_.LoadTitles(file);
+      }
+   }
+   Log(LogLevel::Info) << "<> Loaded " << landed_titles_.GetLandedTitles().size() << " landed titles.";
 }

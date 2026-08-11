@@ -235,6 +235,7 @@ set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/religions/religions.cp
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/title.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/titles.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/dynamic_title_info.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/landed_titles.cpp")
 
 link_directories("./external/rakaly")
 
