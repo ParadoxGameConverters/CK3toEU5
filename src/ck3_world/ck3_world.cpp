@@ -1,5 +1,5 @@
 #include "ck3_world.hpp"
-// #include "CommonFunctions.h"
+
 #include <filesystem>
 #include <iostream>
 #include <sstream>
@@ -11,7 +11,6 @@
 #include "Log.h"
 #include "ModLoader/Mod.h"
 #include "ModLoader/ModFilesystem.h"
-#include "OSCompatibilityLayer.h"
 #include "Parser.h"
 #include "ParserHelpers.h"
 #include "characters/characters.hpp"
@@ -20,24 +19,11 @@
 #include "dynasties/dynasties.hpp"
 #include "external/commonItems/ConverterVersion.h"
 #include "flags/flags.hpp"
+#include "geography/county_details.hpp"
+#include "geography/province_holdings.hpp"
 #include "religions/religions.hpp"
 #include "save_melter.hpp"
 #include "src/configuration/configuration.hpp"
-
-namespace
-{
-// CK3 keeps its actual game data under <install>/game/. Older layouts (and test fixtures) may point directly at the
-// data root.
-std::filesystem::path GetCK3GameDirectory(const configuration::Configuration& configuration)
-{
-   const auto& ck3_path = configuration.GetCK3Directory();
-   if (commonItems::DoesFolderExist(ck3_path / "game"))
-   {
-      return ck3_path / "game";
-   }
-   return ck3_path;
-}
-}  // namespace
 
 ck3::CK3World::CK3World(const configuration::Configuration& configuration,
     const commonItems::ConverterVersion& converter_version)
@@ -87,7 +73,7 @@ void ck3::CK3World::ParseGamestate(std::istream& input_stream, const commonItems
       start_date_ = date(start_date_string.getString());
    });
    parser.registerKeyword("version",
-       [this, converter_version](const std::string&,  // NOLINT : issues with parser error handling
+       [this, converter_version](const std::string&,  // NOLINT - Issues with parser error handling
            std::istream& input_stream) {
           const commonItems::singleString version_string(input_stream);
           ck3_version_ = GameVersion(version_string.getString());
@@ -122,11 +108,11 @@ void ck3::CK3World::ParseGamestate(std::istream& input_stream, const commonItems
                           << " kingdoms, " << titles_.GetEmpires().size() << " empires, "
                           << titles_.GetHegemonies().size() << " hegemonies.";
    });
-   // registerKeyword("provinces", [this](const std::string&, std::istream& input_stream) {
-   //	Log(LogLevel::Info) << "-> Loading provinces.";
-   //	province_holdings_ = ProvinceHoldings(input_stream);
-   //	Log(LogLevel::Info) << "<> Loaded " << province_holdings_.getProvinceHoldings().size() << " provinces.";
-   // });
+   parser.registerKeyword("provinces", [this](const std::string&, std::istream& input_stream) {
+      Log(LogLevel::Info) << "-> Loading provinces.";
+      province_holdings_ = ProvinceHoldings(input_stream);
+      Log(LogLevel::Info) << "<> Loaded " << province_holdings_.GetProvinceHoldings().size() << " provinces.";
+   });
 
    parser.registerKeyword("living", [this](std::istream& input_stream) {
       Log(LogLevel::Info) << "-> Loading alive characters.";
@@ -152,11 +138,11 @@ void ck3::CK3World::ParseGamestate(std::istream& input_stream, const commonItems
       Log(LogLevel::Info) << "<> Loaded " << religions_.GetReligions().size() << " religions and "
                           << religions_.GetFaiths().size() << " faiths.";
    });
-   // registerKeyword("county_manager", [this](const std::string&, std::istream& input_stream) {
-   //	Log(LogLevel::Info) << "-> Loading county details.";
-   //	countyDetails = CountyDetails(input_stream);
-   //	Log(LogLevel::Info) << "<> Loaded " << countyDetails.getCountyDetails().size() << " county details.";
-   // });
+   parser.registerKeyword("county_manager", [this](const std::string&, std::istream& input_stream) {
+      Log(LogLevel::Info) << "-> Loading county details.";
+      county_details_ = CountyDetails(input_stream);
+      Log(LogLevel::Info) << "<> Loaded " << county_details_.GetCountyDetails().size() << " county details.";
+   });
    parser.registerKeyword("culture_manager", [this](const std::string&, std::istream& input_stream) {
       Log(LogLevel::Info) << "-> Loading cultures.";
       cultures_ = Cultures(input_stream);
@@ -167,6 +153,7 @@ void ck3::CK3World::ParseGamestate(std::istream& input_stream, const commonItems
       confederations_ = Confederations(input_stream);
       Log(LogLevel::Info) << "<> Loaded " << confederations_.GetConfederations().size() << " confederations.";
    });
+   // TODO(Kmiotek): add relations, opinions, vassal_contracts
    // registerKeyword("relations", [this](const std::string&, std::istream& input_stream) {
    //	Log(LogLevel::Info) << "-> Loading relations.";
    //	relations = Relations(input_stream);
@@ -191,21 +178,22 @@ void ck3::CK3World::ParseGamestate(std::istream& input_stream, const commonItems
 void ck3::CK3World::ParseMeta(std::istream& input_stream)
 {
    commonItems::parser meta_parser;
+   // TODO(Kmiotek): add mod handling
    // meta_parser_.registerKeyword("mods", [this, configuration](std::istream& input_stream) {
-   //	Log(LogLevel::Info) << "-> Detecting used mods.";
-   //	std::set<std::string> seenMods;
-   //	for (const auto& path: commonItems::getStrings(input_stream))
-   //	{
-   //		if (seenMods.contains(path))
-   //			continue;
-   //		mods_.emplace_back(Mod("", path));
-   //		seenMods.emplace(path);
-   //	}
-   //	Log(LogLevel::Info) << "<> Savegame claims " << mods_.size() << " mods used.";
-   //	commonItems::ModLoader modLoader;
-   //	modLoader.loadMods(theConfiguration.GetCK3DocDirectory(), mods_);
-   //	mods = modLoader.getMods();
-   // });
+   // Log(LogLevel::Info) << "-> Detecting used mods.";
+   // std::set<std::string> seenMods;
+   // for (const auto& path: commonItems::getStrings(input_stream))
+   //{
+   //	if (seenMods.contains(path))
+   //		continue;
+   //	mods_.emplace_back(Mod("", path));
+   //	seenMods.emplace(path);
+   //}
+   // Log(LogLevel::Info) << "<> Savegame claims " << mods_.size() << " mods used.";
+   // commonItems::ModLoader modLoader;
+   // modLoader.loadMods(theConfiguration.GetCK3DocDirectory(), mods_);
+   // mods = modLoader.getMods();
+   //});
    meta_parser.registerKeyword("meta_title_name", [this](std::istream& input_stream) {
       // The realm name as CK3 displays it (e.g. "the Yamamoto Empire") - dynamic nomad/adventurer
       // titles_ often carry a stale internal name, so this is the better source for the player realm.

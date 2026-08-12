@@ -42,6 +42,13 @@ DebugIntermediate/
 lib/
 /CK3toEU5.sln.DotSettings.user
 
+# Exceptions for rakaly
+
+!external/rakaly/rakaly.dll
+!external/rakaly/rakaly.dll.lib
+!external/rakaly/librakaly.so
+!external/rakaly/librakaly.dylib
+
 # Exception for exe files used in tests
 
 !data/test_files/test_folders/ck3_folder/binaries/ck3.exe

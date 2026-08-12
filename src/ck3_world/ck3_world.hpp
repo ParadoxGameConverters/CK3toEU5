@@ -10,6 +10,8 @@
 #include "cultures/cultures.hpp"
 #include "dynasties/dynasties.hpp"
 #include "flags/flags.hpp"
+#include "geography/county_details.hpp"
+#include "geography/province_holdings.hpp"
 #include "religions/religions.hpp"
 #include "src/configuration/configuration.hpp"
 #include "titles/landed_titles.hpp"
@@ -26,18 +28,15 @@ class CK3World
    [[nodiscard]] const auto& GetCultures() const { return cultures_; }
 
    [[nodiscard]] const auto& GetConversionDate() const { return end_date_; }
-   //[[nodiscard]] const auto& GetIndeps() const { return independentTitles; }
    //[[nodiscard]] const auto& GetMods() const { return mods; }
    [[nodiscard]] const auto& GetTitles() const { return titles_; }
    [[nodiscard]] const auto& GetCharacters() const { return characters_; }
    [[nodiscard]] const auto& GetDynasties() const { return dynasties_; }
    [[nodiscard]] const auto& GetReligions() const { return religions_; }
-   //
-   //[[nodiscard]] const auto& GetConfederations() const { return confederations; }
-   //[[nodiscard]] const auto& GetCountyDetails() const { return countyDetails; }
-   //[[nodiscard]] const auto& GetLandedTitles() const { return landedTitles; }
-   //[[nodiscard]] const auto& GetPlayerTitle() const { return playerTitle; }
-   //[[nodiscard]] const auto& GetMetaTitleName() const { return metaTitleName; }
+   [[nodiscard]] const auto& GetConfederations() const { return confederations_; }
+   [[nodiscard]] const auto& GetCountyDetails() const { return county_details_; }
+   [[nodiscard]] const auto& GetLandedTitles() const { return landed_titles_; }
+   [[nodiscard]] const auto& GetMetaTitleName() const { return meta_realm_title_; }
    //[[nodiscard]] const auto& GetMetaCoA() const { return metaCoA; }
    //[[nodiscard]] const auto& GetLocalizationMapper() const { return localizationMapper; }
    //[[nodiscard]] const auto& GetAlliancePairs() const { return relations.getAlliancePairs(); }
@@ -50,7 +49,6 @@ class CK3World
   private:
    void ParseGamestate(std::istream& input_stream, const commonItems::ConverterVersion& converter_version);
    void ParseMeta(std::istream& input_stream);
-   void ParseConfederations(std::istream& input_stream);
    void LoadLandedTitles(const configuration::Configuration& configuration);
 
    // savegame processing
@@ -67,12 +65,12 @@ class CK3World
 
    // world
    Titles titles_;
-   // ProvinceHoldings province_holdings_;
+   ProvinceHoldings province_holdings_;
    Characters characters_;
    Dynasties dynasties_;
    Religions religions_;
    // CoatsOfArms coats;
-   // CountyDetails countyDetails;
+   CountyDetails county_details_;
    Cultures cultures_;
    // HouseNameScraper houseNameScraper;
    Confederations confederations_;
@@ -86,7 +84,6 @@ class CK3World
    // mappers::TraitScraper traitScraper;
    // mappers::LocalizationMapper localizationMapper;
 
-   // std::map<std::string, std::shared_ptr<Title>> independentTitles;
    LandedTitles landed_titles_;
 };
 }  // namespace ck3

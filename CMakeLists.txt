@@ -236,6 +236,11 @@ set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/title.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/titles.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/dynamic_title_info.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/landed_titles.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/geography/county_details.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/geography/county_detail.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/geography/province_holding.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/geography/province_holdings.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/geography/building.cpp")
 
 link_directories("./external/rakaly")
 
