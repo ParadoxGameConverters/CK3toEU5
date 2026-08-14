@@ -23,7 +23,7 @@ class Faith;
 class Culture;
 class House;
 class Title;
-class Character: commonItems::parser  // NOLINT : issues with error handling in parser
+class Character
 {
   public:
    Character(std::istream& input_stream, long long character_id);
@@ -31,6 +31,7 @@ class Character: commonItems::parser  // NOLINT : issues with error handling in 
    [[nodiscard]] auto IsDead() const { return death_date_.has_value(); }
    [[nodiscard]] auto IsKnight() const { return knight_; }
    [[nodiscard]] auto IsFemale() const { return female_; }
+   [[nodiscard]] auto IsCouncilor() const { return councilor_; }
    [[nodiscard]] auto GetID() const { return character_id_; }
    [[nodiscard]] auto GetPiety() const { return piety_; }
    [[nodiscard]] auto GetPrestige() const { return prestige_; }

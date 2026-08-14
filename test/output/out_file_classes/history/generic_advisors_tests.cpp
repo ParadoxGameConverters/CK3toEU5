@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <string>
 
-#include "generic_advisors.hpp"
+#include "src/output/out_file_classes/history/generic_advisors.hpp"
 #include "src/output/utils/file_writer.hpp"
 
 

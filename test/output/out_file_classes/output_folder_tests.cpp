@@ -6,8 +6,8 @@
 #include <string>
 #include <utility>
 
-#include "output_file.hpp"
-#include "output_folder.hpp"
+#include "src/output/out_file_classes/output_file.hpp"
+#include "src/output/out_file_classes/output_folder.hpp"
 #include "src/output/utils/folder_manager.hpp"
 
 

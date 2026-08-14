@@ -11,8 +11,8 @@ class IdPointerPair
   public:
    IdPointerPair() = default;
    explicit IdPointerPair(long long the_id): id_(the_id), pointer_(nullptr) {}
-   [[nodiscard]] long long GetID() { return id_; }
-   [[nodiscard]] std::shared_ptr<T> GetPointer() { return pointer_; }
+   [[nodiscard]] long long GetID() const { return id_; }
+   [[nodiscard]] std::shared_ptr<T> GetPointer() const { return pointer_; }
 
    void SetPointer(std::shared_ptr<T> new_pointer);
 

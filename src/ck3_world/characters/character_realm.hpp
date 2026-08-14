@@ -10,7 +10,7 @@ namespace ck3
 {
 class Character;
 class Title;
-class CharacterRealm: commonItems::parser  // NOLINT : issues with error handling in parser
+class CharacterRealm
 {
   public:
    explicit CharacterRealm(std::istream& input_stream);

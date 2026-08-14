@@ -301,14 +301,17 @@ include_directories("./external/commonItems/external/googletest/googlemock")
 include_directories("./external/commonItems/external/googletest/googlemock/include")
 
 # test sources will be added one by one like so:
-set(TEST_SOURCES ${TEST_SOURCES} "src/configuration/configuration_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/configuration/configuration_tests.cpp")
 
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/file_writer_impl_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/folder_manager_impl_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/output_folder_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/resource_copy_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/metadata/metadata_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/history/generic_advisors_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/utils/file_writer_impl_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/utils/folder_manager_impl_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/out_file_classes/output_folder_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/out_file_classes/resource_copy_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/out_file_classes/metadata/metadata_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/out_file_classes/history/generic_advisors_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/characters/character_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/characters/characters_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/characters/character_realm_tests.cpp")
 
 add_executable(
 	CK3toEU5Tests
