@@ -16,6 +16,9 @@ void ck3::Dynasty::ParseDynasty(std::istream& input_stream)
    registerKeyword("key", [this](const std::string&, std::istream& input_stream) {
       dynasty_id_ = commonItems::singleString(input_stream).getString();
    });
+   registerKeyword("dynasty_head", [this](const std::string&, std::istream& input_stream) {
+      dynasty_head_ = commonItems::singleLlong(input_stream).getLlong();
+   });
    registerKeyword("good_for_realm_name", [this](const std::string&, std::istream& input_stream) {
       appropriate_realm_name_ = commonItems::singleString(input_stream).getString() == "yes";
    });

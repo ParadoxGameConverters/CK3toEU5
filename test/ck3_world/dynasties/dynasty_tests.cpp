@@ -26,9 +26,11 @@ TEST(CK3WorldDynastyTests, DynastyPrimitivesCanBeLoaded)  // NOLINT : clang-tidy
    input << "key = \"7\"\n";
    input << "good_for_realm_name = yes\n";
    input << "coat_of_arms_id = 14\n";
+   input << "dynasty_head = 16878493\n";
 
    const ck3::Dynasty dynasty(input, 42);
 
    ASSERT_EQ("7", dynasty.GetDynastyID());
    ASSERT_TRUE(dynasty.IsAppropriateRealmName());
+   ASSERT_EQ(dynasty.GetDynastyHead().value_or(-1), 16878493);
 }

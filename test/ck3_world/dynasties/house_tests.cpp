@@ -31,6 +31,7 @@ TEST(CK3WorldHouseTests, HousePrimitivesCanBeLoaded)  // NOLINT : clang-tidy doe
    input << "localized_name = \"Gaye\"\n";
    input << "prefix = \"dynnp_de\"\n";
    input << "dynasty = 19\n";
+   input << "head_of_house = 178\n";
 
    const ck3::House house(input, 42);
 
@@ -39,4 +40,6 @@ TEST(CK3WorldHouseTests, HousePrimitivesCanBeLoaded)  // NOLINT : clang-tidy doe
    EXPECT_EQ("Gaye", house.GetLocalizedName());
    EXPECT_EQ("dynnp_de", house.GetPrefix());
    EXPECT_EQ(19, house.GetDynasty().GetID());
+   EXPECT_TRUE(house.GetHouseHead().has_value());
+   EXPECT_EQ(house.GetHouseHead()->GetID(), 178);  // NOLINT
 }

@@ -47,7 +47,7 @@ void ck3::Character::ParseCharacter(std::istream& input_stream)
    });
    parser.registerKeyword("skill", [this](const std::string&, std::istream& input_stream) {
       const auto& skills_list = commonItems::intList(input_stream).getInts();
-      if (skills_list.size() >= kMinSkillsArraySize)
+      if (skills_list.size() >= kMinSkillsArraySize && skills_list.size() <= kMinSkillsArraySize + 1)
       {
          skills_.diplomacy = skills_list[0];
          skills_.martial = skills_list[1];
@@ -71,9 +71,6 @@ void ck3::Character::ParseCharacter(std::istream& input_stream)
          traits_.insert(trait_id);
       }
    });
-   parser.registerKeyword("obedience_target", [this](const std::string&, std::istream& input_stream) {
-      suzerain_ = IdPointerPair<Character>(commonItems::singleLlong(input_stream).getLlong());
-   });
    parser.registerKeyword("court_data", [this](const std::string&, std::istream& input_stream) {
       ParseCourtData(input_stream);
    });
@@ -82,6 +79,9 @@ void ck3::Character::ParseCharacter(std::istream& input_stream)
    });
    parser.registerKeyword("landed_data", [this](const std::string&, std::istream& input_stream) {
       realm_ = CharacterRealm(input_stream);
+   });
+   parser.registerKeyword("playable_data", [this](const std::string&, std::istream& input_stream) {
+      ParsePlayableData(input_stream);
    });
    parser.registerKeyword("family_data", [this](const std::string&, std::istream& input_stream) {
       ParseFamilyData(input_stream);
@@ -127,6 +127,9 @@ void ck3::Character::ParseAliveData(std::istream& input_stream)
          auto blob_stream = std::stringstream(blob);
          ParseClaim(blob_stream);
       }
+   });
+   alive_data_parser.registerKeyword("obedience_target", [this](const std::string&, std::istream& input_stream) {
+      suzerain_ = IdPointerPair<Character>(commonItems::singleLlong(input_stream).getLlong());
    });
    alive_data_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
    alive_data_parser.parseStream(input_stream);

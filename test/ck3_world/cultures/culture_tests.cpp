@@ -56,6 +56,18 @@ TEST(CK3WorldCultureTests, CulturePrimitivesCanBeLoaded)  // NOLINT : clang-tidy
    EXPECT_FALSE(culture.IsDynamic());
 }
 
+TEST(CK3WorldCultureTests, CultureEraLoaded)  // NOLINT : clang-tidy doens't like gtest
+{
+   std::stringstream input;
+   input << "culture_era_data={ {type = culture_era_tribal progress = 100 left=950}{type = culture_era_early_medieval "
+            "progress "
+            "= 100 join=950} {type = culture_era_high_medieval progress = 59.78}{type = culture_era_late_medieval}}\n";
+
+   const ck3::Culture culture(input, 42);
+
+   EXPECT_EQ("culture_era_early_medieval", culture.GetEra());
+}
+
 TEST(CK3WorldCultureTests, CultureNameLoadedForDynamic)  // NOLINT : clang-tidy doens't like gtest
 {
    std::stringstream input;

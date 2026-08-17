@@ -1,7 +1,9 @@
+#include <iostream>
 #include <optional>
 #include <sstream>
 
 #include "Date.h"
+#include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
 #include "src/ck3_world/characters/character.hpp"
 
@@ -80,6 +82,26 @@ TEST(CK3WorldCharacterTests, CharacterPrimitivesCanBeLoaded)  // NOLINT - readab
    ASSERT_EQ(character.GetDeathDate(), date(31, 8, 26));
 }
 
+TEST(CK3WorldCharacterTests, MalformedCharacterSkillsPrintsError)  // NOLINT - readability-function-cognitive-complexity
+{
+   const std::stringstream log;
+   std::streambuf* cout_buffer = std::cout.rdbuf();
+   std::cout.rdbuf(log.rdbuf());
+
+   std::stringstream input;
+   input << "first_name = \"bob spongepants\"\n";
+   input << "birth = 9.9.9\n";
+   input << "skill = { 11 12 13 14 15 16 90 }\n";
+
+   const Character character(input, 42);
+
+   ASSERT_EQ("bob spongepants", character.GetName());
+   ASSERT_EQ(date("9.9.9"), character.GetBirthDate());
+   EXPECT_THAT(log.str(), testing::HasSubstr(R"(Character 42 has a malformed skills block! Size: 7)"));
+
+   std::cout.rdbuf(cout_buffer);
+}
+
 TEST(CK3WorldCharacterTests, CharacterAliveDataCanBeLoaded)  // NOLINT - readability-function-cognitive-complexity
 {
    std::stringstream input;
@@ -90,10 +112,22 @@ TEST(CK3WorldCharacterTests, CharacterAliveDataCanBeLoaded)  // NOLINT - readabi
    input << "\tprestige = {\n";
    input << "\t\taccumulated = 101.02\n";
    input << "\t}\n";
+   input << "\tinfluence = {\n";
+   input << "\t\taccumulated = 101.02\n";
+   input << "\t}\n";
+   input << "\tmerit = {\n";
+   input << "\t\taccumulated = 101.02\n";
+   input << "\t}\n";
    input << "\tgold = {\n";
    input << "\t\tvalue = 103.02\n";
    input << "\t}\n";
    input << "\tclaim = { { title = 1 } { title = 3 } { title = 5 } }\n";
+   input << "obedience_target=336\n";
+   input << "is_obedient=no\n";
+   input << "laws={ japanese_bureaucracy_2 single_heir_succession_law }\n";
+   input << "realm_capital = 13414\n";
+   input << "domain={ 13176 13177 13297}\n";
+   input << "government=japan_feudal_government\n";
    input << "}";
 
    const Character character(input, 42);
@@ -101,21 +135,69 @@ TEST(CK3WorldCharacterTests, CharacterAliveDataCanBeLoaded)  // NOLINT - readabi
    ASSERT_NEAR(100.01, character.GetPiety(), 0.001);
    ASSERT_TRUE(character.GetPrestige().has_value());
    ASSERT_NEAR(101.02, character.GetPrestige().value_or(0), 0.001);
+   ASSERT_NEAR(101.02, character.GetMerit().value_or(0), 0.001);
+   ASSERT_NEAR(101.02, character.GetInfluence().value_or(0), 0.001);
    ASSERT_NEAR(103.02, character.GetGold(), 0.001);
    ASSERT_EQ(3, character.GetClaims().size());
+   ASSERT_EQ(336, character.GetSuzerain()->GetID());  // NOLINT
 }
+
+TEST(CK3WorldCharacterTests, CharacterRealmCanBeLoaded)  // NOLINT - readability-function-cognitive-complexity
+{
+   std::stringstream input;
+   input << "landed_data={\n";
+   input << "laws={ japanese_bureaucracy_2 single_heir_succession_law }\n";
+   input << "realm_capital = 13414\n";
+   input << "domain={ 13176 13177 13297}\n";
+   input << "government=japan_feudal_government\n";
+   input << "}\n";
+
+   const Character character(input, 42);
+
+   ASSERT_TRUE(character.GetCharacterRealm().has_value());
+}
+
 
 TEST(CK3WorldCharacterTests, CharacterFamilyDataCanBeLoaded)  // NOLINT : clang-tidy doens't like gtest
 {
    std::stringstream input;
    input << "family_data = {\n";
    input << "\tprimary_spouse = 17\n";
+   input << "child={ 90 78 }\n";
+   input << "spouse = 56\n";
+   input << "concubine = 101\n";
+   input << "concubine = 103\n";
    input << "}";
 
    const Character character(input, 42);
 
    ASSERT_TRUE(character.GetSpouse().has_value());
-   ASSERT_EQ(17, character.GetSpouse()->GetID());  // NOLINT : bugprone-unchecked-optional-access
+   // ASSERT_EQ(17, character.GetSpouse()->GetID());  // NOLINT : bugprone-unchecked-optional-access
+   ASSERT_EQ(character.GetChildren().size(), 2);
+   ASSERT_EQ(character.GetChildren()[0].GetID(), 90);
+   ASSERT_EQ(character.GetChildren()[1].GetID(), 78);
+   ASSERT_EQ(character.GetConcubines().size(), 2);
+   ASSERT_EQ(character.GetConcubines()[0].GetID(), 101);
+   ASSERT_EQ(character.GetConcubines()[1].GetID(), 103);
+}
+
+TEST(CK3WorldCharacterTests, CharacterPlayableDataCanBeLoaded)  // NOLINT : clang-tidy doens't like gtest
+{
+   std::stringstream input;
+   input << "playable_data = \n"
+            "{ knights = {128103 33670375 124029 50395737 102236 117863 67190927}\n"
+            "diarchy = 973078556\n"
+            "diarchy_successor = 134276006\n"
+            "accolades = {67109158 33554852 50332246}\n"
+            "legitimacy=567.92187\n"
+            "}\n";
+
+   const Character character(input, 42);
+
+   ASSERT_EQ(character.GetKnights().size(), 7);
+   ASSERT_EQ(character.GetKnights()[0].GetID(), 128103);
+   ASSERT_TRUE(character.GetLegitimacy().has_value());
+   ASSERT_NEAR(567.92187, character.GetLegitimacy().value_or(0), 0.001);
 }
 
 TEST(CK3WorldCharacterTests, CharacterCourtDataCanBeLoaded)  // NOLINT : clang-tidy doens't like gtest

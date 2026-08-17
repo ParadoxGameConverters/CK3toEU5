@@ -35,10 +35,13 @@ class Character
    [[nodiscard]] auto GetID() const { return character_id_; }
    [[nodiscard]] auto GetPiety() const { return piety_; }
    [[nodiscard]] auto GetPrestige() const { return prestige_; }
+   [[nodiscard]] auto GetMerit() const { return merit_; }
+   [[nodiscard]] auto GetInfluence() const { return influence_; }
    [[nodiscard]] auto GetGold() const { return gold_; }
    [[nodiscard]] const auto& GetName() const { return name_; }
    [[nodiscard]] const auto& GetBirthDate() const { return birth_date_; }
    [[nodiscard]] const auto& GetDeathDate() const { return death_date_; }
+   [[nodiscard]] auto GetLegitimacy() const { return legitimacy_; }
 
    [[nodiscard]] const auto& GetCulture() const { return culture_; }
    [[nodiscard]] const auto& GetFaith() const { return faith_; }
@@ -46,6 +49,7 @@ class Character
    [[nodiscard]] const auto& GetSpouse() const { return primary_spouse_; }
    [[nodiscard]] const auto& GetSuzerain() const { return suzerain_; }
    [[nodiscard]] const auto& GetChildren() const { return children_; }
+   [[nodiscard]] const auto& GetConcubines() const { return concubines_; }
    [[nodiscard]] const auto& GetHouse() const { return house_; }
    [[nodiscard]] const auto& GetTraits() const { return traits_; }
    [[nodiscard]] const auto& GetClaims() const { return claims_; }
