@@ -23,7 +23,7 @@ void ck3::Confederations::ParseConfederations(std::istream& input_stream)
       commonItems::parser database_parser;
       database_parser.registerRegex(R"(\d+)", [this](const std::string& confederation_id, std::istream& input_stream) {
          const auto confederation_blob_as_string = commonItems::stringOfItem(input_stream).getString();
-         if (confederation_blob_as_string == "none")  // disbanded confederation
+         if (!confederation_blob_as_string.contains("{"))  // disbanded confederation
          {
             return;
          }

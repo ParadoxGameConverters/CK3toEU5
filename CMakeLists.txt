@@ -312,6 +312,14 @@ set(TEST_SOURCES ${TEST_SOURCES} "test/output/out_file_classes/history/generic_a
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/characters/character_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/characters/characters_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/characters/character_realm_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/confederations/confederation_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/confederations/confederations_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/cultures/culture_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/cultures/cultures_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/dynasties/dynasty_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/dynasties/house_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/dynasties/dynasties_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/flags/flags_tests.cpp")
 
 add_executable(
 	CK3toEU5Tests
@@ -350,6 +358,7 @@ if (COVERAGE STREQUAL true)
 		COMMAND echo "=================== GCOV ===================="
 		COMMAND echo "-- Source directories:"
 		COMMAND echo "		${CMAKE_SOURCE_DIR}/src/"
+		COMMAND echo "		${CMAKE_SOURCE_DIR}/test/"
 		COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
 	)
 
@@ -359,7 +368,7 @@ if (COVERAGE STREQUAL true)
 	add_custom_command(TARGET lcov
 		COMMAND echo "=================== LCOV ===================="
 		COMMAND echo "-- Passing lcov tool under code coverage"
-		COMMAND lcov --c --d CMakeFiles/CK3toEU5lib.dir/src/ --d CMakeFiles/CK3toEU5Tests.dir/src/ --o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --c --d CMakeFiles/CK3toEU5lib.dir/src/ --d CMakeFiles/CK3toEU5Tests.dir/test/ --o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/bits/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/ext/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused

@@ -14,7 +14,7 @@ class Dynasties: commonItems::parser
    explicit Dynasties(std::istream& input_stream);
 
    [[nodiscard]] const auto& GetDynasties() const { return dynasties_; }
-   [[nodiscard]] auto GetHouses() { return houses_; }
+   [[nodiscard]] const auto& GetHouses() const { return houses_; }
 
   private:
    void ParseDynasties(std::istream& input_stream);

@@ -29,8 +29,8 @@ class ProvinceHolding
    std::vector<Building> buildings_;
    std::string special_building_;
    std::optional<Building> duchy_capital_building_;
-   double income_ =
-       0;  // Be careful with this income - not every holding will have it and it might depend on holders skill
+   // Be careful with this income - not every holding will have it and it might depend on holders skill
+   double income_ = 0;
    double barter_goods_ = 0;
 };
 }  // namespace ck3

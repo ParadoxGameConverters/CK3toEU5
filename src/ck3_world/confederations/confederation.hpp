@@ -23,6 +23,8 @@ class Confederation: commonItems::parser
    //[[nodiscard]] const auto& getColor() const { return color; }
    //[[nodiscard]] const auto& getCoat() const { return coat; }
    [[nodiscard]] const auto& GetHouses() const { return houses_; }
+   [[nodiscard]] const auto& GetMembers() const { return members_; }
+
 
   private:
    void ParseConfederation(std::istream& input_stream);
@@ -32,6 +34,7 @@ class Confederation: commonItems::parser
 
    IdPointerPair<House> leader_house_;
    std::vector<IdPointerPair<House>> houses_;
+   std::vector<IdPointerPair<Character>> members_;
 };
 }  // namespace ck3
 

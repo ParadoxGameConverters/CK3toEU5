@@ -22,6 +22,12 @@ void ck3::Confederation::ParseConfederation(std::istream& input_stream)
          houses_.emplace_back(house_id);
       }
    });
+   registerKeyword("members", [this](std::istream& input_stream) {
+      for (auto member_id: commonItems::llongList(input_stream).getLlongs())
+      {
+         members_.emplace_back(member_id);
+      }
+   });
    registerKeyword("leader", [this](std::istream& input_stream) {
       // Despite the bare key name, the leader is a house, matching the houses list.
       leader_house_ = IdPointerPair<House>(commonItems::getLlong(input_stream));
