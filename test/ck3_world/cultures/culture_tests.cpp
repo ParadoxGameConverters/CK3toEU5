@@ -35,6 +35,7 @@ TEST(CK3WorldCultureTests, CulturePrimitivesCanBeLoaded)  // NOLINT : clang-tidy
    input << "culture_template = akan\n";
    input << "name = \"Akan\"\n";
    input << "heritage = heritage_akan\n";
+   input << "language = language_kru\n";
    input << "name_list = name_list_akan\n";
    input << "name_list = name_list_blahakan\n";
    input << "ethos = ethos_egalitarian\n";
@@ -48,6 +49,7 @@ TEST(CK3WorldCultureTests, CulturePrimitivesCanBeLoaded)  // NOLINT : clang-tidy
    EXPECT_EQ("Akan", culture.GetLocalizedName());
    EXPECT_EQ("akan", culture.GetName());
    EXPECT_EQ("heritage_akan", culture.GetHeritage());
+   EXPECT_EQ("language_kru", culture.GetLanguage());
    EXPECT_EQ("akan", culture.GetTemplate());
    EXPECT_EQ("ethos_egalitarian", culture.GetEthos());
    EXPECT_EQ("culture_era_tribal", culture.GetEra());
