@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <sstream>
 
 #include "gtest/gtest.h"
@@ -35,6 +36,19 @@ TEST(CK3WorldLandedTitlesTests, TitlePrimitivesCanBeLoaded)  // NOLINT : clang-t
    ASSERT_TRUE(title->CanBeNamedAfterDynasty());
    ASSERT_EQ(345, title->GetProvince());
    ASSERT_EQ("b_barony", title->GetTitleKey());
+}
+
+TEST(CK3WorldLandedTitlesTests, LoadsFromFile)  // NOLINT : clang-tidy doens't like gtest
+{
+   const std::filesystem::path filepath("test_files/ck3_world/titles/landed_titles.txt");
+
+   ck3::LandedTitles titles;
+   titles.LoadTitles(filepath);
+   const auto title = titles.GetLandedTitles().at("h_roman_empire");
+
+   ASSERT_TRUE(title->IsDefiniteForm());
+   ASSERT_FALSE(title->IsLandless());
+   ASSERT_FALSE(title->CanBeNamedAfterDynasty());
 }
 
 TEST(CK3WorldLandedTitlesTests, TitlesCanBeLoaded)  // NOLINT : clang-tidy doens't like gtest

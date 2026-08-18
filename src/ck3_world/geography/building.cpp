@@ -26,18 +26,16 @@ void ck3::Building::ParseBuilding(std::istream& input_stream)
          try
          {
             level_ = std::stoi(level_string);
+            type_ = type.substr(0, pos);
+            return;
          }
          catch (std::exception&)
          {
             Log(LogLevel::Warning) << "Province building level stoi fail: " << level_string << " from " << type;
-            level_ = 1;
          }
-         type_ = type.substr(0, pos);
       }
-      else
-      {
-         type_ = type;
-      }
+      level_ = 1;
+      type_ = type;
    });
    parser.registerKeyword("disabled", [this](const std::string&, std::istream& input_stream) {
       disabled_ = (commonItems::singleString(input_stream).getString() == "yes");

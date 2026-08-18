@@ -42,6 +42,7 @@ TEST(CK3WorldFaithTests, FaithPrimitivesCanBeLoaded)  // NOLINT : clang-tidy doe
    input << "desc = \"Custom Desc\"\n";
    input << "icon = \"gfx/icon.dds\"\n";
    input << "faith_type = daoxue\n";
+   input << "religious_head=42\n";
    input << "variables = { \"a bunch of nonsense \nreally\"}";
 
    const ck3::Faith faith(input, 42);
@@ -59,6 +60,7 @@ TEST(CK3WorldFaithTests, FaithPrimitivesCanBeLoaded)  // NOLINT : clang-tidy doe
    ASSERT_EQ("gfx/icon.dds", faith.GetIconPath());
    ASSERT_EQ("daoxue", faith.GetFaithType());
    ASSERT_TRUE(faith.IsReformed());
+   ASSERT_EQ(faith.GetReligionHead().GetID(), 42);
 }
 
 

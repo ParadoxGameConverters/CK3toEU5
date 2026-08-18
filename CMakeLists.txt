@@ -328,6 +328,7 @@ set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/religions/religion_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/religions/religions_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/titles/landed_titles_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/titles/title_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/titles/titles_tests.cpp")
 
 add_executable(
 	CK3toEU5Tests
