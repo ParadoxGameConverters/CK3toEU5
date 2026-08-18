@@ -72,7 +72,7 @@ TEST(CK3WorldTitleTests, PrimitivesCanBeLoaded)  // NOLINT : clang-tidy doens't 
    ASSERT_TRUE(title.GetHolder().has_value());
    if (title.GetHolder().has_value())
    {
-      ASSERT_EQ(123, title.GetHolder()->GetID());
+      ASSERT_EQ(123, title.GetHolder()->GetID());  // NOLINT(bugprone-unchecked-optional-access) : incorrect
    }
    ASSERT_TRUE(title.IsTheocraticLease());
    ASSERT_TRUE(title.IsCountyCapital());
@@ -80,17 +80,17 @@ TEST(CK3WorldTitleTests, PrimitivesCanBeLoaded)  // NOLINT : clang-tidy doens't 
    ASSERT_TRUE(title.GetCapitalCounty().has_value());
    if (title.GetCapitalCounty().has_value())
    {
-      ASSERT_EQ(123, title.GetCapitalCounty()->GetID());
+      ASSERT_EQ(123, title.GetCapitalCounty()->GetID());  // NOLINT(bugprone-unchecked-optional-access) : incorrect
    }
    ASSERT_TRUE(title.GetDeFactoLiege().has_value());
    if (title.GetDeFactoLiege().has_value())
    {
-      ASSERT_EQ(1234, title.GetDeFactoLiege()->GetID());
+      ASSERT_EQ(1234, title.GetDeFactoLiege()->GetID());  // NOLINT(bugprone-unchecked-optional-access) : incorrect
    }
    ASSERT_TRUE(title.GetDeJureLiege().has_value());
    if (title.GetDeJureLiege().has_value())
    {
-      ASSERT_EQ(12345, title.GetDeJureLiege()->GetID());
+      ASSERT_EQ(12345, title.GetDeJureLiege()->GetID());  // NOLINT(bugprone-unchecked-optional-access) : incorrect
    }
    ASSERT_EQ(5, title.GetDeJureVassals().size());
    ASSERT_EQ(title.GetDeJureVassals()[0].GetID(), 1);

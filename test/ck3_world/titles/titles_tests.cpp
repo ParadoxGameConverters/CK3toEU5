@@ -1,7 +1,4 @@
-#include <gmock/gmock-matchers.h>
-
 #include <sstream>
-#include <stdexcept>
 
 #include "gtest/gtest.h"
 #include "src/ck3_world/titles/title.hpp"

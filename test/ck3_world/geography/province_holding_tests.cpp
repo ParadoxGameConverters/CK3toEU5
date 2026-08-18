@@ -124,8 +124,12 @@ TEST(CK3WorldProvinceHoldingTests, HoldingDuchyBuildingCanBeLoaded)  // NOLINT :
    ASSERT_TRUE(holding.GetDuchyCapitalBuilding().has_value());
    if (holding.GetDuchyCapitalBuilding().has_value())
    {
-      ASSERT_EQ(holding.GetDuchyCapitalBuilding()->GetType(), "tax_assessor");
-      ASSERT_EQ(holding.GetDuchyCapitalBuilding()->GetLevel(), 1);
-      ASSERT_TRUE(holding.GetDuchyCapitalBuilding()->IsDisabled());
+      ASSERT_EQ(holding.GetDuchyCapitalBuilding()->GetType(),  // NOLINT(bugprone-unchecked-optional-access) : incorrect
+          "tax_assessor");
+      ASSERT_EQ(
+          holding.GetDuchyCapitalBuilding()->GetLevel(),  // NOLINT(bugprone-unchecked-optional-access) : incorrect
+          1);
+      ASSERT_TRUE(
+          holding.GetDuchyCapitalBuilding()->IsDisabled());  // NOLINT(bugprone-unchecked-optional-access) : incorrect
    }
 }
