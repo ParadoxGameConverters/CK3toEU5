@@ -36,7 +36,7 @@ class Title
    [[nodiscard]] const auto& GetName() const { return name_; }
    [[nodiscard]] const auto& GetCustomName() const { return custom_name_; }
    [[nodiscard]] const auto& GetAdjective() const { return adjective_; }
-   [[nodiscard]] const auto& GetCreationDate() const { return last_holder_change_date_; }
+   [[nodiscard]] const auto& GetLastHolderChangeDate() const { return last_holder_change_date_; }
    [[nodiscard]] const auto& GetHistoryGovernment() const { return history_government_; }
    [[nodiscard]] const auto& GetCapitalCounty() const { return capital_county_; }
 

@@ -58,6 +58,7 @@ TEST(CK3WorldTitleTests, PrimitivesCanBeLoaded)  // NOLINT : clang-tidy doens't 
    input << "claim={ 7 8 }\n";
    input << "coat_of_arms_id=45\n";
    input << "color={ 1 2 3 }\n";
+   input << "date=285.7.1\n";
    input << "landless=yes\n";
 
    const ck3::Title title(input, 1);
@@ -101,6 +102,7 @@ TEST(CK3WorldTitleTests, PrimitivesCanBeLoaded)  // NOLINT : clang-tidy doens't 
    ASSERT_EQ(7, title.GetClaimants()[0].GetID());
    ASSERT_EQ(8, title.GetClaimants()[1].GetID());
    ASSERT_TRUE(title.IsLandless());
+   ASSERT_EQ(title.GetLastHolderChangeDate(), date(285, 7, 1));
 }
 
 // TEST(CK3World_TitleTests, nameCanBeCleanedOfGUIJunk)

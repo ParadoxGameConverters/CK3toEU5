@@ -112,10 +112,10 @@ TEST(CK3WorldTitlesTests, InsaneTitlesThrowException)  // NOLINT : clang-tidy do
    input << "1234512356789012345678901234567890={key=c_roma2}\n";
    input << "}";
 
+   EXPECT_ANY_THROW(const ck3::Titles titles(input));  // NOLINT : gtest things (multiple rules)
    try
    {
       const ck3::Titles titles(input);
-      FAIL();
    }
    catch (const std::runtime_error& e)
    {
