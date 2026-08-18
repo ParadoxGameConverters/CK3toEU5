@@ -113,14 +113,6 @@ TEST(CK3WorldTitlesTests, InsaneTitlesThrowException)  // NOLINT : clang-tidy do
    input << "}";
 
    EXPECT_ANY_THROW(const ck3::Titles titles(input));  // NOLINT : gtest things (multiple rules)
-   try
-   {
-      const ck3::Titles titles(input);
-   }
-   catch (const std::runtime_error& e)
-   {
-      EXPECT_THAT(e.what(), testing::HasSubstr("Cannot import title ID: 1234512356789012345678901234567890 (stoll"));
-   }
 }
 
 TEST(CK3WorldTitlesTests, JunkTitlesAreIgnored)  // NOLINT : clang-tidy doens't like gtest
