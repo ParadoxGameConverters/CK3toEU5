@@ -37,7 +37,11 @@ void ck3::ProvinceHolding::ParseHolding(std::istream& input_stream)
       for (const auto& blob: building_blobs)
       {
          auto blob_stream = std::stringstream(blob);
-         buildings_.emplace_back(blob_stream);
+         const auto new_building = Building(blob_stream);
+         if (!new_building.GetType().empty())
+         {
+            buildings_.push_back(new_building);
+         }
       }
    });
    parser.registerKeyword("income", [this](const std::string&, std::istream& input_stream) {

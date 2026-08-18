@@ -10,9 +10,14 @@ class Building
   public:
    explicit Building(std::istream& input_stream);
 
+   [[nodiscard]] const auto& GetType() const { return type_; }
+   [[nodiscard]] auto IsDisabled() const { return disabled_; }
+   [[nodiscard]] auto GetLevel() const { return level_; }
+
   private:
    std::string type_;
    bool disabled_ = false;
+   int level_ = 0;
 
    void ParseBuilding(std::istream& input_stream);
 };

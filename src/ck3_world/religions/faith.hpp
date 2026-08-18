@@ -18,13 +18,13 @@ class Faith: commonItems::parser  // NOLINT : issues with error handling in pars
 
    [[nodiscard]] const auto& GetTag() const { return tag_; }
    [[nodiscard]] const auto& GetDoctrines() const { return doctrines_; }
+   [[nodiscard]] const auto& GetTenets() const { return tenets_; }
    [[nodiscard]] const auto& GetReligion() const { return religion_; }
    [[nodiscard]] const auto& GetReligionHead() const { return religion_head_; }
    [[nodiscard]] auto GetID() const { return faith_id_; }
    [[nodiscard]] const auto& GetCustomName() const { return custom_name_; }
    [[nodiscard]] const auto& GetCustomAdjective() const { return custom_adjective_; }
    [[nodiscard]] const auto& GetDescription() const { return description_; }
-   [[nodiscard]] const auto& GetTemplate() const { return religion_template_; }
    [[nodiscard]] const auto& GetIconPath() const { return icon_path_; }
    [[nodiscard]] const auto& GetFaithType() const { return faith_type_; }
    [[nodiscard]] const auto& IsReformed() const { return is_reformed_; }
@@ -37,7 +37,6 @@ class Faith: commonItems::parser  // NOLINT : issues with error handling in pars
 
    long long faith_id_ = -1;
    std::string tag_;
-   std::string religion_template_;
    std::string faith_type_;
    std::filesystem::path icon_path_;
    std::string custom_name_;

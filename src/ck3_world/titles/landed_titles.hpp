@@ -14,6 +14,7 @@ class LandedTitles
 {
   public:
    void LoadTitles(const std::filesystem::path& file_name);
+   void LoadTitles(std::istream& input_stream);
 
    [[nodiscard]] const auto& GetLandedTitles() const { return landed_titles_; }
 

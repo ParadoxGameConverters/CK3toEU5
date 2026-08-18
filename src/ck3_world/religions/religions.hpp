@@ -17,7 +17,7 @@ class Religions: commonItems::parser  // NOLINT : issues with error handling in 
    explicit Religions(std::istream& input_stream);
 
    [[nodiscard]] const auto& GetReligions() const { return religions_; }
-   [[nodiscard]] auto GetFaiths() { return faiths_; }
+   [[nodiscard]] const auto& GetFaiths() const { return faiths_; }
 
   private:
    void ParseReligions(std::istream& input_stream);

@@ -18,6 +18,7 @@ class ProvinceHolding
    [[nodiscard]] const auto& GetHoldingType() const { return holding_type_; }
    [[nodiscard]] const auto& GetBuildings() const { return buildings_; }
    [[nodiscard]] const auto& GetSpecialBuilding() const { return special_building_; }
+   [[nodiscard]] const auto& GetDuchyCapitalBuilding() const { return duchy_capital_building_; }
    [[nodiscard]] const auto& GetIncome() const { return income_; }
    [[nodiscard]] const auto& GetBarterGoods() const { return barter_goods_; }
 

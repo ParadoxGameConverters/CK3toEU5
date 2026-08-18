@@ -320,6 +320,14 @@ set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/dynasties/dynasty_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/dynasties/house_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/dynasties/dynasties_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/flags/flags_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/geography/county_details_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/geography/province_holding_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/geography/province_holdings_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/religions/faith_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/religions/religion_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/religions/religions_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/titles/landed_titles_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/titles/title_tests.cpp")
 
 add_executable(
 	CK3toEU5Tests

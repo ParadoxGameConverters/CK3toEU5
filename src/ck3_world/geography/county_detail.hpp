@@ -25,7 +25,7 @@ class CountyDetail
   private:
    void ParseCountyDetails(std::istream& input_stream);
 
-   int development_ = -1;
+   int development_ = 0;
    std::string county_key_;
    IdPointerPair<Culture> culture_;
    IdPointerPair<Faith> faith_;

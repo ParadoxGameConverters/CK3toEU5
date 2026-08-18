@@ -74,7 +74,8 @@ class Title
    std::set<std::string> laws_;
    Level level_ = Level::kUnknown;
 
-   IdPointerPair<Title> capital_county_;  // capital title is a COUNTY, even for county itself and baronies beneath it!
+   std::optional<IdPointerPair<Title>>
+       capital_county_;  // capital title is a COUNTY, even for county itself and baronies beneath it!
 
    std::optional<IdPointerPair<Character>> holder_;
    std::vector<IdPointerPair<Character>> heirs_;
