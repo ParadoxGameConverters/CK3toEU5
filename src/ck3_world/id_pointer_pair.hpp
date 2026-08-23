@@ -10,15 +10,15 @@ class IdPointerPair
 {
   public:
    IdPointerPair() = default;
-   explicit IdPointerPair(long long the_id): id_(the_id), pointer_(nullptr) {}
+   explicit IdPointerPair(long long the_id): id_(the_id), pointer_() {}
    [[nodiscard]] long long GetID() const { return id_; }
-   [[nodiscard]] std::shared_ptr<T> GetPointer() const { return pointer_; }
+   [[nodiscard]] std::weak_ptr<T> GetPointer() const { return pointer_; }
 
-   void SetPointer(std::shared_ptr<T> new_pointer);
+   void SetPointer(std::weak_ptr<T> new_pointer);
 
   private:
    long long id_ = -1;
-   std::shared_ptr<T> pointer_;
+   std::weak_ptr<T> pointer_;
 };
 }  // namespace ck3
 

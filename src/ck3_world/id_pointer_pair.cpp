@@ -8,7 +8,7 @@
 //}
 
 template <typename T>
-void ck3::IdPointerPair<T>::SetPointer(std::shared_ptr<T> new_pointer)
+void ck3::IdPointerPair<T>::SetPointer(std::weak_ptr<T> new_pointer)
 {
    pointer_ = new_pointer;
 }

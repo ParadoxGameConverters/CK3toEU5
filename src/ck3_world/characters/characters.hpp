@@ -5,6 +5,10 @@
 
 namespace ck3
 {
+class Cultures;
+class Faiths;
+class Dynasties;
+class Titles;
 class Characters
 {
   public:
@@ -15,11 +19,11 @@ class Characters
    [[nodiscard]] const auto& GetAliveCharacters() const { return characters_alive_; }
    [[nodiscard]] const auto& GetDeadCharacters() const { return characters_dead_; }
 
-   // void LinkCultures(const Cultures& cultures);
-   // void LinkFaiths(const Faiths& faiths);
-   // void LinkHouses(const Houses& houses);
-   // void LinkTitles(const Titles& titles);
-   // void LinkCharacters();
+   void LinkCultures(const Cultures& cultures);
+   void LinkFaiths(const Faiths& faiths);
+   void LinkHouses(const Dynasties& houses);
+   void LinkTitles(const Titles& titles);
+   void LinkCharacters();
    // void LinkTraits(const mappers::TraitScraper& traitScraper);
 
   private:
