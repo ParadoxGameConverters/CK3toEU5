@@ -1,0 +1,53 @@
+#ifndef CK3_FAITH_H
+#define CK3_FAITH_H
+#include <set>
+
+#include "Color.h"
+#include "Parser.h"
+#include "src/ck3_world/id_pointer_pair.hpp"
+
+namespace ck3
+{
+class Religion;
+class Character;
+class Faith: commonItems::parser  // NOLINT : issues with error handling in parser
+{
+  public:
+   Faith() = default;
+   Faith(std::istream& input_stream, long long faith_id);
+
+   [[nodiscard]] const auto& GetTag() const { return tag_; }
+   [[nodiscard]] const auto& GetDoctrines() const { return doctrines_; }
+   [[nodiscard]] const auto& GetTenets() const { return tenets_; }
+   [[nodiscard]] const auto& GetReligion() const { return religion_; }
+   [[nodiscard]] const auto& GetReligionHead() const { return religion_head_; }
+   [[nodiscard]] auto GetID() const { return faith_id_; }
+   [[nodiscard]] const auto& GetCustomName() const { return custom_name_; }
+   [[nodiscard]] const auto& GetCustomAdjective() const { return custom_adjective_; }
+   [[nodiscard]] const auto& GetDescription() const { return description_; }
+   [[nodiscard]] const auto& GetIconPath() const { return icon_path_; }
+   [[nodiscard]] const auto& GetFaithType() const { return faith_type_; }
+   [[nodiscard]] const auto& IsReformed() const { return is_reformed_; }
+
+  private:
+   void ParseFaith(std::istream& input_stream);
+   void ParseDoctrine(std::istream& input_stream);
+
+   bool is_reformed_ = true;
+
+   long long faith_id_ = -1;
+   std::string tag_;
+   std::string faith_type_;
+   std::filesystem::path icon_path_;
+   std::string custom_name_;
+   std::string custom_adjective_;
+   std::string description_;
+   std::set<std::string> doctrines_;
+   std::set<std::string> tenets_;
+
+   IdPointerPair<Character> religion_head_;
+   IdPointerPair<Religion> religion_;
+};
+}  // namespace ck3
+
+#endif  // CK3_FAITH_H

@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <string>
 
-#include "resource_copy.hpp"
+#include "src/output/out_file_classes/resource_copy.hpp"
 
 
 namespace out

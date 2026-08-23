@@ -214,6 +214,33 @@ set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/resource
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/metadata/metadata.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/history/generic_advisors.cpp")
 
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/ck3_world.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/id_pointer_pair.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/save_melter.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/cultures/culture.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/cultures/cultures.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/characters/character.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/characters/character_realm.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/characters/characters.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/flags/flag.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/flags/flags.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/dynasties/dynasty.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/dynasties/dynasties.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/dynasties/house.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/confederations/confederation.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/confederations/confederations.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/religions/religion.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/religions/faith.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/religions/religions.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/title.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/titles.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/dynamic_title_info.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/titles/landed_titles.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/geography/county_details.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/geography/county_detail.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/geography/province_holding.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/geography/province_holdings.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/geography/building.cpp")
 
 link_directories("./external/rakaly")
 
@@ -274,14 +301,34 @@ include_directories("./external/commonItems/external/googletest/googlemock")
 include_directories("./external/commonItems/external/googletest/googlemock/include")
 
 # test sources will be added one by one like so:
-set(TEST_SOURCES ${TEST_SOURCES} "src/configuration/configuration_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/configuration/configuration_tests.cpp")
 
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/file_writer_impl_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/utils/folder_manager_impl_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/output_folder_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/resource_copy_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/metadata/metadata_tests.cpp")
-set(TEST_SOURCES ${TEST_SOURCES} "src/output/out_file_classes/history/generic_advisors_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/utils/file_writer_impl_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/utils/folder_manager_impl_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/out_file_classes/output_folder_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/out_file_classes/resource_copy_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/out_file_classes/metadata/metadata_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/output/out_file_classes/history/generic_advisors_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/characters/character_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/characters/characters_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/characters/character_realm_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/confederations/confederation_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/confederations/confederations_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/cultures/culture_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/cultures/cultures_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/dynasties/dynasty_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/dynasties/house_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/dynasties/dynasties_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/flags/flags_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/geography/county_details_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/geography/province_holding_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/geography/province_holdings_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/religions/faith_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/religions/religion_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/religions/religions_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/titles/landed_titles_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/titles/title_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/titles/titles_tests.cpp")
 
 add_executable(
 	CK3toEU5Tests
@@ -320,6 +367,7 @@ if (COVERAGE STREQUAL true)
 		COMMAND echo "=================== GCOV ===================="
 		COMMAND echo "-- Source directories:"
 		COMMAND echo "		${CMAKE_SOURCE_DIR}/src/"
+		COMMAND echo "		${CMAKE_SOURCE_DIR}/test/"
 		COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
 	)
 
@@ -329,7 +377,7 @@ if (COVERAGE STREQUAL true)
 	add_custom_command(TARGET lcov
 		COMMAND echo "=================== LCOV ===================="
 		COMMAND echo "-- Passing lcov tool under code coverage"
-		COMMAND lcov --c --d CMakeFiles/CK3toEU5lib.dir/src/ --d CMakeFiles/CK3toEU5Tests.dir/src/ --o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --c --d CMakeFiles/CK3toEU5lib.dir/src/ --d CMakeFiles/CK3toEU5Tests.dir/test/ --o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/bits/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/ext/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
