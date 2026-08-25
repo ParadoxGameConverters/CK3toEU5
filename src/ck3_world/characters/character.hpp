@@ -43,20 +43,24 @@ class Character
    [[nodiscard]] const auto& GetDeathDate() const { return death_date_; }
    [[nodiscard]] auto GetLegitimacy() const { return legitimacy_; }
 
-   [[nodiscard]] const auto& GetCulture() const { return culture_; }
-   [[nodiscard]] const auto& GetFaith() const { return faith_; }
-   [[nodiscard]] const auto& GetEmployer() const { return employer_; }
-   [[nodiscard]] const auto& GetSpouse() const { return primary_spouse_; }
-   [[nodiscard]] const auto& GetSuzerain() const { return suzerain_; }
-   [[nodiscard]] const auto& GetChildren() const { return children_; }
-   [[nodiscard]] const auto& GetConcubines() const { return concubines_; }
-   [[nodiscard]] const auto& GetHouse() const { return house_; }
-   [[nodiscard]] const auto& GetTraits() const { return traits_; }
-   [[nodiscard]] const auto& GetClaims() const { return claims_; }
+   [[nodiscard]] auto& GetCulture() { return culture_; }
+   [[nodiscard]] auto& GetFaith() { return faith_; }
+   [[nodiscard]] auto& GetEmployer() { return employer_; }
+   [[nodiscard]] auto& GetSpouse() { return primary_spouse_; }
+   [[nodiscard]] auto& GetSuzerain() { return suzerain_; }
+   [[nodiscard]] auto& GetChildren() { return children_; }
+   [[nodiscard]] auto& GetConcubines() { return concubines_; }
+   [[nodiscard]] auto& GetHouse() { return house_; }
+   [[nodiscard]] auto& GetTraits() { return traits_; }
+   [[nodiscard]] auto& GetClaims() { return claims_; }
 
    [[nodiscard]] const auto& GetSkills() const { return skills_; }
-   [[nodiscard]] const auto& GetCharacterRealm() const { return realm_; }
-   [[nodiscard]] const auto& GetKnights() const { return knights_; }
+   [[nodiscard]] auto& GetCharacterRealm() { return realm_; }
+   [[nodiscard]] auto& GetKnights() { return knights_; }
+
+   void RemoveSpouse() { primary_spouse_ = std::nullopt; }
+   void RemoveEmployer() { employer_ = std::nullopt; }
+   void RemoveSuzerain() { suzerain_ = std::nullopt; }
 
   private:
    void ParseCharacter(std::istream& input_stream);

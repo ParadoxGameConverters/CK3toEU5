@@ -14,7 +14,7 @@ class IdPointerPair
    [[nodiscard]] long long GetID() const { return id_; }
    [[nodiscard]] std::weak_ptr<T> GetPointer() const { return pointer_; }
 
-   void SetPointer(std::weak_ptr<T> new_pointer);
+   void SetPointer(std::weak_ptr<T> new_pointer) { pointer_ = new_pointer; }
 
   private:
    long long id_ = -1;

@@ -51,6 +51,7 @@ ck3::CK3World::CK3World(const configuration::Configuration& configuration,
 
    Log(LogLevel::Info) << "* Parsing Complete, Weaving Internals *";
    Log(LogLevel::Progress) << "30 %";
+   characters_.LinkCharacters();
 
    Log(LogLevel::Info) << "*** Good-bye CK3, rest in peace. ***";
    Log(LogLevel::Progress) << "47 %";

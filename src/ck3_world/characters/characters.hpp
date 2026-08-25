@@ -6,7 +6,7 @@
 namespace ck3
 {
 class Cultures;
-class Faiths;
+class Religions;
 class Dynasties;
 class Titles;
 class Characters
@@ -20,7 +20,7 @@ class Characters
    [[nodiscard]] const auto& GetDeadCharacters() const { return characters_dead_; }
 
    void LinkCultures(const Cultures& cultures);
-   void LinkFaiths(const Faiths& faiths);
+   void LinkFaiths(const Religions& religions);
    void LinkHouses(const Dynasties& houses);
    void LinkTitles(const Titles& titles);
    void LinkCharacters();
@@ -29,6 +29,7 @@ class Characters
   private:
    std::map<long long, std::shared_ptr<Character>> characters_alive_;
    std::map<long long, std::shared_ptr<Character>> characters_dead_;
+   std::map<long long, std::shared_ptr<Character>> all_characters_;
 };
 }  // namespace ck3
 
