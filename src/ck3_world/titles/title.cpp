@@ -141,7 +141,7 @@ void ck3::Title::DetermineLevelAfterParsing()
    level_ = Level::kUnknown;
 }
 
-bool ck3::Title::DoesTitleExist()
-{
-   return (holder_.has_value() && last_holder_change_date_ != kNeverCreatedDate);
-}
+// bool ck3::Title::DoesTitleExist()
+//{
+//    return (holder_.has_value() && last_holder_change_date_ != kNeverCreatedDate);
+// }
