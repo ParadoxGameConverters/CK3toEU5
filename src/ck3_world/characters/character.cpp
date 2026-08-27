@@ -238,6 +238,12 @@ void ck3::Character::ParseClaim(std::istream& input_stream)
 
 void ck3::Character::LinkCharacters(const std::map<long long, std::shared_ptr<Character>>& characters)
 {
+   LinkCharacterSingles(characters);
+   LinkCharacterVectors(characters);
+}
+
+void ck3::Character::LinkCharacterSingles(const std::map<long long, std::shared_ptr<Character>>& characters)
+{
    if (primary_spouse_.has_value())
    {
       if (characters.contains(primary_spouse_->GetID()))
@@ -271,6 +277,10 @@ void ck3::Character::LinkCharacters(const std::map<long long, std::shared_ptr<Ch
          suzerain_ = std::nullopt;  // ... ok ck3
       }
    }
+}
+
+void ck3::Character::LinkCharacterVectors(const std::map<long long, std::shared_ptr<Character>>& characters)
+{
    std::vector<IdPointerPair<Character>> replacement_children;
    for (auto& child: children_)
    {

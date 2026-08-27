@@ -45,7 +45,7 @@ void ck3::Characters::LinkCharacters()
    {
       character.second->LinkCharacters(all_characters_);
    }
-   Log(LogLevel::Info) << "Characters linked.";
+   Log(LogLevel::Debug) << "Characters linked.";
 }
 
 
@@ -56,7 +56,7 @@ void ck3::Characters::LinkCultures(const Cultures& cultures)
    {
       character.second->LinkCulture(culture_map);
    }
-   Log(LogLevel::Info) << "Character cultures linked.";
+   Log(LogLevel::Debug) << "Character cultures linked.";
 }
 
 void ck3::Characters::LinkFaiths(const Religions& religions)
@@ -66,7 +66,7 @@ void ck3::Characters::LinkFaiths(const Religions& religions)
    {
       character.second->LinkFaith(faith_map);
    }
-   Log(LogLevel::Info) << "Character faiths linked.";
+   Log(LogLevel::Debug) << "Character faiths linked.";
 }
 
 void ck3::Characters::LinkHouses(const Dynasties& houses)
@@ -76,7 +76,7 @@ void ck3::Characters::LinkHouses(const Dynasties& houses)
    {
       character.second->LinkHouse(house_map);
    }
-   Log(LogLevel::Info) << "Character houses linked.";
+   Log(LogLevel::Debug) << "Character houses linked.";
 }
 
 void ck3::Characters::LinkTitles(const Titles& titles, const CouncillorTasks& councillor_tasks)
@@ -94,5 +94,5 @@ void ck3::Characters::LinkTitles(const Titles& titles, const CouncillorTasks& co
       character.second->LinkCharacterRealm(id_title_map, councillor_tasks.GetCouncillorTasks());
       character.second->LinkClaims(id_title_map);
    }
-   Log(LogLevel::Info) << "Character realms and claims linked.";
+   Log(LogLevel::Debug) << "Character realms and claims linked.";
 }

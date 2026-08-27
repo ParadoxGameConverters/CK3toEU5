@@ -82,6 +82,9 @@ class Character
    void ParseFamilyData(std::istream& input_stream);
    void ParseClaim(std::istream& input_stream);
 
+   void LinkCharacterSingles(const std::map<long long, std::shared_ptr<Character>>& characters);
+   void LinkCharacterVectors(const std::map<long long, std::shared_ptr<Character>>& characters);
+
    bool knight_ = false;
    bool female_ = false;
    bool councilor_ = false;

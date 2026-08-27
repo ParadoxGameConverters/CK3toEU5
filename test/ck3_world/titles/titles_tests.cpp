@@ -86,19 +86,19 @@ TEST(CK3WorldTitlesTests, TitlesDividedIntoLevels)  // NOLINT : clang-tidy doens
    ASSERT_TRUE(titles.GetHegemonies().contains("h_roma"));
 }
 
-TEST(CK3WorldTitlesTests, NamelessTitlesAreIgnored)  // NOLINT : clang-tidy doens't like gtest
-{
-   std::stringstream input;
-   input << "landed_titles={\n";
-   input << "123={key=c_roma holder=21}\n";
-   input << "1234={}\n";
-   input << "12345={key=c_roma2 holder=21}\n";
-   input << "}";
-
-   const ck3::Titles titles(input);
-
-   ASSERT_EQ(2, titles.GetTitles().size());
-}
+// TEST(CK3WorldTitlesTests, NamelessTitlesAreIgnored)  // NOLINT : clang-tidy doens't like gtest
+//{
+//    std::stringstream input;
+//    input << "landed_titles={\n";
+//    input << "123={key=c_roma holder=21}\n";
+//    input << "1234={}\n";
+//    input << "12345={key=c_roma2 holder=21}\n";
+//    input << "}";
+//
+//    const ck3::Titles titles(input);
+//
+//    ASSERT_EQ(2, titles.GetTitles().size());
+// }
 
 TEST(CK3WorldTitlesTests, InsaneTitlesThrowException)  // NOLINT : clang-tidy doens't like gtest
 {

@@ -7,6 +7,7 @@
 #include <utility>
 
 #include "CommonRegexes.h"
+#include "Log.h"
 #include "Parser.h"
 #include "ParserHelpers.h"
 #include "councillor_task.hpp"
@@ -49,4 +50,5 @@ void ck3::CouncillorTasks::LinkCharacters(const Characters& characters)
    {
       councillor_task.second->LinkCharacters(character_map);
    }
+   Log(LogLevel::Debug) << "Councillor tasks linked.";
 }

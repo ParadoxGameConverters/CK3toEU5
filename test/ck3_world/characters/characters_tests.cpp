@@ -38,16 +38,15 @@ TEST(CK3World_CharactersTests, DeadCharactersCanBeLoaded)  // NOLINT : clang-tid
 {
    std::stringstream input;
    input << "11={}\n";
-   input << "13={first_name=\"bob\"}\n";
-   input << "15={first_name=\"alice\"}\n";
+   input << "13={first_name=\"bob\" dead_data={date = 31.8.26} }\n ";
+   input << "15={first_name=\"alice\" dead_data={date = 772.8.26}}\n";
 
    Characters characters;
    characters.ParseCharacters(input);
-   const auto& char1 = characters.GetDeadCharacters().at(11);  // NOLINT(readability-magic-numbers) : "magic number"
    const auto& char2 = characters.GetDeadCharacters().at(13);  // NOLINT(readability-magic-numbers) : "magic number"
    const auto& char3 = characters.GetDeadCharacters().at(15);  // NOLINT(readability-magic-numbers) : "magic number"
 
-   ASSERT_TRUE(char1->GetClaims().empty());
+   ASSERT_FALSE(characters.GetDeadCharacters().contains(11));  // NOLINT(readability-magic-numbers) : "magic number"
    ASSERT_EQ("bob", char2->GetName());
    ASSERT_EQ("alice", char3->GetName());
 }
