@@ -23,6 +23,7 @@ class Faith;
 class Culture;
 class House;
 class Title;
+class CouncillorTask;
 class Character
 {
   public:
@@ -48,19 +49,27 @@ class Character
    [[nodiscard]] auto& GetEmployer() { return employer_; }
    [[nodiscard]] auto& GetSpouse() { return primary_spouse_; }
    [[nodiscard]] auto& GetSuzerain() { return suzerain_; }
-   [[nodiscard]] auto& GetChildren() { return children_; }
-   [[nodiscard]] auto& GetConcubines() { return concubines_; }
    [[nodiscard]] auto& GetHouse() { return house_; }
    [[nodiscard]] auto& GetTraits() { return traits_; }
-   [[nodiscard]] auto& GetClaims() { return claims_; }
-
-   [[nodiscard]] const auto& GetSkills() const { return skills_; }
    [[nodiscard]] auto& GetCharacterRealm() { return realm_; }
+   [[nodiscard]] const auto& GetSkills() const { return skills_; }
+
    [[nodiscard]] auto& GetKnights() { return knights_; }
+   [[nodiscard]] auto& GetChildren() { return children_; }
+   [[nodiscard]] auto& GetConcubines() { return concubines_; }
+   [[nodiscard]] auto& GetClaims() { return claims_; }
 
    void RemoveSpouse() { primary_spouse_ = std::nullopt; }
    void RemoveEmployer() { employer_ = std::nullopt; }
    void RemoveSuzerain() { suzerain_ = std::nullopt; }
+
+   void LinkCulture(const std::map<long long, std::shared_ptr<Culture>>& cultures);
+   void LinkFaith(const std::map<long long, std::shared_ptr<Faith>>& faiths);
+   void LinkHouse(const std::map<long long, std::shared_ptr<House>>& houses);
+   void LinkClaims(const std::map<long long, std::shared_ptr<Title>>& id_title_map);
+   void LinkCharacters(const std::map<long long, std::shared_ptr<Character>>& characters);
+   void LinkCharacterRealm(const std::map<long long, std::shared_ptr<Title>>& id_title_map,
+       const std::map<long long, std::shared_ptr<CouncillorTask>>& tasks);
 
   private:
    void ParseCharacter(std::istream& input_stream);
@@ -92,7 +101,7 @@ class Character
    std::optional<date> death_date_;
    std::set<int> traits_;
 
-   IdPointerPair<House> house_;
+   std::optional<IdPointerPair<House>> house_;
 
    std::optional<IdPointerPair<Culture>> culture_;
    std::optional<IdPointerPair<Faith>> faith_;

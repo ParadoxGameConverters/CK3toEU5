@@ -10,7 +10,8 @@ namespace ck3
 {
 class Character;
 class Title;
-class CharacterRealm
+class CouncillorTask;
+class CharacterRealm  // NOLINT(bugprone-exception-escape)
 {
   public:
    explicit CharacterRealm(std::istream& input_stream);
@@ -18,10 +19,14 @@ class CharacterRealm
    [[nodiscard]] auto GetVassalPower() const { return vassal_power_; }
    [[nodiscard]] const auto& GetGovernmentType() const { return government_type_; }
    [[nodiscard]] const auto& GetLaws() const { return laws_; }
-   [[nodiscard]] const auto& GetRealmCapital() const { return realm_capital_; }
-   [[nodiscard]] const auto& GetDomain() const { return domain_; }
+   [[nodiscard]] auto& GetRealmCapital() { return realm_capital_; }
+   [[nodiscard]] auto& GetDomain() { return domain_; }
    [[nodiscard]] const auto& GetCourtLanguage() const { return court_language_; }
-   [[nodiscard]] const auto& GetCouncil() const { return council_; }
+   [[nodiscard]] auto& GetCouncil() { return council_; }
+
+   void Link(const std::map<long long, std::shared_ptr<Title>>& id_title_map,
+       const std::map<long long, std::shared_ptr<CouncillorTask>>& tasks,
+       long long character_id);
 
   private:
    void ParseLandedData(std::istream& input_stream);
@@ -32,10 +37,11 @@ class CharacterRealm
    std::set<std::string> laws_;
    std::string court_language_;
 
-   IdPointerPair<Title> realm_capital_;  // A barony!
-   std::vector<IdPointerPair<Title>>
-       domain_;  // These are all titles_ owned (b-c-d-k-e), landless included. First one is PRIMARY.
-   std::vector<IdPointerPair<Character>> council_;
+   // A barony, not present for characters with just ceremonial titles
+   std::optional<IdPointerPair<Title>> realm_capital_;
+   // These are all titles_ owned (b-c-d-k-e), landless included. First one is PRIMARY.
+   std::vector<IdPointerPair<Title>> domain_;
+   std::vector<IdPointerPair<CouncillorTask>> council_;
 };
 }  // namespace ck3
 

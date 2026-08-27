@@ -11,10 +11,11 @@ class IdPointerPair
   public:
    IdPointerPair() = default;
    explicit IdPointerPair(long long the_id): id_(the_id), pointer_() {}
+   IdPointerPair(long long the_id, std::weak_ptr<T> the_pointer): id_(the_id), pointer_(std::move(the_pointer)) {}
    [[nodiscard]] long long GetID() const { return id_; }
    [[nodiscard]] std::weak_ptr<T> GetPointer() const { return pointer_; }
 
-   void SetPointer(std::weak_ptr<T> new_pointer) { pointer_ = new_pointer; }
+   void SetPointer(std::weak_ptr<T> new_pointer) { pointer_ = std::move(new_pointer); }
 
   private:
    long long id_ = -1;

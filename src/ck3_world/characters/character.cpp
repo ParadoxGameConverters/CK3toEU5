@@ -1,7 +1,13 @@
 #include "character.hpp"
 
 #include <iostream>
+#include <map>
+#include <memory>
+#include <optional>
 #include <sstream>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 #include "CommonRegexes.h"
 #include "Log.h"
@@ -228,4 +234,151 @@ void ck3::Character::ParseClaim(std::istream& input_stream)
    claims_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
    claims_parser.parseStream(input_stream);
    claims_parser.clearRegisteredKeywords();
+}
+
+void ck3::Character::LinkCharacters(const std::map<long long, std::shared_ptr<Character>>& characters)
+{
+   if (primary_spouse_.has_value())
+   {
+      if (characters.contains(primary_spouse_->GetID()))
+      {
+         primary_spouse_->SetPointer(characters.at(primary_spouse_->GetID()));
+      }
+      else
+      {
+         primary_spouse_ = std::nullopt;  // dead and pruned spouse
+      }
+   }
+   if (employer_.has_value() && characters.contains(employer_->GetID()))
+   {
+      if (characters.contains(employer_->GetID()))
+      {
+         employer_->SetPointer(characters.at(employer_->GetID()));
+      }
+      else
+      {
+         employer_ = std::nullopt;  // dead and pruned employer ??
+      }
+   }
+   if (suzerain_.has_value() && characters.contains(suzerain_->GetID()))
+   {
+      if (characters.contains(suzerain_->GetID()))
+      {
+         suzerain_->SetPointer(characters.at(suzerain_->GetID()));
+      }
+      else
+      {
+         suzerain_ = std::nullopt;  // ... ok ck3
+      }
+   }
+   std::vector<IdPointerPair<Character>> replacement_children;
+   for (auto& child: children_)
+   {
+      if (characters.contains(child.GetID()))
+      {
+         replacement_children.emplace_back(child.GetID(), characters.at(child.GetID()));
+      }
+   }
+   children_ = replacement_children;
+
+   std::vector<IdPointerPair<Character>> replacement_concubines;
+   for (auto& concubine: concubines_)
+   {
+      if (characters.contains(concubine.GetID()))
+      {
+         replacement_concubines.emplace_back(concubine.GetID(), characters.at(concubine.GetID()));
+      }
+   }
+   concubines_ = replacement_concubines;
+
+   std::vector<IdPointerPair<Character>> replacement_knights;
+   for (auto& knight: knights_)
+   {
+      if (characters.contains(knight.GetID()))
+      {
+         replacement_knights.emplace_back(knight.GetID(), characters.at(knight.GetID()));
+      }
+   }
+   knights_ = replacement_knights;
+}
+
+void ck3::Character::LinkCulture(const std::map<long long, std::shared_ptr<Culture>>& cultures)
+{
+   if (!culture_.has_value())
+   {
+      // We'll try determining the culture later from house head
+      return;
+   }
+   if (cultures.contains(culture_->GetID()))
+   {
+      culture_->SetPointer(cultures.at(culture_->GetID()));
+   }
+   else
+   {
+      throw std::runtime_error("Character " + std::to_string(character_id_) + " " + name_ + " has culture " +
+                               std::to_string(culture_->GetID()) + " which has no definition!");
+   }
+}
+
+void ck3::Character::LinkFaith(const std::map<long long, std::shared_ptr<Faith>>& faiths)
+{
+   if (!faith_.has_value())
+   {
+      // We'll try determining the faith later from house head
+      return;
+   }
+   if (faiths.contains(faith_->GetID()))
+   {
+      faith_->SetPointer(faiths.at(faith_->GetID()));
+   }
+   else
+   {
+      throw std::runtime_error("Character " + std::to_string(character_id_) + " " + name_ + " has faith " +
+                               std::to_string(faith_->GetID()) + " which has no definition!");
+   }
+}
+
+void ck3::Character::LinkHouse(const std::map<long long, std::shared_ptr<House>>& houses)
+{
+   if (!house_.has_value())
+   {
+      // Not a noble
+      return;
+   }
+   if (houses.contains(house_->GetID()))
+   {
+      house_->SetPointer(houses.at(house_->GetID()));
+   }
+   else
+   {
+      throw std::runtime_error("Character " + std::to_string(character_id_) + " " + name_ + " has house " +
+                               std::to_string(house_->GetID()) + " which has no definition!");
+   }
+}
+
+void ck3::Character::LinkCharacterRealm(const std::map<long long, std::shared_ptr<Title>>& id_title_map,
+    const std::map<long long, std::shared_ptr<CouncillorTask>>& tasks)
+{
+   if (realm_.has_value())
+   {
+      realm_->Link(id_title_map, tasks, character_id_);
+   }
+}
+
+void ck3::Character::LinkClaims(const std::map<long long, std::shared_ptr<Title>>& id_title_map)
+{
+   std::vector<IdPointerPair<Title>> replacement_claims;
+   for (auto& claim: claims_)
+   {
+      if (id_title_map.contains(claim.GetID()))
+      {
+         replacement_claims.emplace_back(claim.GetID(), id_title_map.at(claim.GetID()));
+      }
+      else
+      {
+         Log(LogLevel::Warning) << "Character " + std::to_string(character_id_) + " " + name_ + " has claim " +
+                                       std::to_string(claim.GetID()) + " which has no definition, removing it.";
+      }
+   }
+   claims_ = replacement_claims;
 }

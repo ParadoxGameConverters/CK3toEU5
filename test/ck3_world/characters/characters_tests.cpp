@@ -11,7 +11,7 @@ TEST(CK3WorldCharactersTests, CharactersDefaultToEmpty)  // NOLINT : clang-tidy 
 {
    std::stringstream input;
    Characters characters;
-   characters.ParseAliveCharacters(input);
+   characters.ParseCharacters(input);
 
    ASSERT_TRUE(characters.GetAliveCharacters().empty());
 }
@@ -24,7 +24,7 @@ TEST(CK3World_CharactersTests, CharactersCanBeLoaded)  // NOLINT : clang-tidy do
    input << "15={first_name=\"alice\"}\n";
 
    Characters characters;
-   characters.ParseAliveCharacters(input);
+   characters.ParseCharacters(input);
    const auto& char1 = characters.GetAliveCharacters().at(11);  // NOLINT(readability-magic-numbers) : "magic number"
    const auto& char2 = characters.GetAliveCharacters().at(13);  // NOLINT(readability-magic-numbers) : "magic number"
    const auto& char3 = characters.GetAliveCharacters().at(15);  // NOLINT(readability-magic-numbers) : "magic number"
@@ -42,7 +42,7 @@ TEST(CK3World_CharactersTests, DeadCharactersCanBeLoaded)  // NOLINT : clang-tid
    input << "15={first_name=\"alice\"}\n";
 
    Characters characters;
-   characters.ParseDeadCharacters(input);
+   characters.ParseCharacters(input);
    const auto& char1 = characters.GetDeadCharacters().at(11);  // NOLINT(readability-magic-numbers) : "magic number"
    const auto& char2 = characters.GetDeadCharacters().at(13);  // NOLINT(readability-magic-numbers) : "magic number"
    const auto& char3 = characters.GetDeadCharacters().at(15);  // NOLINT(readability-magic-numbers) : "magic number"

@@ -21,7 +21,7 @@ int main()  // NOLINT(bugprone-exception-escape)
 
       const auto configuration = configuration::LoadConfiguration("configuration.txt");
       configuration.Validate(converter_version);
-      Log(LogLevel::Progress) << "5%";
+      Log(LogLevel::Progress) << "3%";
       Log(LogLevel::Info) << "Converter configuration valid, starting conversion";
 
       auto converter = ck3_to_eu5::Converter(configuration, converter_version);

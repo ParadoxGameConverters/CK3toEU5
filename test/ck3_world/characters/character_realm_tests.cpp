@@ -10,10 +10,10 @@ namespace ck3
 TEST(CK3WorldCharactersRealmTests, CharacterRealmDefaultsToEmpty)  // NOLINT - readability-function-cognitive-complexity
 {
    std::stringstream input;
-   const CharacterRealm character_realm(input);
+   CharacterRealm character_realm(input);
 
    ASSERT_EQ(character_realm.GetVassalPower(), std::nullopt);
-   ASSERT_EQ(character_realm.GetRealmCapital().GetID(), -1);
+   ASSERT_EQ(character_realm.GetRealmCapital(), std::nullopt);
    ASSERT_TRUE(character_realm.GetCourtLanguage().empty());
    ASSERT_EQ(character_realm.GetCouncil().size(), 0);
    ASSERT_EQ(character_realm.GetDomain().size(), 0);
@@ -31,10 +31,11 @@ TEST(CK3WorldCharactersRealmTests, CharacterRealmParsed)  // NOLINT - readabilit
    input << "government=japan_feudal_government\n";
    input << "council={ 16795546 16795548 16795549 33556428 33572763 33574740 }\n";
    input << "royal_court={ language=language_japonic }\n";
-   const CharacterRealm character_realm(input);
+   CharacterRealm character_realm(input);
 
    ASSERT_EQ(character_realm.GetVassalPower(), 1337);
-   ASSERT_EQ(character_realm.GetRealmCapital().GetID(), 13414);
+   ASSERT_TRUE(character_realm.GetRealmCapital().has_value());
+   ASSERT_EQ(character_realm.GetRealmCapital()->GetID(), 13414);  // NOLINT : bugprone-unchecked-optional-access
    ASSERT_EQ(character_realm.GetCourtLanguage(), "language_japonic");
    ASSERT_EQ(character_realm.GetCouncil().size(), 6);
    ASSERT_EQ(character_realm.GetDomain().size(), 3);

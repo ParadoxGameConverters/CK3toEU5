@@ -27,7 +27,7 @@ TEST(CK3WorldCharacterTests, LoadValuesDefaultToBlank)  // NOLINT - readability-
    ASSERT_EQ(date("1.1.1"), character.GetBirthDate());
    ASSERT_EQ(std::nullopt, character.GetCulture());
    ASSERT_EQ(std::nullopt, character.GetFaith());
-   ASSERT_EQ(character.GetHouse().GetID(), -1);
+   ASSERT_EQ(std::nullopt, character.GetHouse());
    ASSERT_FALSE(character.GetSkills().martial);
    ASSERT_FALSE(character.GetSkills().diplomacy);
    ASSERT_FALSE(character.GetSkills().stewardship);
@@ -60,7 +60,7 @@ TEST(CK3WorldCharacterTests, CharacterPrimitivesCanBeLoaded)  // NOLINT - readab
    input << "female = yes\n";
    input << "dead_data = { date=31.8.26 }\n";
 
-   Character character(input, 42);
+   Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_EQ("bob spongepants", character.GetName());
    ASSERT_EQ(date("9.9.9"), character.GetBirthDate());
@@ -68,7 +68,7 @@ TEST(CK3WorldCharacterTests, CharacterPrimitivesCanBeLoaded)  // NOLINT - readab
    ASSERT_EQ(1, character.GetCulture()->GetID());  // NOLINT : bugprone-unchecked-optional-access
    ASSERT_TRUE(character.GetFaith().has_value());
    ASSERT_EQ(2, character.GetFaith()->GetID());  // NOLINT : bugprone-unchecked-optional-access
-   ASSERT_EQ(3, character.GetHouse().GetID());
+   ASSERT_EQ(3, character.GetHouse()->GetID());  // NOLINT : bugprone-unchecked-optional-access
    ASSERT_EQ(11, character.GetSkills().diplomacy);
    ASSERT_EQ(12, character.GetSkills().martial);
    ASSERT_EQ(13, character.GetSkills().stewardship);
@@ -93,7 +93,7 @@ TEST(CK3WorldCharacterTests, MalformedCharacterSkillsPrintsError)  // NOLINT - r
    input << "birth = 9.9.9\n";
    input << "skill = { 11 12 13 14 15 16 90 }\n";
 
-   const Character character(input, 42);
+   const Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_EQ("bob spongepants", character.GetName());
    ASSERT_EQ(date("9.9.9"), character.GetBirthDate());
@@ -130,7 +130,7 @@ TEST(CK3WorldCharacterTests, CharacterAliveDataCanBeLoaded)  // NOLINT - readabi
    input << "government=japan_feudal_government\n";
    input << "}";
 
-   Character character(input, 42);
+   Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_NEAR(100.01, character.GetPiety(), 0.001);
    ASSERT_TRUE(character.GetPrestige().has_value());
@@ -152,7 +152,7 @@ TEST(CK3WorldCharacterTests, CharacterRealmCanBeLoaded)  // NOLINT - readability
    input << "government=japan_feudal_government\n";
    input << "}\n";
 
-   Character character(input, 42);
+   Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_TRUE(character.GetCharacterRealm().has_value());
 }
@@ -169,7 +169,7 @@ TEST(CK3WorldCharacterTests, CharacterFamilyDataCanBeLoaded)  // NOLINT : clang-
    input << "concubine = 103\n";
    input << "}";
 
-   Character character(input, 42);
+   Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_TRUE(character.GetSpouse().has_value());
    // ASSERT_EQ(17, character.GetSpouse()->GetID());  // NOLINT : bugprone-unchecked-optional-access
@@ -192,7 +192,7 @@ TEST(CK3WorldCharacterTests, CharacterPlayableDataCanBeLoaded)  // NOLINT : clan
             "legitimacy=567.92187\n"
             "}\n";
 
-   Character character(input, 42);
+   Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_EQ(character.GetKnights().size(), 7);
    ASSERT_EQ(character.GetKnights()[0].GetID(), 128103);
@@ -209,7 +209,7 @@ TEST(CK3WorldCharacterTests, CharacterCourtDataCanBeLoaded)  // NOLINT : clang-t
    input << "\tcouncil_task = 7248\n";
    input << "}";
 
-   Character character(input, 42);
+   Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_TRUE(character.GetEmployer().has_value());
    ASSERT_EQ(27, character.GetEmployer().value().GetID());  // NOLINT : bugprone-unchecked-optional-access
