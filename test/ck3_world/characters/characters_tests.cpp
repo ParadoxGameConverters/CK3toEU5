@@ -38,9 +38,14 @@ TEST(CK3WorldCharactersTests, CharactersCanBeLoaded)  // NOLINT : clang-tidy doe
    const auto& char2 = characters.GetAliveCharacters().at(13);  // NOLINT(readability-magic-numbers) : "magic number"
    const auto& char3 = characters.GetAliveCharacters().at(15);  // NOLINT(readability-magic-numbers) : "magic number"
 
+   const auto& char2_from_all =
+       characters.GetAllCharacters().at(13);  // NOLINT(readability-magic-numbers) : "magic number"
+
    ASSERT_TRUE(char1->GetClaims().empty());
    ASSERT_EQ("bob", char2->GetName());
    ASSERT_EQ("alice", char3->GetName());
+
+   ASSERT_EQ("bob", char2_from_all->GetName());
 }
 
 TEST(CK3WorldCharactersTests, DeadCharactersCanBeLoaded)  // NOLINT : clang-tidy doens't like gtest
@@ -110,6 +115,19 @@ TEST(CK3WorldCharactersTests, LinkingMissingCultureThrowsException)  // NOLINT :
    ASSERT_THROW(characters.LinkCultures(cultures), std::runtime_error);  // NOLINT : clang-tidy doens't like gtest
 }
 
+TEST(CK3WorldCharactersTests, LinkingCharacterWithoutCultureDoesntThrow)  // NOLINT : clang-tidy doens't like gtest
+{
+   std::stringstream input;
+   const ck3::Cultures cultures(input);
+
+   std::stringstream input2;
+   input2 << "1={first_name=zabak}\n";
+   ck3::Characters characters;
+   characters.ParseCharacters(input2);
+
+   characters.LinkCultures(cultures);
+}
+
 TEST(CK3WorldCharactersTests, FaithsCanBeLinked)  // NOLINT : clang-tidy doens't like gtest
 {
    std::stringstream input;
@@ -152,6 +170,19 @@ TEST(CK3WorldCharactersTests, LinkingMissingFaithThrowsException)  // NOLINT : c
    ASSERT_THROW(characters.LinkFaiths(religions), std::runtime_error);  // NOLINT : clang-tidy doens't like gtest
 }
 
+TEST(CK3WorldCharactersTests, LinkingCharacterWithoutFaithDoesntThrow)  // NOLINT : clang-tidy doens't like gtest
+{
+   std::stringstream input;
+   const ck3::Religions religions(input);
+
+   std::stringstream input2;
+   input2 << "1={first_name=zabak}\n";
+   ck3::Characters characters;
+   characters.ParseCharacters(input2);
+
+   characters.LinkFaiths(religions);
+}
+
 TEST(CK3WorldCharactersTests, HousesCanBeLinked)  // NOLINT : clang-tidy doens't like gtest
 {
    std::stringstream input;
@@ -192,6 +223,19 @@ TEST(CK3WorldCharactersTests, LinkingMissingHouseThrowsException)  // NOLINT : c
    characters.ParseCharacters(input2);
 
    ASSERT_THROW(characters.LinkHouses(dynasties), std::runtime_error);  // NOLINT : clang-tidy doens't like gtest
+}
+
+TEST(CK3WorldCharactersTests, LinkingCharacterWithoutHouseDoesntThrow)  // NOLINT : clang-tidy doens't like gtest
+{
+   std::stringstream input;
+   const ck3::Dynasties dynasties(input);
+
+   std::stringstream input2;
+   input2 << "1={first_name=zabak}\n";
+   ck3::Characters characters;
+   characters.ParseCharacters(input2);
+
+   characters.LinkHouses(dynasties);
 }
 
 TEST(CK3WorldCharactersTests, TitlesCanBeLinked)  // NOLINT : clang-tidy doens't like gtest
