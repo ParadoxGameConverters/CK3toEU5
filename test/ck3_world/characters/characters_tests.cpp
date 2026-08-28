@@ -352,5 +352,90 @@ TEST(CK3WorldCharactersTests, TitlesLinkMissingClaimDropsErrantClaim)  // NOLINT
    std::cout.rdbuf(cout_buffer);
 }
 
+TEST(CK3WorldCharactersTests, CharactersCanBeLinked)  // NOLINT : clang-tidy doens't like gtest
+{
+   std::stringstream input;
+   input << "1 = {\n";
+   input << "\tfirst_name = Alice\n";
+   input << "\tcourt_data = { employer = 5 }\n";
+   input << "\tfamily_data = { primary_spouse = 2 spouse = 2 child =  { 9 } concubine = 3 }\n";
+   input << "playable_data = { knights = { 9 } }\n";
+   input << "alive_data = {obedience_target = 4}\n";
+   input << "}\n";
+   input << "2 = {\n";
+   input << "\tfirst_name = Bob\n";
+   input << "\tcourt_data = { employer = 9 }\n";
+   input << "\tfamily_data = { primary_spouse = 1 }\n";
+   input << "}\n";
+   input << "3 = {\n";
+   input << "\tfirst_name = Grzegorz\n";
+   input << "}\n";
+   input << "4 = {\n";
+   input << "\tfirst_name = Janusz\n";
+   input << "}\n";
+   input << "5 = {\n";
+   input << "\tfirst_name = Grzmichuj\n";
+   input << "}\n";
+   input << "9 = {\n";
+   input << "\tfirst_name = Carol\n";
+   input << "}\n";
+   ck3::Characters characters;
+   characters.ParseCharacters(input);
+   characters.LinkCharacters();
+
+   const auto& character1 = characters.GetAllCharacters().find(1);
+   const auto& character2 = characters.GetAllCharacters().find(2);
+
+   ASSERT_EQ("Grzmichuj",
+       character1  // NOLINT(bugprone-unchecked-optional-access)
+           ->second->GetEmployer()
+           ->GetPointer()
+           .lock()
+           ->GetName());
+   ASSERT_EQ("Carol",
+       character2  // NOLINT(bugprone-unchecked-optional-access)
+           ->second->GetEmployer()
+           ->GetPointer()
+           .lock()
+           ->GetName());
+   ASSERT_EQ("Bob",
+       character1->second->GetSpouse()->GetPointer().lock()->GetName());  // NOLINT(bugprone-unchecked-optional-access)
+   ASSERT_EQ("Alice",
+       character2->second->GetSpouse()->GetPointer().lock()->GetName());  // NOLINT(bugprone-unchecked-optional-access)
+   ASSERT_EQ("Janusz",
+       character1  // NOLINT(bugprone-unchecked-optional-access)
+           ->second->GetSuzerain()
+           ->GetPointer()
+           .lock()
+           ->GetName());
+   ASSERT_EQ("Grzegorz", character1->second->GetConcubines().at(0).GetPointer().lock()->GetName());
+   ASSERT_EQ("Carol", character1->second->GetChildren().at(0).GetPointer().lock()->GetName());
+   ASSERT_EQ("Carol", character1->second->GetKnights().at(0).GetPointer().lock()->GetName());
+}
+
+TEST(CK3WorldCharactersTests, CharactersRemovedWhenMissingDuringLinking)  // NOLINT : clang-tidy doens't like gtest
+{
+   std::stringstream input;
+   input << "1 = {\n";
+   input << "\tfirst_name = Alice\n";
+   input << "\tcourt_data = { employer = 5 }\n";
+   input << "\tfamily_data = { primary_spouse = 2 spouse = 2 child =  { 9 } concubine = 3 }\n";
+   input << "playable_data = { knights = { 9 } }\n";
+   input << "alive_data = {obedience_target = 4}\n";
+   input << "}\n";
+   ck3::Characters characters;
+   characters.ParseCharacters(input);
+   characters.LinkCharacters();
+
+   const auto& character1 = characters.GetAllCharacters().find(1);
+
+   ASSERT_FALSE(character1->second->GetEmployer().has_value());
+   ASSERT_FALSE(character1->second->GetSpouse().has_value());
+   ASSERT_FALSE(character1->second->GetSuzerain().has_value());
+   ASSERT_EQ(0, character1->second->GetConcubines().size());
+   ASSERT_EQ(0, character1->second->GetChildren().size());
+   ASSERT_EQ(0, character1->second->GetKnights().size());
+}
+
 
 }  // namespace ck3

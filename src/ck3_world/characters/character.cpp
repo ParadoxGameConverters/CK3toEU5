@@ -255,7 +255,7 @@ void ck3::Character::LinkCharacterSingles(const std::map<long long, std::shared_
          primary_spouse_ = std::nullopt;  // dead and pruned spouse
       }
    }
-   if (employer_.has_value() && characters.contains(employer_->GetID()))
+   if (employer_.has_value())
    {
       if (characters.contains(employer_->GetID()))
       {
@@ -266,7 +266,7 @@ void ck3::Character::LinkCharacterSingles(const std::map<long long, std::shared_
          employer_ = std::nullopt;  // dead and pruned employer ??
       }
    }
-   if (suzerain_.has_value() && characters.contains(suzerain_->GetID()))
+   if (suzerain_.has_value())
    {
       if (characters.contains(suzerain_->GetID()))
       {

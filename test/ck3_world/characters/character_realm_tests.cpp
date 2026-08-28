@@ -44,7 +44,7 @@ TEST(CK3WorldCharactersRealmTests, CharacterRealmParsed)  // NOLINT - readabilit
 
    ASSERT_EQ(character_realm.GetVassalPower(), 1337);
    ASSERT_TRUE(character_realm.GetRealmCapital().has_value());
-   ASSERT_EQ(character_realm.GetRealmCapital()->GetID(), 13414);  // NOLINT : bugprone-unchecked-optional-access
+   ASSERT_EQ(character_realm.GetRealmCapital()->GetID(), 13414);  // NOLINT(bugprone-unchecked-optional-access)
    ASSERT_EQ(character_realm.GetCourtLanguage(), "language_japonic");
    ASSERT_EQ(character_realm.GetCouncil().size(), 6);
    ASSERT_EQ(character_realm.GetDomain().size(), 3);
