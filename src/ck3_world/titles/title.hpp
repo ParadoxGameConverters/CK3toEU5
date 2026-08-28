@@ -1,6 +1,7 @@
 #ifndef CK3_TITLE_H
 #define CK3_TITLE_H
 
+#include <cstdint>
 #include <optional>
 #include <set>
 #include <string>
