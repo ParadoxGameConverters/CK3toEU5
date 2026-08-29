@@ -19,10 +19,10 @@ class CharacterRealm  // NOLINT(bugprone-exception-escape)
    [[nodiscard]] auto GetVassalPower() const { return vassal_power_; }
    [[nodiscard]] const auto& GetGovernmentType() const { return government_type_; }
    [[nodiscard]] const auto& GetLaws() const { return laws_; }
-   [[nodiscard]] auto& GetRealmCapital() { return realm_capital_; }
-   [[nodiscard]] auto& GetDomain() { return domain_; }
+   [[nodiscard]] auto& GetRealmCapital() const { return realm_capital_; }
+   [[nodiscard]] auto& GetDomain() const { return domain_; }
    [[nodiscard]] const auto& GetCourtLanguage() const { return court_language_; }
-   [[nodiscard]] auto& GetCouncil() { return council_; }
+   [[nodiscard]] auto& GetCouncil() const { return council_; }
 
    void Link(const std::map<long long, std::shared_ptr<Title>>& id_title_map,
        const std::map<long long, std::shared_ptr<CouncillorTask>>& tasks,

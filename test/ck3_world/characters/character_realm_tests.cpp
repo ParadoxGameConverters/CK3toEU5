@@ -19,7 +19,7 @@ namespace ck3
 TEST(CK3WorldCharactersRealmTests, CharacterRealmDefaultsToEmpty)  // NOLINT - readability-function-cognitive-complexity
 {
    std::stringstream input;
-   CharacterRealm character_realm(input);
+   const CharacterRealm character_realm(input);
 
    ASSERT_EQ(character_realm.GetVassalPower(), std::nullopt);
    ASSERT_EQ(character_realm.GetRealmCapital(), std::nullopt);
@@ -40,7 +40,7 @@ TEST(CK3WorldCharactersRealmTests, CharacterRealmParsed)  // NOLINT - readabilit
    input << "government=japan_feudal_government\n";
    input << "council={ 16795546 16795548 16795549 33556428 33572763 33574740 }\n";
    input << "royal_court={ language=language_japonic }\n";
-   CharacterRealm character_realm(input);
+   const CharacterRealm character_realm(input);
 
    ASSERT_EQ(character_realm.GetVassalPower(), 1337);
    ASSERT_TRUE(character_realm.GetRealmCapital().has_value());
@@ -52,7 +52,7 @@ TEST(CK3WorldCharactersRealmTests, CharacterRealmParsed)  // NOLINT - readabilit
    ASSERT_EQ(character_realm.GetLaws().size(), 2);
 }
 
-TEST(CK3WorldCharactersTests, WarningLoggedWhenDifferentOwners)  // NOLINT : clang-tidy doens't like gtest
+TEST(CK3WorldCharactersTests, WarningLoggedWhenDifferentOwnersDuringLinking)  // NOLINT : clang-tidy doens't like gtest
 {
    const std::stringstream log;
    std::streambuf* cout_buffer = std::cout.rdbuf();
@@ -95,7 +95,8 @@ TEST(CK3WorldCharactersTests, WarningLoggedWhenDifferentOwners)  // NOLINT : cla
    std::cout.rdbuf(cout_buffer);
 }
 
-TEST(CK3WorldCharactersTests, WarningLoggedWhenNonexistantCouncilTask)  // NOLINT : clang-tidy doens't like gtest
+TEST(CK3WorldCharactersTests,  // NOLINT : clang-tidy doens't like gtest
+    WarningLoggedWhenNonexistantCouncilTaskDuringLinking)
 {
    const std::stringstream log;
    std::streambuf* cout_buffer = std::cout.rdbuf();
@@ -137,7 +138,7 @@ TEST(CK3WorldCharactersTests, WarningLoggedWhenNonexistantCouncilTask)  // NOLIN
    std::cout.rdbuf(cout_buffer);
 }
 
-TEST(CK3WorldCharactersTests, ThrowsWhenNonexistentTitle)  // NOLINT : clang-tidy doens't like gtest
+TEST(CK3WorldCharactersTests, ThrowsWhenNonexistentTitleDuringLinking)  // NOLINT : clang-tidy doens't like gtest
 {
    std::stringstream input;
    input << "landed_titles={\n";
@@ -172,7 +173,7 @@ TEST(CK3WorldCharactersTests, ThrowsWhenNonexistentTitle)  // NOLINT : clang-tid
        std::runtime_error);
 }
 
-TEST(CK3WorldCharactersTests, ThrowsWhenNonexistentCapital)  // NOLINT : clang-tidy doens't like gtest
+TEST(CK3WorldCharactersTests, ThrowsWhenNonexistentCapitalDuringLinking)  // NOLINT : clang-tidy doens't like gtest
 {
    std::stringstream input;
    input << "landed_titles={\n";

@@ -21,7 +21,7 @@ TEST(CK3WorldCharacterTests, CharacterIDLoads)  // NOLINT : clang-tidy doens't l
 TEST(CK3WorldCharacterTests, LoadValuesDefaultToBlank)  // NOLINT - readability-function-cognitive-complexity
 {
    std::stringstream input;
-   ck3::Character character(input, 1);
+   const ck3::Character character(input, 1);
 
    ASSERT_TRUE(character.GetName().empty());
    ASSERT_EQ(date("1.1.1"), character.GetBirthDate());
@@ -60,7 +60,7 @@ TEST(CK3WorldCharacterTests, CharacterPrimitivesCanBeLoaded)  // NOLINT - readab
    input << "female = yes\n";
    input << "dead_data = { date=31.8.26 }\n";
 
-   Character character(input, 42);  // NOLINT(readability-magic-numbers)
+   const Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_EQ("bob spongepants", character.GetName());
    ASSERT_EQ(date("9.9.9"), character.GetBirthDate());
@@ -130,7 +130,7 @@ TEST(CK3WorldCharacterTests, CharacterAliveDataCanBeLoaded)  // NOLINT - readabi
    input << "government=japan_feudal_government\n";
    input << "}";
 
-   Character character(input, 42);  // NOLINT(readability-magic-numbers)
+   const Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_NEAR(100.01, character.GetPiety(), 0.001);
    ASSERT_TRUE(character.GetPrestige().has_value());
@@ -152,7 +152,7 @@ TEST(CK3WorldCharacterTests, CharacterRealmCanBeLoaded)  // NOLINT - readability
    input << "government=japan_feudal_government\n";
    input << "}\n";
 
-   Character character(input, 42);  // NOLINT(readability-magic-numbers)
+   const Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_TRUE(character.GetCharacterRealm().has_value());
 }
@@ -169,7 +169,7 @@ TEST(CK3WorldCharacterTests, CharacterFamilyDataCanBeLoaded)  // NOLINT : clang-
    input << "concubine = 103\n";
    input << "}";
 
-   Character character(input, 42);  // NOLINT(readability-magic-numbers)
+   const Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_TRUE(character.GetSpouse().has_value());
    // ASSERT_EQ(17, character.GetSpouse()->GetID());  // NOLINT : bugprone-unchecked-optional-access
@@ -192,7 +192,7 @@ TEST(CK3WorldCharacterTests, CharacterPlayableDataCanBeLoaded)  // NOLINT : clan
             "legitimacy=567.92187\n"
             "}\n";
 
-   Character character(input, 42);  // NOLINT(readability-magic-numbers)
+   const Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_EQ(character.GetKnights().size(), 7);
    ASSERT_EQ(character.GetKnights()[0].GetID(), 128103);
@@ -209,7 +209,7 @@ TEST(CK3WorldCharacterTests, CharacterCourtDataCanBeLoaded)  // NOLINT : clang-t
    input << "\tcouncil_task = 7248\n";
    input << "}";
 
-   Character character(input, 42);  // NOLINT(readability-magic-numbers)
+   const Character character(input, 42);  // NOLINT(readability-magic-numbers)
 
    ASSERT_TRUE(character.GetEmployer().has_value());
    ASSERT_EQ(27, character.GetEmployer().value().GetID());  // NOLINT : bugprone-unchecked-optional-access

@@ -67,12 +67,9 @@ void ck3::Titles::ParseLandedTitles(std::istream& input_stream)
          try
          {
             const std::shared_ptr<Title> new_title = std::make_shared<Title>(title_stream, std::stoll(title_id));
-            // if (new_title->DoesTitleExist())  // we skip not created/held titles, eu5 doesn't care about them
-            //{
             auto title_pair = std::pair(new_title->GetKey(), new_title);
             all_titles_.insert(title_pair);
             InsertToCorrectMap(new_title);
-            //}
          }
          catch (std::exception& e)
          {

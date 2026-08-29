@@ -44,20 +44,20 @@ class Character
    [[nodiscard]] const auto& GetDeathDate() const { return death_date_; }
    [[nodiscard]] auto GetLegitimacy() const { return legitimacy_; }
 
-   [[nodiscard]] auto& GetCulture() { return culture_; }
-   [[nodiscard]] auto& GetFaith() { return faith_; }
-   [[nodiscard]] auto& GetEmployer() { return employer_; }
-   [[nodiscard]] auto& GetSpouse() { return primary_spouse_; }
-   [[nodiscard]] auto& GetSuzerain() { return suzerain_; }
-   [[nodiscard]] auto& GetHouse() { return house_; }
-   [[nodiscard]] auto& GetTraits() { return traits_; }
-   [[nodiscard]] auto& GetCharacterRealm() { return realm_; }
+   [[nodiscard]] auto& GetCulture() const { return culture_; }
+   [[nodiscard]] auto& GetFaith() const { return faith_; }
+   [[nodiscard]] auto& GetEmployer() const { return employer_; }
+   [[nodiscard]] auto& GetSpouse() const { return primary_spouse_; }
+   [[nodiscard]] auto& GetSuzerain() const { return suzerain_; }
+   [[nodiscard]] auto& GetHouse() const { return house_; }
+   [[nodiscard]] auto& GetTraits() const { return traits_; }
+   [[nodiscard]] auto& GetCharacterRealm() const { return realm_; }
    [[nodiscard]] const auto& GetSkills() const { return skills_; }
 
-   [[nodiscard]] auto& GetKnights() { return knights_; }
-   [[nodiscard]] auto& GetChildren() { return children_; }
-   [[nodiscard]] auto& GetConcubines() { return concubines_; }
-   [[nodiscard]] auto& GetClaims() { return claims_; }
+   [[nodiscard]] auto& GetKnights() const { return knights_; }
+   [[nodiscard]] auto& GetChildren() const { return children_; }
+   [[nodiscard]] auto& GetConcubines() const { return concubines_; }
+   [[nodiscard]] auto& GetClaims() const { return claims_; }
 
    void RemoveSpouse() { primary_spouse_ = std::nullopt; }
    void RemoveEmployer() { employer_ = std::nullopt; }
