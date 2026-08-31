@@ -7,6 +7,7 @@
 namespace ck3
 {
 
+class Characters;
 class Dynasties: commonItems::parser
 {
   public:
@@ -15,6 +16,9 @@ class Dynasties: commonItems::parser
 
    [[nodiscard]] const auto& GetDynasties() const { return dynasties_; }
    [[nodiscard]] const auto& GetHouses() const { return houses_; }
+
+   void LinkCharacters(const Characters& characters);
+   void LinkDynasties();
 
   private:
    void ParseDynasties(std::istream& input_stream);

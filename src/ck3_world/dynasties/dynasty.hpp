@@ -1,10 +1,12 @@
 #ifndef CK3_DYNASTY_H
 #define CK3_DYNASTY_H
 #include "Parser.h"
+#include "src/ck3_world/id_pointer_pair.hpp"
 
 namespace ck3
 {
 
+class Character;
 class Dynasty: commonItems::parser
 {
   public:
@@ -17,13 +19,15 @@ class Dynasty: commonItems::parser
    [[nodiscard]] auto GetDynastyHead() const { return dynasty_head_; }
    //[[nodiscard]] const auto& getCoA() const { return coa; }
 
+   void LinkCharacters(const std::map<long long, std::shared_ptr<Character>>& characters_map);
+
   private:
    void ParseDynasty(std::istream& input_stream);
 
    std::string dynasty_id_;             // this is actual key, looks like an int but is actually string.
    long long savegame_dynasty_id_ = 0;  // this is savegame key
    bool appropriate_realm_name_ = false;
-   std::optional<long long> dynasty_head_;
+   std::optional<IdPointerPair<Character>> dynasty_head_;
 };
 }  // namespace ck3
 

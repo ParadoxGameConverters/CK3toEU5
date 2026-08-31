@@ -1,14 +1,13 @@
 #ifndef CK3_HOUSE_H
 #define CK3_HOUSE_H
 #include "Parser.h"
-#include "dynasty.hpp"
 #include "src/ck3_world/id_pointer_pair.hpp"
 
 namespace ck3
 {
 
 class Character;
-
+class Dynasty;
 class House: commonItems::parser
 {
   public:
@@ -21,6 +20,9 @@ class House: commonItems::parser
    [[nodiscard]] const auto& GetDynasty() const { return dynasty_; }
    [[nodiscard]] const auto& GetID() const { return house_id_; }
    [[nodiscard]] const auto& GetHouseHead() const { return house_head_; }
+
+   void LinkHouseHead(const std::map<long long, std::shared_ptr<Character>>& characters_map);
+   void LinkDynasty(const std::map<long long, std::shared_ptr<Dynasty>>& dynasties_map);
 
   private:
    void ParseHouse(std::istream& input_stream);

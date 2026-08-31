@@ -32,5 +32,5 @@ TEST(CK3WorldDynastyTests, DynastyPrimitivesCanBeLoaded)  // NOLINT : clang-tidy
 
    ASSERT_EQ("7", dynasty.GetDynastyID());
    ASSERT_TRUE(dynasty.IsAppropriateRealmName());
-   ASSERT_EQ(dynasty.GetDynastyHead().value_or(-1), 16878493);
+   ASSERT_EQ(dynasty.GetDynastyHead()->GetID(), 16878493);  // NOLINT(bugprone-unchecked-optional-access)
 }

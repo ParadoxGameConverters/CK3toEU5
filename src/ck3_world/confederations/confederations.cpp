@@ -7,9 +7,12 @@
 #include <utility>
 
 #include "CommonRegexes.h"
+#include "Log.h"
 #include "Parser.h"
 #include "ParserHelpers.h"
 #include "confederation.hpp"
+#include "src/ck3_world/characters/characters.hpp"
+#include "src/ck3_world/dynasties/dynasties.hpp"
 
 
 ck3::Confederations::Confederations(std::istream& input_stream)
@@ -38,4 +41,22 @@ void ck3::Confederations::ParseConfederations(std::istream& input_stream)
    registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
    parseStream(input_stream);
    clearRegisteredKeywords();
+}
+
+void ck3::Confederations::LinkCharacters(const Characters& characters)
+{
+   for (const auto& confederation: confederations_)
+   {
+      confederation.second->LinkCharacters(characters.GetAllCharacters());
+   }
+   Log(LogLevel::Debug) << "Confederation character members linked.";
+}
+
+void ck3::Confederations::LinkHouses(const Dynasties& dynasties)
+{
+   for (const auto& confederation: confederations_)
+   {
+      confederation.second->LinkHouses(dynasties.GetHouses());
+   }
+   Log(LogLevel::Debug) << "Confederation leaders and house members linked.";
 }

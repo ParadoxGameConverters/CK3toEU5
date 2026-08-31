@@ -5,14 +5,16 @@
 
 namespace ck3
 {
+class Characters;
+class Dynasties;
 class Confederations: commonItems::parser
 {
   public:
    Confederations() = default;
    explicit Confederations(std::istream& input_stream);
 
-   // void linkCharacters(const Characters& characters);
-   // void linkCoats(const CoatsOfArms& coats);
+   void LinkCharacters(const Characters& characters);
+   void LinkHouses(const Dynasties& dynasties);
 
    [[nodiscard]] const auto& GetConfederations() const { return confederations_; }
 
