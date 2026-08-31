@@ -15,6 +15,7 @@
 #include "ParserHelpers.h"
 #include "characters/characters.hpp"
 #include "confederations/confederations.hpp"
+#include "council_manager/councillor_tasks.hpp"
 #include "cultures/cultures.hpp"
 #include "dynasties/dynasties.hpp"
 #include "external/commonItems/ConverterVersion.h"
@@ -51,6 +52,14 @@ ck3::CK3World::CK3World(const configuration::Configuration& configuration,
 
    Log(LogLevel::Info) << "* Parsing Complete, Weaving Internals *";
    Log(LogLevel::Progress) << "30 %";
+
+   characters_.LinkCharacters();
+   characters_.LinkCultures(cultures_);
+   characters_.LinkFaiths(religions_);
+   characters_.LinkHouses(dynasties_);
+   characters_.LinkTitles(titles_, councillor_tasks_);
+
+   councillor_tasks_.LinkCharacters(characters_);
 
    Log(LogLevel::Info) << "*** Good-bye CK3, rest in peace. ***";
    Log(LogLevel::Progress) << "47 %";
@@ -113,17 +122,26 @@ void ck3::CK3World::ParseGamestate(std::istream& input_stream, const commonItems
       province_holdings_ = ProvinceHoldings(input_stream);
       Log(LogLevel::Info) << "<> Loaded " << province_holdings_.GetProvinceHoldings().size() << " provinces.";
    });
+   parser.registerKeyword("council_task_manager", [this](const std::string&, std::istream& input_stream) {
+      Log(LogLevel::Info) << "-> Loading councillor tasks.";
+      councillor_tasks_ = CouncillorTasks(input_stream);
+      Log(LogLevel::Info) << "<> Loaded " << councillor_tasks_.GetCouncillorTasks().size() << " councillor tasks.";
+   });
 
    parser.registerKeyword("living", [this](std::istream& input_stream) {
       Log(LogLevel::Info) << "-> Loading alive characters.";
-      characters_.ParseAliveCharacters(input_stream);
+      characters_.ParseCharacters(input_stream);
       Log(LogLevel::Info) << "<> Loaded " << characters_.GetAliveCharacters().size() << " living characters.";
+      Log(LogLevel::Info) << "<> Loaded " << characters_.GetDeadCharacters().size() << " dead human memories.";
    });
 
    parser.registerKeyword("dead_unprunable", [this](const std::string&, std::istream& input_stream) {
       Log(LogLevel::Info) << "-> Loading dead people.";
-      characters_.ParseDeadCharacters(input_stream);
-      Log(LogLevel::Info) << "<> Loaded " << characters_.GetDeadCharacters().size() << " dead human memories.";
+      characters_.ParseCharacters(input_stream);
+      Log(LogLevel::Info) << "<> Loaded " << characters_.GetAliveCharacters().size()
+                          << " living characters including from dead_unprunable.";
+      Log(LogLevel::Info) << "<> Loaded " << characters_.GetDeadCharacters().size()
+                          << " dead human memories including from dead_unprunable.";
    });
    parser.registerKeyword("dynasties", [this](const std::string&, std::istream& input_stream) {
       Log(LogLevel::Info) << "-> Loading dynasties.";

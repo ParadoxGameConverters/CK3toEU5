@@ -7,6 +7,7 @@
 #include "Parser.h"
 #include "characters/characters.hpp"
 #include "confederations/confederations.hpp"
+#include "council_manager/councillor_tasks.hpp"
 #include "cultures/cultures.hpp"
 #include "dynasties/dynasties.hpp"
 #include "flags/flags.hpp"
@@ -74,6 +75,7 @@ class CK3World
    Cultures cultures_;
    // HouseNameScraper houseNameScraper;
    Confederations confederations_;
+   CouncillorTasks councillor_tasks_;
    // Relations relations;
    // Opinions opinions;
    // Wars wars;

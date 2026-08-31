@@ -23,6 +23,7 @@ class Faith;
 class Culture;
 class House;
 class Title;
+class CouncillorTask;
 class Character
 {
   public:
@@ -43,20 +44,32 @@ class Character
    [[nodiscard]] const auto& GetDeathDate() const { return death_date_; }
    [[nodiscard]] auto GetLegitimacy() const { return legitimacy_; }
 
-   [[nodiscard]] const auto& GetCulture() const { return culture_; }
-   [[nodiscard]] const auto& GetFaith() const { return faith_; }
-   [[nodiscard]] const auto& GetEmployer() const { return employer_; }
-   [[nodiscard]] const auto& GetSpouse() const { return primary_spouse_; }
-   [[nodiscard]] const auto& GetSuzerain() const { return suzerain_; }
-   [[nodiscard]] const auto& GetChildren() const { return children_; }
-   [[nodiscard]] const auto& GetConcubines() const { return concubines_; }
-   [[nodiscard]] const auto& GetHouse() const { return house_; }
-   [[nodiscard]] const auto& GetTraits() const { return traits_; }
-   [[nodiscard]] const auto& GetClaims() const { return claims_; }
-
+   [[nodiscard]] auto& GetCulture() const { return culture_; }
+   [[nodiscard]] auto& GetFaith() const { return faith_; }
+   [[nodiscard]] auto& GetEmployer() const { return employer_; }
+   [[nodiscard]] auto& GetSpouse() const { return primary_spouse_; }
+   [[nodiscard]] auto& GetSuzerain() const { return suzerain_; }
+   [[nodiscard]] auto& GetHouse() const { return house_; }
+   [[nodiscard]] auto& GetTraits() const { return traits_; }
+   [[nodiscard]] auto& GetCharacterRealm() const { return realm_; }
    [[nodiscard]] const auto& GetSkills() const { return skills_; }
-   [[nodiscard]] const auto& GetCharacterRealm() const { return realm_; }
-   [[nodiscard]] const auto& GetKnights() const { return knights_; }
+
+   [[nodiscard]] auto& GetKnights() const { return knights_; }
+   [[nodiscard]] auto& GetChildren() const { return children_; }
+   [[nodiscard]] auto& GetConcubines() const { return concubines_; }
+   [[nodiscard]] auto& GetClaims() const { return claims_; }
+
+   void RemoveSpouse() { primary_spouse_ = std::nullopt; }
+   void RemoveEmployer() { employer_ = std::nullopt; }
+   void RemoveSuzerain() { suzerain_ = std::nullopt; }
+
+   void LinkCulture(const std::map<long long, std::shared_ptr<Culture>>& cultures);
+   void LinkFaith(const std::map<long long, std::shared_ptr<Faith>>& faiths);
+   void LinkHouse(const std::map<long long, std::shared_ptr<House>>& houses);
+   void LinkClaims(const std::map<long long, std::shared_ptr<Title>>& id_title_map);
+   void LinkCharacters(const std::map<long long, std::shared_ptr<Character>>& characters);
+   void LinkCharacterRealm(const std::map<long long, std::shared_ptr<Title>>& id_title_map,
+       const std::map<long long, std::shared_ptr<CouncillorTask>>& tasks);
 
   private:
    void ParseCharacter(std::istream& input_stream);
@@ -68,6 +81,9 @@ class Character
    void ParsePlayableData(std::istream& input_stream);
    void ParseFamilyData(std::istream& input_stream);
    void ParseClaim(std::istream& input_stream);
+
+   void LinkCharacterSingles(const std::map<long long, std::shared_ptr<Character>>& characters);
+   void LinkCharacterVectors(const std::map<long long, std::shared_ptr<Character>>& characters);
 
    bool knight_ = false;
    bool female_ = false;
@@ -88,7 +104,7 @@ class Character
    std::optional<date> death_date_;
    std::set<int> traits_;
 
-   IdPointerPair<House> house_;
+   std::optional<IdPointerPair<House>> house_;
 
    std::optional<IdPointerPair<Culture>> culture_;
    std::optional<IdPointerPair<Faith>> faith_;

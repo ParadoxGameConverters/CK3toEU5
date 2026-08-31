@@ -215,11 +215,12 @@ set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/metadata
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/output/out_file_classes/history/generic_advisors.cpp")
 
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/ck3_world.cpp")
-set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/id_pointer_pair.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/save_melter.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/cultures/culture.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/cultures/cultures.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/characters/character.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/council_manager/councillor_task.cpp")
+set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/council_manager/councillor_tasks.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/characters/character_realm.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/characters/characters.cpp")
 set(CONVERTER_SOURCES ${CONVERTER_SOURCES} "src/ck3_world/flags/flag.cpp")
@@ -329,6 +330,8 @@ set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/religions/religions_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/titles/landed_titles_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/titles/title_tests.cpp")
 set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/titles/titles_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/council_manager/councillor_task_tests.cpp")
+set(TEST_SOURCES ${TEST_SOURCES} "test/ck3_world/council_manager/councillor_tasks_tests.cpp")
 
 add_executable(
 	CK3toEU5Tests
