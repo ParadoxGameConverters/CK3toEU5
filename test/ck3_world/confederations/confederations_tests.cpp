@@ -159,7 +159,7 @@ TEST(CK3WorldConfederationsTests, LinkingMissingHouseThrows)  // NOLINT : clang-
 {
    std::stringstream input;
    input << "database={\n";
-   input << "13={leader=2 houses={ 11 6} }\n ";  // 6 is missing
+   input << "13={leader=11 houses={ 11 6} }\n ";  // 6 is missing
    input << "15={members={ 1 2 }}\n";
    input << "17={members={ 2 }}\n";
    input << "}\n";
