@@ -10,6 +10,7 @@
 namespace ck3
 {
 
+class Characters;
 class Religions: commonItems::parser  // NOLINT : issues with error handling in parser
 {
   public:
@@ -18,6 +19,9 @@ class Religions: commonItems::parser  // NOLINT : issues with error handling in 
 
    [[nodiscard]] const auto& GetReligions() const { return religions_; }
    [[nodiscard]] const auto& GetFaiths() const { return faiths_; }
+
+   void LinkCharacters(const Characters& characters);
+   void LinkReligions();
 
   private:
    void ParseReligions(std::istream& input_stream);

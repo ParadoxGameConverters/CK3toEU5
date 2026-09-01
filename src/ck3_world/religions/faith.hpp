@@ -8,6 +8,7 @@
 
 namespace ck3
 {
+
 class Religion;
 class Character;
 class Faith: commonItems::parser  // NOLINT : issues with error handling in parser
@@ -20,7 +21,7 @@ class Faith: commonItems::parser  // NOLINT : issues with error handling in pars
    [[nodiscard]] const auto& GetDoctrines() const { return doctrines_; }
    [[nodiscard]] const auto& GetTenets() const { return tenets_; }
    [[nodiscard]] const auto& GetReligion() const { return religion_; }
-   [[nodiscard]] const auto& GetReligionHead() const { return religion_head_; }
+   [[nodiscard]] const auto& GetReligionHead() const { return religious_head_; }
    [[nodiscard]] auto GetID() const { return faith_id_; }
    [[nodiscard]] const auto& GetCustomName() const { return custom_name_; }
    [[nodiscard]] const auto& GetCustomAdjective() const { return custom_adjective_; }
@@ -28,6 +29,9 @@ class Faith: commonItems::parser  // NOLINT : issues with error handling in pars
    [[nodiscard]] const auto& GetIconPath() const { return icon_path_; }
    [[nodiscard]] const auto& GetFaithType() const { return faith_type_; }
    [[nodiscard]] const auto& IsReformed() const { return is_reformed_; }
+
+   void LinkReligiousHead(const std::map<long long, std::shared_ptr<Character>>& character_map);
+   void LinkReligion(const std::map<long long, std::shared_ptr<Religion>>& religion_map);
 
   private:
    void ParseFaith(std::istream& input_stream);
@@ -45,7 +49,7 @@ class Faith: commonItems::parser  // NOLINT : issues with error handling in pars
    std::set<std::string> doctrines_;
    std::set<std::string> tenets_;
 
-   IdPointerPair<Character> religion_head_;
+   std::optional<IdPointerPair<Character>> religious_head_;
    IdPointerPair<Religion> religion_;
 };
 }  // namespace ck3

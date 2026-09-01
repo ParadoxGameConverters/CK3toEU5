@@ -6,10 +6,12 @@
 #include <utility>
 
 #include "CommonRegexes.h"
+#include "Log.h"
 #include "Parser.h"
 #include "ParserHelpers.h"
 #include "faith.hpp"
 #include "religion.hpp"
+#include "src/ck3_world/characters/characters.hpp"
 
 ck3::Religions::Religions(std::istream& input_stream)
 {
@@ -51,4 +53,25 @@ void ck3::Religions::ParseFaiths(std::istream& input_stream)
    faiths_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
    faiths_parser.parseStream(input_stream);
    faiths_parser.clearRegisteredKeywords();
+}
+
+void ck3::Religions::LinkCharacters(const Characters& characters)
+{
+   for (const auto& faith: faiths_)
+   {
+      faith.second->LinkReligiousHead(characters.GetAllCharacters());
+   }
+   Log(LogLevel::Debug) << "Religious heads linked.";
+}
+void ck3::Religions::LinkReligions()
+{
+   for (const auto& faith: faiths_)
+   {
+      faith.second->LinkReligion(religions_);
+   }
+   for (const auto& religion: religions_)
+   {
+      religion.second->LinkFaiths(faiths_);
+   }
+   Log(LogLevel::Debug) << "Religions linked.";
 }

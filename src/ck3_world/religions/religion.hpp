@@ -19,6 +19,8 @@ class Religion: commonItems::parser  // NOLINT : issues with error handling in p
    [[nodiscard]] const auto& GetFaiths() const { return faiths_; }
    [[nodiscard]] const auto& GetReligionType() const { return religion_type_; }
 
+   void LinkFaiths(const std::map<long long, std::shared_ptr<Faith>>& faith_map);
+
   private:
    void ParseReligion(std::istream& input_stream);
 
