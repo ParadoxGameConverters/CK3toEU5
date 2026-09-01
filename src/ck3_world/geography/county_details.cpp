@@ -6,10 +6,12 @@
 #include <utility>
 
 #include "CommonRegexes.h"
+#include "Log.h"
 #include "Parser.h"
 #include "ParserHelpers.h"
 #include "county_detail.hpp"
-
+#include "src/ck3_world/cultures/cultures.hpp"
+#include "src/ck3_world/religions/religions.hpp"
 
 ck3::CountyDetails::CountyDetails(std::istream& input_stream)
 {
@@ -32,4 +34,22 @@ void ck3::CountyDetails::ParseCountyDetails(std::istream& input_stream)
    parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
    parser.parseStream(input_stream);
    parser.clearRegisteredKeywords();
+}
+
+void ck3::CountyDetails::LinkCultures(const Cultures& cultures)
+{
+   for (const auto& county_detail: county_details_)
+   {
+      county_detail.second->LinkCulture(cultures.GetCultures());
+   }
+   Log(LogLevel::Debug) << "County cultures linked.";
+}
+
+void ck3::CountyDetails::LinkReligions(const Religions& religions)
+{
+   for (const auto& county_detail: county_details_)
+   {
+      county_detail.second->LinkFaith(religions.GetFaiths());
+   }
+   Log(LogLevel::Debug) << "County faiths linked.";
 }

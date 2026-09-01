@@ -22,6 +22,9 @@ class CountyDetail
    [[nodiscard]] const auto& GetFaith() const { return faith_; }
    [[nodiscard]] const auto& IsDeJureHRE() const { return de_jure_hre_; }
 
+   void LinkCulture(const std::map<long long, std::shared_ptr<Culture>>& cultures_map);
+   void LinkFaith(const std::map<long long, std::shared_ptr<Faith>>& faiths_map);
+
   private:
    void ParseCountyDetails(std::istream& input_stream);
 

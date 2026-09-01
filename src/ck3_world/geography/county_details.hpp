@@ -10,7 +10,7 @@ namespace ck3
 {
 class CountyDetail;
 class Cultures;
-class Faiths;
+class Religions;
 class CountyDetails
 {
   public:
@@ -19,8 +19,8 @@ class CountyDetails
 
    [[nodiscard]] const auto& GetCountyDetails() const { return county_details_; }
 
-   // void LinkCultures(const Cultures& cultures);
-   // void LinkFaiths(const Faiths& faiths);
+   void LinkCultures(const Cultures& cultures);
+   void LinkReligions(const Religions& religions);
 
   private:
    void ParseCountyDetails(std::istream& input_stream);
