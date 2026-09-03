@@ -7,10 +7,12 @@
 #include <utility>
 
 #include "CommonRegexes.h"
+#include "Log.h"
 #include "Parser.h"
 #include "ParserHelpers.h"
 #include "dynasty.hpp"
 #include "house.hpp"
+#include "src/ck3_world/characters/characters.hpp"
 
 
 ck3::Dynasties::Dynasties(std::istream& input_stream)
@@ -65,4 +67,26 @@ void ck3::Dynasties::ParseHouses(std::istream& input_stream)
    house_parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
    house_parser.parseStream(input_stream);
    house_parser.clearRegisteredKeywords();
+}
+
+void ck3::Dynasties::LinkCharacters(const Characters& characters)
+{
+   for (auto& house: houses_)
+   {
+      house.second->LinkHouseHead(characters.GetAllCharacters());
+   }
+   for (auto& dynasty: dynasties_)
+   {
+      dynasty.second->LinkCharacters(characters.GetAllCharacters());
+   }
+   Log(LogLevel::Debug) << "Dynasties characters linked.";
+}
+
+void ck3::Dynasties::LinkDynasties()
+{
+   for (auto& house: houses_)
+   {
+      house.second->LinkDynasty(dynasties_);
+   }
+   Log(LogLevel::Debug) << "Dynasties houses linked.";
 }

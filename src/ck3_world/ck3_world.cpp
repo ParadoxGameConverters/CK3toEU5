@@ -61,6 +61,12 @@ ck3::CK3World::CK3World(const configuration::Configuration& configuration,
 
    councillor_tasks_.LinkCharacters(characters_);
 
+   confederations_.LinkCharacters(characters_);
+   confederations_.LinkHouses(dynasties_);
+
+   dynasties_.LinkCharacters(characters_);
+   dynasties_.LinkDynasties();
+
    Log(LogLevel::Info) << "*** Good-bye CK3, rest in peace. ***";
    Log(LogLevel::Progress) << "47 %";
 }

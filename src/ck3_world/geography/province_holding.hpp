@@ -24,7 +24,6 @@ class ProvinceHolding
 
   private:
    void ParseHolding(std::istream& input_stream);
-   void ParseBuilding(std::istream& input_stream);
 
    std::string holding_type_;
    std::vector<Building> buildings_;

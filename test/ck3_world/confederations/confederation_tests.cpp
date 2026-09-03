@@ -43,5 +43,5 @@ TEST(CK3WorldConfederationTests, ConfederationPrimitivesCanBeLoaded)  // NOLINT 
    EXPECT_EQ(confederation.GetHouses()[0].GetID(), 1679);
 
    EXPECT_EQ("Polabian Confederation", confederation.GetName());
-   EXPECT_EQ(610, confederation.GetLeaderHouse().GetID());
+   EXPECT_EQ(610, confederation.GetLeaderHouse()->GetID());  // NOLINT(bugprone-unchecked-optional-access)
 }
