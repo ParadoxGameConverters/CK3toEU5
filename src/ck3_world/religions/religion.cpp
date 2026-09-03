@@ -1,6 +1,9 @@
 #include "religion.hpp"
 
 #include <iostream>
+#include <map>
+#include <memory>
+#include <stdexcept>
 #include <string>
 
 #include "CommonRegexes.h"
@@ -32,4 +35,21 @@ void ck3::Religion::ParseReligion(std::istream& input_stream)
    registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
    parseStream(input_stream);
    clearRegisteredKeywords();
+}
+
+
+void ck3::Religion::LinkFaiths(const std::map<long long, std::shared_ptr<Faith>>& faith_map)
+{
+   for (auto& faith: faiths_)
+   {
+      if (faith_map.contains(faith.GetID()))
+      {
+         faith.SetPointer(faith_map.at(faith.GetID()));
+      }
+      else
+      {
+         throw std::runtime_error("Faith " + std::to_string(religion_id_) + " belongs to a religion " +
+                                  std::to_string(faith.GetID()) + " that doens't exist in save!");
+      }
+   }
 }

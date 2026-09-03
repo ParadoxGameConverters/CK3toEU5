@@ -67,6 +67,12 @@ ck3::CK3World::CK3World(const configuration::Configuration& configuration,
    dynasties_.LinkCharacters(characters_);
    dynasties_.LinkDynasties();
 
+   county_details_.LinkCultures(cultures_);
+   county_details_.LinkReligions(religions_);
+
+   religions_.LinkCharacters(characters_);
+   religions_.LinkReligions();
+
    Log(LogLevel::Info) << "*** Good-bye CK3, rest in peace. ***";
    Log(LogLevel::Progress) << "47 %";
 }

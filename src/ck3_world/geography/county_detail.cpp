@@ -1,6 +1,9 @@
 #include "county_detail.hpp"
 
 #include <iostream>
+#include <map>
+#include <memory>
+#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -32,4 +35,29 @@ void ck3::CountyDetail::ParseCountyDetails(std::istream& input_stream)
    parser.registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
    parser.parseStream(input_stream);
    parser.clearRegisteredKeywords();
+}
+
+void ck3::CountyDetail::LinkCulture(const std::map<long long, std::shared_ptr<Culture>>& cultures_map)
+{
+   if (cultures_map.contains(culture_.GetID()))
+   {
+      culture_.SetPointer(cultures_map.at(culture_.GetID()));
+   }
+   else
+   {
+      throw std::runtime_error("County details " + county_key_ + " has culture " + std::to_string(culture_.GetID()) +
+                               " that doens't exist in save!");
+   }
+}
+void ck3::CountyDetail::LinkFaith(const std::map<long long, std::shared_ptr<Faith>>& faiths_map)
+{
+   if (faiths_map.contains(faith_.GetID()))
+   {
+      faith_.SetPointer(faiths_map.at(faith_.GetID()));
+   }
+   else
+   {
+      throw std::runtime_error("County details " + county_key_ + " has faith " + std::to_string(faith_.GetID()) +
+                               " that doens't exist in save!");
+   }
 }

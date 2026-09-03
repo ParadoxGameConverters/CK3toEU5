@@ -3,10 +3,13 @@
 #include "gtest/gtest.h"
 #include "src/ck3_world/religions/faith.hpp"
 
+namespace ck3
+{
+
 TEST(CK3WorldFaithTests, FaithIDLoads)  // NOLINT : clang-tidy doens't like gtest
 {
    std::stringstream input;
-   const ck3::Faith faith(input, 42);
+   const Faith faith(input, 42);
 
    ASSERT_EQ(42, faith.GetID());
 }
@@ -14,12 +17,12 @@ TEST(CK3WorldFaithTests, FaithIDLoads)  // NOLINT : clang-tidy doens't like gtes
 TEST(CK3WorldFaithTests, LoadValuesDefaultToBlank)  // NOLINT : clang-tidy doens't like gtest
 {
    std::stringstream input;
-   const ck3::Faith faith(input, 1);
+   const Faith faith(input, 1);
 
    ASSERT_TRUE(faith.GetTag().empty());
    ASSERT_TRUE(faith.GetDoctrines().empty());
    ASSERT_EQ(faith.GetReligion().GetID(), -1);
-   ASSERT_EQ(faith.GetReligionHead().GetID(), -1);
+   ASSERT_FALSE(faith.GetReligionHead().has_value());
    ASSERT_TRUE(faith.GetCustomName().empty());
    ASSERT_TRUE(faith.GetCustomAdjective().empty());
    ASSERT_TRUE(faith.GetDescription().empty());
@@ -45,7 +48,7 @@ TEST(CK3WorldFaithTests, FaithPrimitivesCanBeLoaded)  // NOLINT : clang-tidy doe
    input << "religious_head=42\n";
    input << "variables = { \"a bunch of nonsense \nreally\"}";
 
-   const ck3::Faith faith(input, 42);
+   const Faith faith(input, 41);
 
    ASSERT_EQ("akom_pagan", faith.GetTag());
    ASSERT_EQ(2, faith.GetDoctrines().size());
@@ -60,7 +63,7 @@ TEST(CK3WorldFaithTests, FaithPrimitivesCanBeLoaded)  // NOLINT : clang-tidy doe
    ASSERT_EQ("gfx/icon.dds", faith.GetIconPath());
    ASSERT_EQ("daoxue", faith.GetFaithType());
    ASSERT_TRUE(faith.IsReformed());
-   ASSERT_EQ(faith.GetReligionHead().GetID(), 42);
+   ASSERT_EQ(faith.GetReligionHead()->GetID(), 42);  // NOLINT(bugprone-unchecked-optional-access)
 }
 
 
@@ -81,8 +84,22 @@ TEST(CK3WorldFaithTests, UnreformedFaithLoaded)  // NOLINT : clang-tidy doens't 
    input << "faith_type = daoxue\n";
    input << "variables = { \"a bunch of nonsense \nreally\"}";
 
-   const ck3::Faith faith(input, 42);
+   const Faith faith(input, 42);
 
    ASSERT_EQ("akom_pagan", faith.GetTag());
    ASSERT_FALSE(faith.IsReformed());
 }
+
+TEST(CK3WorldFaithTests, MissingReligiousHeadCanBeLoaded)  // NOLINT : clang-tidy doens't like gtest
+{
+   std::stringstream input;
+   input << "tag=\"akom_pagan\"\n";
+   input << "religious_head=4294967295\n";
+
+   const Faith faith(input, 42);
+
+   ASSERT_EQ("akom_pagan", faith.GetTag());
+   ASSERT_FALSE(faith.GetReligionHead().has_value());
+}
+
+}  // namespace ck3
