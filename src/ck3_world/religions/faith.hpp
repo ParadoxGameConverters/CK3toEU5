@@ -10,7 +10,7 @@ namespace ck3
 {
 
 class Religion;
-class Character;
+class Title;
 class Faith: commonItems::parser  // NOLINT : issues with error handling in parser
 {
   public:
@@ -30,7 +30,7 @@ class Faith: commonItems::parser  // NOLINT : issues with error handling in pars
    [[nodiscard]] const auto& GetFaithType() const { return faith_type_; }
    [[nodiscard]] const auto& IsReformed() const { return is_reformed_; }
 
-   void LinkReligiousHead(const std::map<long long, std::shared_ptr<Character>>& character_map);
+   void LinkReligiousHead(const std::map<long long, std::shared_ptr<Title>>& title_map);
    void LinkReligion(const std::map<long long, std::shared_ptr<Religion>>& religion_map);
 
   private:
@@ -49,7 +49,8 @@ class Faith: commonItems::parser  // NOLINT : issues with error handling in pars
    std::set<std::string> doctrines_;
    std::set<std::string> tenets_;
 
-   std::optional<IdPointerPair<Character>> religious_head_;
+   // The head of faith is a TITLE (e.g. k_papal_state, d_sunni), not a character.
+   std::optional<IdPointerPair<Title>> religious_head_;
    IdPointerPair<Religion> religion_;
 };
 }  // namespace ck3

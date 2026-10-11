@@ -66,21 +66,21 @@ link = { eu5 = austroasiatic_group eu5 = confucian_group heritage = heritage_vie
 
 ##Language -> Group(s)
 link = { eu5 = arabic_group language = language_arabic }
-link = { eu5 = netherlandish_group langauge = language_dutch }
-link = { eu5 = nepali_group langauge = language_pahari }
-link = { eu5 = pyrenean_group langauge = language_occitano_romance }
-link = { eu5 = pyrenean_group langauge = language_basque }
-link = { eu5 = tatar_group langauge = language_oghur }
+link = { eu5 = netherlandish_group language = language_dutch }
+link = { eu5 = nepali_group language = language_pahari }
+link = { eu5 = pyrenean_group language = language_occitano_romance }
+link = { eu5 = pyrenean_group language = language_basque }
+link = { eu5 = tatar_group language = language_oghur }
 
 ##Complex (Requires BOTH heritage and a language)
-link = { eu5 = bohemian_group heritage = heritage_west_slavic langauge = language_czech_slovak }
-link = { eu5 = swiss_group heritage = central_germanic langauge = language_french }
-link = { eu5 = swiss_group heritage = central_germanic langauge = language_occitano_romance }
-link = { eu5 = swiss_group heritage = central_germanic langauge = language_italian }
-link = { eu5 = swiss_group heritage = frankish langauge = language_central_germanic }
-link = { eu5 = swiss_group heritage = frankish langauge = language_high_german }
-link = { eu5 = swiss_group heritage = heritage_latin langauge = language_central_germanic }
-link = { eu5 = swiss_group heritage = heritage_latin langauge = language_high_german }
+link = { eu5 = bohemian_group heritage = heritage_west_slavic language = language_czech_slovak }
+link = { eu5 = swiss_group heritage = central_germanic language = language_french }
+link = { eu5 = swiss_group heritage = central_germanic language = language_occitano_romance }
+link = { eu5 = swiss_group heritage = central_germanic language = language_italian }
+link = { eu5 = swiss_group heritage = frankish language = language_central_germanic }
+link = { eu5 = swiss_group heritage = frankish language = language_high_german }
+link = { eu5 = swiss_group heritage = heritage_latin language = language_central_germanic }
+link = { eu5 = swiss_group heritage = heritage_latin language = language_high_german }
 
 ##name_list -> Group(s)
 link = { eu5 = maghrebi_group name_list = name_list_maghrebi }

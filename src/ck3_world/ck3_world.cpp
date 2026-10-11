@@ -22,6 +22,7 @@
 #include "flags/flags.hpp"
 #include "geography/county_details.hpp"
 #include "geography/province_holdings.hpp"
+#include "realms/realms.hpp"
 #include "religions/religions.hpp"
 #include "save_melter.hpp"
 #include "src/configuration/configuration.hpp"
@@ -70,8 +71,12 @@ ck3::CK3World::CK3World(const configuration::Configuration& configuration,
    county_details_.LinkCultures(cultures_);
    county_details_.LinkReligions(religions_);
 
-   religions_.LinkCharacters(characters_);
+   religions_.LinkTitles(titles_);
    religions_.LinkReligions();
+
+   Log(LogLevel::Info) << "-> Determining independent realms.";
+   realms_ = Realms(titles_, characters_, county_details_);
+   realms_.LogRealmReport();
 
    Log(LogLevel::Info) << "*** Good-bye CK3, rest in peace. ***";
    Log(LogLevel::Progress) << "47 %";
@@ -208,22 +213,22 @@ void ck3::CK3World::ParseGamestate(std::istream& input_stream, const commonItems
 void ck3::CK3World::ParseMeta(std::istream& input_stream)
 {
    commonItems::parser meta_parser;
-   // TODO(Kmiotek): add mod handling
-   // meta_parser_.registerKeyword("mods", [this, configuration](std::istream& input_stream) {
-   // Log(LogLevel::Info) << "-> Detecting used mods.";
-   // std::set<std::string> seenMods;
-   // for (const auto& path: commonItems::getStrings(input_stream))
-   //{
-   //	if (seenMods.contains(path))
-   //		continue;
-   //	mods_.emplace_back(Mod("", path));
-   //	seenMods.emplace(path);
-   //}
-   // Log(LogLevel::Info) << "<> Savegame claims " << mods_.size() << " mods used.";
-   // commonItems::ModLoader modLoader;
-   // modLoader.loadMods(theConfiguration.GetCK3DocDirectory(), mods_);
-   // mods = modLoader.getMods();
-   //});
+   // TODO(Kmiotek): load the mods rather than only warning about them.
+   //
+   // CK3 writes this key only when the save used mods. Until mod content is actually loaded, a
+   // modded save is read as though it were vanilla: titles the mod added are missing from the game
+   // files, so realms silently lose land or vanish, and nothing in the output says why. Warning is
+   // the least that can be done.
+   meta_parser.registerKeyword("mods", [this](std::istream& input_stream) {
+      used_mods_ = commonItems::getStrings(input_stream);
+      Log(LogLevel::Warning) << "!!! This save used " << used_mods_.size()
+                             << " mod(s). The converter does not load mod content, so anything a mod";
+      Log(LogLevel::Warning) << "!!! added or changed will be missing and the conversion will be wrong:";
+      for (const auto& mod: used_mods_)
+      {
+         Log(LogLevel::Warning) << "!!!    " << mod;
+      }
+   });
    meta_parser.registerKeyword("meta_title_name", [this](std::istream& input_stream) {
       // The realm name as CK3 displays it (e.g. "the Yamamoto Empire") - dynamic nomad/adventurer
       // titles_ often carry a stale internal name, so this is the better source for the player realm.
