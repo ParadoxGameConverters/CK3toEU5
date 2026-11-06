@@ -8,10 +8,11 @@
 #include <string>
 
 #include "CommonRegexes.h"
+#include "Log.h"
 #include "ParserHelpers.h"
 #include "religion.hpp"
-#include "src/ck3_world/characters/character.hpp"
 #include "src/ck3_world/id_pointer_pair.hpp"
+#include "src/ck3_world/titles/title.hpp"
 
 namespace
 {
@@ -51,7 +52,7 @@ void ck3::Faith::ParseFaith(std::istream& input_stream)
       }
       else
       {
-         religious_head_ = IdPointerPair<Character>(religious_head_id);
+         religious_head_ = IdPointerPair<Title>(religious_head_id);
       }
    });
    registerKeyword("desc", [this](const std::string&, std::istream& input_stream) {
@@ -82,19 +83,22 @@ void ck3::Faith::ParseDoctrine(std::istream& input_stream)
    }
 }
 
-void ck3::Faith::LinkReligiousHead(const std::map<long long, std::shared_ptr<Character>>& character_map)
+void ck3::Faith::LinkReligiousHead(const std::map<long long, std::shared_ptr<Title>>& title_map)
 {
-   if (religious_head_.has_value())
+   if (!religious_head_.has_value())
    {
-      if (character_map.contains(religious_head_->GetID()))
-      {
-         religious_head_->SetPointer(character_map.at(religious_head_->GetID()));
-      }
-      else
-      {
-         throw std::runtime_error("Faith " + std::to_string(faith_id_) + " has religious head " +
-                                  std::to_string(religious_head_->GetID()) + " that doens't exist in save!");
-      }
+      return;
+   }
+   const auto& title = title_map.find(religious_head_->GetID());
+   if (title != title_map.end())
+   {
+      religious_head_->SetPointer(title->second);
+   }
+   else
+   {
+      // Not fatal: a head of faith title can be destroyed, or come from a mod we haven't loaded.
+      Log(LogLevel::Warning) << "Faith " << faith_id_ << " has religious head title " << religious_head_->GetID()
+                             << " that doesn't exist in save! Leaving it unlinked.";
    }
 }
 

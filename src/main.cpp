@@ -28,6 +28,10 @@ int main()  // NOLINT(bugprone-exception-escape)
       converter.Convert();
       Log(LogLevel::Progress) << "100%";
       Log(LogLevel::Notice) << "* Conversion complete *";
+      // EU5 has no launcher to register the mod with, so the frontend cannot switch it on for
+      // the player. Say how, or the last step of a conversion is left for them to discover.
+      Log(LogLevel::Notice) << "Once the mod has been copied, start EU5, open Mods & DLCs from the main menu and turn on "
+                            << configuration.GetOutputName() << ".";
    }
    catch (const std::exception& e)
    {
