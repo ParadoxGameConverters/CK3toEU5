@@ -1,3 +1,4 @@
+#This is based on "New Miller Cylindrical Projection" for CK3 and Vanilla EU5 map, I chose to use this CK3 mod because it has better Earth projection and doesn't add any new provinces. Therefore, it is much more #accurate then using default CK3 projection.
 0.0.0 = {
 	triangulation_pair = { srcX = 7039 srcY = 1668 dstX = 13098 dstY = 2603 }
 	triangulation_pair = { srcX = 5154 srcY = 3731 dstX = 11218 dstY = 4394 }
