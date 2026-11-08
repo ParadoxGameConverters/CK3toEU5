@@ -11,7 +11,8 @@
 #include "ParserHelpers.h"
 #include "faith.hpp"
 #include "religion.hpp"
-#include "src/ck3_world/characters/characters.hpp"
+#include "src/ck3_world/titles/title.hpp"
+#include "src/ck3_world/titles/titles.hpp"
 
 ck3::Religions::Religions(std::istream& input_stream)
 {
@@ -55,11 +56,18 @@ void ck3::Religions::ParseFaiths(std::istream& input_stream)
    faiths_parser.clearRegisteredKeywords();
 }
 
-void ck3::Religions::LinkCharacters(const Characters& characters)
+void ck3::Religions::LinkTitles(const Titles& titles)
 {
+   // Titles are keyed by name, and religious heads reference them by ID, so build a cache.
+   std::map<long long, std::shared_ptr<Title>> id_title_map;
+   for (const auto& title: titles.GetTitles())
+   {
+      id_title_map.insert(std::pair(title.second->GetID(), title.second));
+   }
+
    for (const auto& faith: faiths_)
    {
-      faith.second->LinkReligiousHead(characters.GetAllCharacters());
+      faith.second->LinkReligiousHead(id_title_map);
    }
    Log(LogLevel::Debug) << "Religious heads linked.";
 }

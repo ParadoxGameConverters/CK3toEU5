@@ -430,7 +430,7 @@ link = { ck3 = k_east_francia eu5 = GER }
 link = { ck3 = c_gleichenstein eu5 = GLN } #Gleichenstein -> Gleichen? There's also a barony b_gleichen in c_schmalkalden
 link = { ck3 = c_gottingen eu5 = GOS } #Goslar
 link = { ck3 = c_guelders eu5 = GEL }
-link = { ck3 = b_feldkirchen eu5 = GRK } Feldkirchen -> Gurk
+link = { ck3 = b_feldkirchen eu5 = GRK } #Feldkirchen -> Gurk
 link = { ck3 = b_gustrow eu5 = GSW }
 link = { ck3 = k_austria eu5 = HAB }
 link = { ck3 = k_raetia_noricum eu5 = HAB }

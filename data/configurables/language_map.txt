@@ -117,7 +117,7 @@ link = { eu5 = tamil_language ck3 = language_tamil }
 link = { eu5 = kannada_language ck3 = language_kannada }
 #link = { eu5 = hindustani_language ck3 = ??? }
 #link = { eu5 = bihari_language ck3 = ??? }
-link = { eu5 = bengali_language ck3 = language_magadhan heritage name_list = name_list_bengali }
+link = { eu5 = bengali_language ck3 = language_magadhan name_list = name_list_bengali }
 link = { eu5 = kamarupi_language ck3 = language_magadhan name_list = name_list_assamese }
 link = { eu5 = marathi_language ck3 = language_marathi }
 link = { eu5 = sinhala_language ck3 = language_sinhalese }
